@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 
+	let { isGuest = false }: { isGuest?: boolean } = $props();
+
 	interface RollRecord {
 		dieType: number;
 		value: number;
@@ -98,7 +100,7 @@
 
 <div class="px-4 py-6">
 	<div class="mb-5 flex items-center justify-between">
-		<h2 class="text-xl font-bold text-white">Roll History</h2>
+		<h2 class="text-xl font-bold text-white">{isGuest ? "Lee's" : 'Your'} Roll History</h2>
 		<button
 			type="button"
 			onclick={fetchSessions}
@@ -120,13 +122,19 @@
 				<div class="rounded-2xl bg-slate-800 p-4">
 					<!-- Session name -->
 					<div class="relative mb-3">
-						<input
-							type="text"
-							bind:value={names[session.id]}
-							onblur={() => saveName(session.id)}
-							placeholder="Unnamed session"
-							class="w-full rounded-xl border border-slate-600 bg-slate-700/60 px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
-						/>
+						{#if isGuest}
+							<p class="px-3 py-2 text-sm font-semibold text-white">
+								{names[session.id] || 'Unnamed session'}
+							</p>
+						{:else}
+							<input
+								type="text"
+								bind:value={names[session.id]}
+								onblur={() => saveName(session.id)}
+								placeholder="Unnamed session"
+								class="w-full rounded-xl border border-slate-600 bg-slate-700/60 px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
+							/>
+						{/if}
 					</div>
 
 					<!-- Date + total -->
@@ -136,8 +144,8 @@
 							<p class="text-xs text-slate-500">{formatTime(session.rolledAt)}</p>
 						</div>
 						<div class="text-right">
-							<p class="text-xs text-slate-500">Total</p>
-							<p class="text-lg font-black text-amber-400">{session.total}</p>
+							<p class="text-xs text-slate-500">Total Rolls</p>
+							<p class="text-lg font-black text-amber-400">{session.rolls.length}</p>
 						</div>
 					</div>
 
@@ -150,14 +158,20 @@
 									class="shrink-0 rounded-full px-2.5 py-1 text-xs font-bold text-slate-900"
 									style="background: {dieColor(roll.dieType)}">d{roll.dieType}→{roll.value}</span
 								>
-								<!-- Note input -->
-								<input
-									type="text"
-									bind:value={rolls[session.id][i].note}
-									onblur={() => saveRolls(session.id)}
-									placeholder="Note…"
-									class="min-w-0 flex-1 rounded-lg border border-slate-600 bg-slate-700/60 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
-								/>
+								<!-- Note -->
+								{#if isGuest}
+									{#if roll.note}
+										<span class="min-w-0 flex-1 text-xs leading-5 text-slate-400">{roll.note}</span>
+									{/if}
+								{:else}
+									<input
+										type="text"
+										bind:value={rolls[session.id][i].note}
+										onblur={() => saveRolls(session.id)}
+										placeholder="Note…"
+										class="min-w-0 flex-1 rounded-lg border border-slate-600 bg-slate-700/60 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
+									/>
+								{/if}
 							</div>
 						{/each}
 						{#if session.modifier !== 0}
@@ -170,9 +184,9 @@
 					</div>
 
 					<!-- Save indicator -->
-					{#if savingId === session.id}
+					{#if !isGuest && savingId === session.id}
 						<p class="mt-2 text-right text-xs text-slate-500">Saving…</p>
-					{:else if savedId === session.id}
+					{:else if !isGuest && savedId === session.id}
 						<p
 							in:fade={{ duration: 150 }}
 							out:fade={{ duration: 400 }}

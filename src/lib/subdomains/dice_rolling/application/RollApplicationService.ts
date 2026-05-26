@@ -71,6 +71,20 @@ export class RollApplicationService {
 		return rollRepo.findByUserId(userId);
 	}
 
+	async getAllSessions() {
+		return rollRepo.findAll();
+	}
+
+	async getPublicDashboard() {
+		const stats = await statsRepo.getAggregate();
+		return {
+			totalRolls: stats.totalRollsCount,
+			averageValue: stats.averageRoll,
+			nat20s: stats.naturalTwenties,
+			nat1s: stats.naturalOnes
+		};
+	}
+
 	async updateSession(sessionId: string, userId: string, fields: { name?: string; rolls?: RollRecord[] }) {
 		await rollRepo.updateSession(sessionId, userId, fields);
 	}

@@ -18,14 +18,7 @@ export interface SessionRecord {
 }
 
 export class PostgresRollRepository {
-	async findByUserId(userId: string): Promise<SessionRecord[]> {
-		const rows = await db
-			.select()
-			.from(dbRollSessions)
-			.where(eq(dbRollSessions.userId, userId))
-			.orderBy(desc(dbRollSessions.rolledAt))
-			.limit(100);
-
+	private mapRows(rows: typeof dbRollSessions.$inferSelect[]): SessionRecord[] {
 		return rows.map((row) => {
 			const rolls = (row.rolls as RollRecord[]).map((r) => ({
 				dieType: r.dieType,
@@ -41,6 +34,25 @@ export class PostgresRollRepository {
 				total: rolls.reduce((s, r) => s + r.value, 0) + row.modifier
 			};
 		});
+	}
+
+	async findByUserId(userId: string): Promise<SessionRecord[]> {
+		const rows = await db
+			.select()
+			.from(dbRollSessions)
+			.where(eq(dbRollSessions.userId, userId))
+			.orderBy(desc(dbRollSessions.rolledAt))
+			.limit(100);
+		return this.mapRows(rows);
+	}
+
+	async findAll(): Promise<SessionRecord[]> {
+		const rows = await db
+			.select()
+			.from(dbRollSessions)
+			.orderBy(desc(dbRollSessions.rolledAt))
+			.limit(100);
+		return this.mapRows(rows);
 	}
 
 	async updateSession(

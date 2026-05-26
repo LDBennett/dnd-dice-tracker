@@ -3,11 +3,8 @@ import type { Actions, PageServerLoad } from './$types';
 import { auth } from '$lib/server/auth';
 import { APIError } from 'better-auth/api';
 
-export const load: PageServerLoad = (event) => {
-	if (event.locals.user) {
-		redirect(302, '/');
-	}
-	return {};
+export const load: PageServerLoad = () => {
+	redirect(302, '/');
 };
 
 export const actions: Actions = {

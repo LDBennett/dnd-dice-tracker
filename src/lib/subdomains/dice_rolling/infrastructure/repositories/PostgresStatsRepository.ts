@@ -3,6 +3,8 @@ import { dbPlayerStats } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { PlayerStats } from '../../domain/models/PlayerStats';
 
+const ZERO = { totalRollsCount: 0, runningSum: 0, naturalTwenties: 0, naturalOnes: 0 } as const;
+
 export class PostgresStatsRepository {
 	async findByUserId(userId: string): Promise<PlayerStats> {
 		const [dbStats] = await db
@@ -22,5 +24,20 @@ export class PostgresStatsRepository {
 			dbStats.naturalTwenties,
 			dbStats.naturalOnes
 		);
+	}
+
+	async getAggregate(): Promise<PlayerStats> {
+		const rows = await db.select().from(dbPlayerStats);
+		if (rows.length === 0) return new PlayerStats('public', 0, 0, 0, 0);
+		const t = rows.reduce(
+			(acc, r) => ({
+				totalRollsCount: acc.totalRollsCount + r.totalRollsCount,
+				runningSum: acc.runningSum + r.runningSum,
+				naturalTwenties: acc.naturalTwenties + r.naturalTwenties,
+				naturalOnes: acc.naturalOnes + r.naturalOnes
+			}),
+			{ ...ZERO }
+		);
+		return new PlayerStats('public', t.totalRollsCount, t.runningSum, t.naturalTwenties, t.naturalOnes);
 	}
 }

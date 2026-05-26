@@ -1,12 +1,12 @@
-import { json, error } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { RollApplicationService } from '$lib/subdomains/dice_rolling/application/RollApplicationService';
 
 const rollService = new RollApplicationService();
 
 export const GET: RequestHandler = async ({ locals }) => {
-	if (!locals.user) error(401, 'Unauthorized');
-
-	const sessions = await rollService.getSessionHistory(locals.user.id);
+	const sessions = locals.user
+		? await rollService.getSessionHistory(locals.user.id)
+		: await rollService.getAllSessions();
 	return json(sessions);
 };
