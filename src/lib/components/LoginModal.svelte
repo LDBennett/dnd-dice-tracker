@@ -2,6 +2,9 @@
 	import { invalidateAll } from '$app/navigation';
 	import { fade, scale } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+	import { PUBLIC_ALLOW_REGISTRATION } from '$env/static/public';
+
+	const allowRegistration = PUBLIC_ALLOW_REGISTRATION === 'true';
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
 
@@ -83,22 +86,24 @@
 		</div>
 
 		<!-- Mode toggle -->
-		<div class="mb-5 flex rounded-xl bg-slate-700 p-1">
-			<button
-				type="button"
-				onclick={() => { mode = 'login'; error = ''; }}
-				class="flex-1 rounded-lg py-2 text-sm font-semibold transition {mode === 'login'
-					? 'bg-amber-400 text-slate-900'
-					: 'text-slate-400 hover:text-white'}"
-			>Sign In</button>
-			<button
-				type="button"
-				onclick={() => { mode = 'register'; error = ''; }}
-				class="flex-1 rounded-lg py-2 text-sm font-semibold transition {mode === 'register'
-					? 'bg-amber-400 text-slate-900'
-					: 'text-slate-400 hover:text-white'}"
-			>Register</button>
-		</div>
+		{#if allowRegistration}
+			<div class="mb-5 flex rounded-xl bg-slate-700 p-1">
+				<button
+					type="button"
+					onclick={() => { mode = 'login'; error = ''; }}
+					class="flex-1 rounded-lg py-2 text-sm font-semibold transition {mode === 'login'
+						? 'bg-amber-400 text-slate-900'
+						: 'text-slate-400 hover:text-white'}"
+				>Sign In</button>
+				<button
+					type="button"
+					onclick={() => { mode = 'register'; error = ''; }}
+					class="flex-1 rounded-lg py-2 text-sm font-semibold transition {mode === 'register'
+						? 'bg-amber-400 text-slate-900'
+						: 'text-slate-400 hover:text-white'}"
+				>Register</button>
+			</div>
+		{/if}
 
 		<!-- Form -->
 		<div class="flex flex-col gap-3">
