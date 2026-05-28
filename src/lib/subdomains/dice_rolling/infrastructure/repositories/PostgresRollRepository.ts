@@ -1,6 +1,7 @@
 import { db } from '$lib/server/db';
 import { dbRollSessions } from '$lib/server/db/schema';
 import { eq, desc, and } from 'drizzle-orm';
+import type { RollSession } from '../../domain/models/RollSession';
 
 export interface RollRecord {
 	dieType: number;
@@ -33,6 +34,17 @@ export class PostgresRollRepository {
 				name: row.name,
 				total: rolls.reduce((s, r) => s + r.value, 0) + row.modifier
 			};
+		});
+	}
+
+	async save(session: RollSession): Promise<void> {
+		await db.insert(dbRollSessions).values({
+			id: session.id,
+			userId: session.userId,
+			rolls: session.getRolls() as unknown as object,
+			modifier: session.getModifier(),
+			name: session.getName(),
+			rolledAt: session.rolledAt
 		});
 	}
 

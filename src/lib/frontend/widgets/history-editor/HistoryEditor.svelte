@@ -1,15 +1,7 @@
 <script lang="ts">
-	import SessionCard from './SessionCard.svelte';
-
-	interface RollRecord { dieType: number; value: number; note: string; }
-	interface Session {
-		id: string;
-		rolls: RollRecord[];
-		modifier: number;
-		rolledAt: string;
-		name: string;
-		total: number;
-	}
+	import { SessionCard } from '$lib/frontend/entities/roll-session';
+	import { fetchSessions as apiFetchSessions, patchSession } from './historyEditor.api';
+	import type { Session, RollRecord } from './historyEditor.api';
 
 	let { isGuest = false }: { isGuest?: boolean } = $props();
 
@@ -23,8 +15,7 @@
 	async function fetchSessions() {
 		loading = true;
 		try {
-			const res = await fetch('/api/rolls');
-			if (res.ok) sessions = await res.json();
+			sessions = await apiFetchSessions();
 		} finally {
 			loading = false;
 		}
@@ -41,11 +32,7 @@
 	async function patch(id: string, body: object) {
 		savingId = id;
 		try {
-			await fetch(`/api/rolls/${id}`, {
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify(body)
-			});
+			await patchSession(id, body);
 			savedId = id;
 			setTimeout(() => { if (savedId === id) savedId = null; }, 1800);
 		} finally {

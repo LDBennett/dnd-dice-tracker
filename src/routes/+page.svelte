@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import type { PageServerData } from './$types';
-	import NavBar from '$lib/components/ui/NavBar.svelte';
-	import LoginModal from '$lib/components/ui/LoginModal.svelte';
-	import DiceLogger from '$lib/components/dice/DiceLogger.svelte';
-	import StatsDashboard from '$lib/components/stats/StatsDashboard.svelte';
-	import HistoryEditor from '$lib/components/history/HistoryEditor.svelte';
+	import { NavBar, LoginModal } from '$lib/frontend/shared/ui';
+	import { DiceLogger } from '$lib/frontend/widgets/dice-dashboard';
+	import { StatsDashboard } from '$lib/frontend/widgets/stats-dashboard';
+	import { HistoryEditor } from '$lib/frontend/widgets/history-editor';
 
 	let { data }: { data: PageServerData } = $props();
 
@@ -31,7 +30,7 @@
 		{#if activeTab === 'roll'}
 			<DiceLogger {rightHanded} {isGuest} onSignInClick={openLogin} />
 		{:else if activeTab === 'stats'}
-			<StatsDashboard {totalRolls} {averageValue} {nat20s} {nat1s} {isGuest} />
+			<StatsDashboard {totalRolls} {nat20s} {nat1s} {isGuest} />
 		{:else}
 			<HistoryEditor {isGuest} />
 		{/if}

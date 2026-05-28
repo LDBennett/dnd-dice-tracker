@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { fade, scale } from 'svelte/transition';
 	import { backOut, cubicOut } from 'svelte/easing';
+	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
+	import DiceHistory from './DiceHistory.svelte';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 	interface RollResult { dieType: DieType; value: number; note: string; }
-	interface HistoryEntry { value: number; note: string; date: string; }
 
 	let {
 		die,
@@ -22,11 +23,9 @@
 		onCancel: () => void;
 	} = $props();
 
-	let sliderValue    = $state(Math.ceil(die / 2));
-	let rollNote       = $state('');
-	let dieTab         = $state<'roll' | 'history'>('roll');
-	let historyRolls   = $state<HistoryEntry[]>([]);
-	let historyLoading = $state(false);
+	let sliderValue = $state(Math.ceil(die / 2));
+	let rollNote    = $state('');
+	let dieTab      = $state<'roll' | 'history'>('roll');
 
 	const DIE_BORDER: Record<DieType, string> = {
 		4: 'border-red-500/70 text-red-400',
@@ -37,48 +36,9 @@
 		20: 'border-amber-400/70 text-amber-400',
 		100: 'border-purple-500/70 text-purple-400'
 	};
-	const DIE_COLOR: Record<DieType, string> = {
-		4: '#f87171', 6: '#fb923c', 8: '#facc15',
-		10: '#4ade80', 12: '#2dd4bf', 20: '#fbbf24', 100: '#c084fc'
-	};
-
-	async function loadHistory() {
-		historyLoading = true;
-		historyRolls   = [];
-		try {
-			const res = await fetch('/api/rolls');
-			if (res.ok) {
-				const sessions = (await res.json()) as Array<{
-					rolls: Array<{ dieType: number; value: number; note: string }>;
-					rolledAt: string;
-				}>;
-				historyRolls = sessions.flatMap((s) =>
-					s.rolls
-						.filter((r) => r.dieType === die)
-						.map((r) => ({ value: r.value, note: r.note, date: s.rolledAt }))
-				);
-			}
-		} finally {
-			historyLoading = false;
-		}
-	}
-
-	function switchToHistory() {
-		dieTab = 'history';
-		loadHistory();
-	}
 
 	function confirmRoll() {
 		onConfirm({ dieType: die, value: sliderValue, note: rollNote.trim() });
-	}
-
-	function fmtDate(iso: string) {
-		const d = new Date(iso);
-		return (
-			d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) +
-			' ' +
-			d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-		);
 	}
 </script>
 
@@ -121,7 +81,7 @@
 			>
 			<button
 				type="button"
-				onclick={switchToHistory}
+				onclick={() => (dieTab = 'history')}
 				class="flex-1 rounded-lg py-2 text-sm font-semibold transition {dieTab === 'history'
 					? 'bg-slate-900 text-white'
 					: 'text-slate-400 hover:text-white'}">History</button
@@ -176,41 +136,6 @@
 			style="background: {DIE_COLOR[die]};">Log Roll</button
 		>
 	{:else}
-		<!-- History tab -->
-		<div class="flex max-h-72 flex-col gap-4 overflow-y-auto pr-1">
-			{#if sessionRolls.length > 0}
-				<div>
-					<p class="mb-1.5 text-xs font-semibold tracking-wider text-slate-500 uppercase">This session</p>
-					<div class="flex flex-col gap-1.5">
-						{#each sessionRolls as r, i (i)}
-							<div class="flex items-center gap-3">
-								<span class="w-8 text-right text-xl font-black text-white">{r.value}</span>
-								{#if r.note}<span class="text-xs text-slate-400">{r.note}</span>{/if}
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/if}
-			<div>
-				<p class="mb-1.5 text-xs font-semibold tracking-wider text-slate-500 uppercase">Overall</p>
-				{#if historyLoading}
-					<p class="text-xs text-slate-500">Loading…</p>
-				{:else if historyRolls.length === 0}
-					<p class="text-xs text-slate-500">No past rolls for d{die}.</p>
-				{:else}
-					<div class="flex flex-col gap-1.5">
-						{#each historyRolls as h, i (i)}
-							<div class="flex items-center justify-between gap-2">
-								<div class="flex items-center gap-3">
-									<span class="w-8 text-right text-xl font-black text-white">{h.value}</span>
-									{#if h.note}<span class="text-xs text-slate-400">{h.note}</span>{/if}
-								</div>
-								<span class="shrink-0 text-xs text-slate-600">{fmtDate(h.date)}</span>
-							</div>
-						{/each}
-					</div>
-				{/if}
-			</div>
-		</div>
+		<DiceHistory {die} {sessionRolls} />
 	{/if}
 </div>

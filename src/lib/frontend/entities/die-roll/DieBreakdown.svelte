@@ -1,22 +1,18 @@
 <script lang="ts">
-	interface BreakdownEntry { dieType: number; count: number; avg: number; }
+	import type { BreakdownEntry } from '$lib/frontend/shared/lib/api-types';
+	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
+	import { fmtLuck, luckClass } from '$lib/frontend/shared/lib/dice-utils';
 
 	let { breakdown }: { breakdown: BreakdownEntry[] } = $props();
 
-	const DIE_COLOR: Record<number, string> = {
-		4: '#f87171', 6: '#fb923c', 8: '#facc15',
-		10: '#4ade80', 12: '#2dd4bf', 20: '#fbbf24', 100: '#c084fc'
-	};
 	function color(t: number) { return DIE_COLOR[t] ?? '#94a3b8'; }
 	function theoreticalAvg(t: number) { return (t + 1) / 2; }
 	function luck(entry: BreakdownEntry) { return Number((entry.avg - theoreticalAvg(entry.dieType)).toFixed(2)); }
-	function fmtLuck(n: number) { return (n >= 0 ? '+' : '') + n.toFixed(2); }
-	function luckClass(n: number) { return n > 0.1 ? 'text-green-400' : n < -0.1 ? 'text-red-400' : 'text-slate-500'; }
 </script>
 
 <div class="mt-6">
 	<h3 class="mb-3 text-xs font-semibold tracking-widest text-slate-500 uppercase">Die Breakdown</h3>
-	<div class="flex flex-col gap-2">
+	<div class="grid grid-cols-2 gap-2">
 		{#each breakdown as entry (entry.dieType)}
 			{@const luckScore = luck(entry)}
 			<div class="rounded-2xl bg-slate-800 px-4 py-3">

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import DiceExpandedCard from './DiceExpandedCard.svelte';
-	import BatchPanel from './BatchPanel.svelte';
-	import PendingRollsQueue from './PendingRollsQueue.svelte';
+	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
+	import { DiceExpandedCard } from '$lib/frontend/features/log-roll';
+	import { BatchPanel } from '$lib/frontend/features/batch-roll';
+	import { PendingRollsQueue, submitRollSession } from '$lib/frontend/features/submit-session';
+	import type { RollResult } from '$lib/frontend/features/submit-session';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface RollResult { dieType: DieType; value: number; note: string; }
 	interface BatchEntry { id: number; dieType: DieType; value: number; }
 
 	const DICE: DieType[] = [4, 6, 8, 10, 12, 20, 100];
@@ -43,10 +44,6 @@
 		20: 'border-amber-400/70 text-amber-400',
 		100: 'border-purple-500/70 text-purple-400'
 	};
-	const DIE_COLOR: Record<DieType, string> = {
-		4: '#f87171', 6: '#fb923c', 8: '#facc15',
-		10: '#4ade80', 12: '#2dd4bf', 20: '#fbbf24', 100: '#c084fc'
-	};
 
 	function setMode(batch: boolean) {
 		batchMode = batch;
@@ -81,20 +78,10 @@
 		submitting = true;
 		saveError  = null;
 		try {
-			const res = await fetch('/api/roll', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ dice: pendingRolls, name: sessionName })
-			});
-			if (res.ok) {
-				const data = await res.json();
-				lastResult   = { rolls: data.rolls, total: data.total };
-				pendingRolls = [];
-				sessionName  = '';
-			} else {
-				const text = await res.text().catch(() => res.statusText);
-				saveError = `Save failed (${res.status}): ${text}`;
-			}
+			const result = await submitRollSession(pendingRolls, sessionName);
+			lastResult   = result;
+			pendingRolls = [];
+			sessionName  = '';
 		} catch (e) {
 			saveError = e instanceof Error ? e.message : 'Network error';
 		} finally {

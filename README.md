@@ -1,72 +1,95 @@
 # D&D Dice Tracker
 
-A mobile-first app for logging physical dice rolls during tabletop RPG sessions. Roll real dice, then log the result — the app tracks your history and stats over time.
+A mobile-first web app for logging, tracking, and analyzing dice rolls in tabletop RPG sessions. Built with SvelteKit, Drizzle ORM, and Neon PostgreSQL.
 
 ## Features
 
-- **Dice logger** — tap a die (d4 through d100), slide to your rolled value, add an optional note, and confirm
-- **Session saving** — group rolls into a named session before committing to the database
-- **Roll history** — view and edit past session names and per-roll notes
-- **Stats dashboard** — total rolls, average value, natural 20s, and natural 1s
-- **Per-die history** — see past rolls for a specific die type while you're rolling it
-- **Auth** — email/password login via Better Auth; all data is scoped to your account
+- **Dice Rolling** — Log individual or batch rolls for d4, d6, d8, d10, d12, d20, and d100
+- **Session Management** — Group rolls into named sessions with optional notes and modifiers
+- **Statistics Dashboard** — Track total rolls, averages, natural 20s/1s, and per-die breakdowns
+- **Roll History** — View and edit past rolling sessions
+- **Guest Mode** — Browse aggregated public stats without an account
+- **Handedness Toggle** — Switch between left- and right-handed UI layouts
 
-## Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
 | Framework | SvelteKit 2 + Svelte 5 (runes) |
-| Styling | Tailwind CSS 4 |
-| Auth | Better Auth 1.4 (email/password) |
-| ORM | Drizzle ORM |
-| Database | Neon (serverless PostgreSQL) |
+| Styling | Tailwind CSS v4 |
+| Database | Neon (PostgreSQL) via Drizzle ORM |
+| Auth | better-auth (email/password) |
 | Deployment | Vercel |
 
-## Getting started
+## Architecture
 
-### 1. Install dependencies
+The project follows Domain-Driven Design (DDD) with a strict separation between domain logic, application services, and infrastructure.
 
-```sh
+```
+src/lib/subdomains/dice_rolling/
+├── domain/
+│   ├── models/
+│   │   ├── RollSession.ts      # Rolling session aggregate
+│   │   └── PlayerStats.ts      # Incremental stats ledger
+│   └── services/
+└── infrastructure/
+    └── repositories/
+        ├── PostgresRollRepository.ts
+        └── PostgresStatsRepository.ts
+```
+
+Domain models have zero external dependencies — all infrastructure concerns (database, auth, framework) are kept strictly outside of `domain/`.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm
+- A [Neon](https://neon.tech) PostgreSQL database
+
+### Setup
+
+1. Clone the repository and install dependencies:
+
+```bash
+git clone <repo-url>
+cd dnd-dice-tracker
 pnpm install
 ```
 
-### 2. Set up environment variables
+2. Copy the example environment file and fill in your Neon connection string:
 
-Copy `.env.example` to `.env` and fill in your values:
-
-```sh
+```bash
 cp .env.example .env
 ```
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | Neon PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Random secret (32+ characters) |
-| `ORIGIN` | App origin, e.g. `http://localhost:5173` |
+3. Push the database schema to Neon:
 
-### 3. Push the database schema
-
-```sh
+```bash
 pnpm db:push
 ```
 
-### 4. Generate Better Auth tables (first time only)
+4. Start the development server:
 
-```sh
-pnpm auth:schema
-pnpm db:push
-```
-
-### 5. Run the dev server
-
-```sh
+```bash
 pnpm dev
 ```
 
-## Database commands
+## Available Scripts
 
-```sh
-pnpm db:push      # Sync schema to Neon (no migration files)
-pnpm db:generate  # Generate Drizzle migration files
-pnpm db:studio    # Open Drizzle Studio (database GUI)
-```
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start local development server |
+| `pnpm build` | Build for production |
+| `pnpm check` | Type-check with svelte-check |
+| `pnpm lint` | Run Prettier and ESLint checks |
+| `pnpm format` | Auto-format all source files |
+| `pnpm test` | Run unit tests with Vitest |
+| `pnpm db:push` | Sync schema to Neon (no migrations) |
+| `pnpm db:studio` | Open Drizzle Studio GUI |
+| `pnpm auth:schema` | Regenerate better-auth schema |
+
+## License
+
+[MIT](LICENSE)

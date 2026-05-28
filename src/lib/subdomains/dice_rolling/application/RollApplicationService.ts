@@ -1,5 +1,3 @@
-import { db } from '$lib/server/db';
-import { dbRollSessions, dbPlayerStats } from '$lib/server/db/schema';
 import { RollSession } from '../domain/models/RollSession';
 import { PostgresStatsRepository } from '../infrastructure/repositories/PostgresStatsRepository';
 import { PostgresRollRepository } from '../infrastructure/repositories/PostgresRollRepository';
@@ -26,33 +24,9 @@ export class RollApplicationService {
 			stats.recordRoll(roll.dieType, roll.value);
 		}
 
-		await db.batch([
-			db.insert(dbRollSessions).values({
-				id: session.id,
-				userId: session.userId,
-				rolls: session.getRolls() as unknown as object,
-				modifier: session.getModifier(),
-				name: session.getName(),
-				rolledAt: session.rolledAt
-			}),
-			db.insert(dbPlayerStats)
-				.values({
-					userId: stats.userId,
-					totalRollsCount: stats.totalRollsCount,
-					runningSum: stats.runningSum,
-					naturalTwenties: stats.naturalTwenties,
-					naturalOnes: stats.naturalOnes
-				})
-				.onConflictDoUpdate({
-					target: dbPlayerStats.userId,
-					set: {
-						totalRollsCount: stats.totalRollsCount,
-						runningSum: stats.runningSum,
-						naturalTwenties: stats.naturalTwenties,
-						naturalOnes: stats.naturalOnes
-					}
-				})
-		]);
+		// TODO: wrap in db.transaction for atomicity
+		await rollRepo.save(session);
+		await statsRepo.save(stats);
 
 		return { sessionId: session.id, total: session.totalScore, rolls: session.getRolls() };
 	}

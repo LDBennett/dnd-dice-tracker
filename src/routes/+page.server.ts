@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { RollApplicationService } from '$lib/subdomains/dice_rolling/application/RollApplicationService';
+import { RollApplicationService } from '$lib/subdomains/dice_rolling';
 
 const rollService = new RollApplicationService();
 

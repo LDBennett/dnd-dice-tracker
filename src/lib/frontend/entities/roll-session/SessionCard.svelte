@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
 
 	interface RollRecord { dieType: number; value: number; note: string; }
 	interface Session {
@@ -30,10 +31,6 @@
 	let name  = $state(session.name);
 	let rolls = $state(session.rolls.map((r) => ({ ...r })));
 
-	const DIE_COLOR: Record<number, string> = {
-		4: '#f87171', 6: '#fb923c', 8: '#facc15',
-		10: '#4ade80', 12: '#2dd4bf', 20: '#fbbf24', 100: '#c084fc'
-	};
 	function dieColor(t: number) { return DIE_COLOR[t] ?? '#94a3b8'; }
 
 	function formatDate(iso: string) {

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
+
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 	interface BatchEntry { id: number; dieType: DieType; value: number; }
 	interface RollResult { dieType: DieType; value: number; note: string; }
@@ -13,11 +15,6 @@
 
 	let batchNote = $state('');
 	let quickFill = $state('');
-
-	const DIE_COLOR: Record<DieType, string> = {
-		4: '#f87171', 6: '#fb923c', 8: '#facc15',
-		10: '#4ade80', 12: '#2dd4bf', 20: '#fbbf24', 100: '#c084fc'
-	};
 
 	const batchTotal = $derived(entries.reduce((s, e) => s + e.value, 0));
 
