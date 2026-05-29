@@ -4,10 +4,12 @@
 
 	let {
 		activeTab = $bindable<Tab>('roll'),
+		rollMode = $bindable(false),
 		user = null,
 		onSignInClick = () => {}
 	}: {
 		activeTab: Tab;
+		rollMode: boolean;
 		user: { name: string; email: string } | null;
 		onSignInClick: () => void;
 	} = $props();
@@ -32,6 +34,19 @@
 			</div>
 
 			<div class="flex items-center gap-1">
+				<!-- Roll mode toggle -->
+				<button
+					type="button"
+					onclick={() => (rollMode = !rollMode)}
+					title={rollMode ? 'Quick Roll on — click for Log mode' : 'Log mode — click for Quick Roll'}
+					class="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition {rollMode
+						? 'bg-amber-400 text-slate-900'
+						: 'text-slate-400 hover:bg-slate-800 hover:text-white'}"
+				>
+					<span>🎲</span>
+					<span class="text-xs">{rollMode ? 'Quick' : 'Log'}</span>
+				</button>
+
 				{#if user}
 					<form method="post" action="/signout">
 						<button

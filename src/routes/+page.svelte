@@ -11,10 +11,15 @@
 	type Tab = 'roll' | 'stats' | 'history';
 	let activeTab   = $state<Tab>('roll');
 	let rightHanded = $state(browser ? localStorage.getItem('handedness') === 'right' : false);
+	let rollMode    = $state(browser ? localStorage.getItem('rollMode') === 'quick' : false);
 	let showLogin   = $state(false);
 
 	$effect(() => {
 		localStorage.setItem('handedness', rightHanded ? 'right' : 'left');
+	});
+
+	$effect(() => {
+		localStorage.setItem('rollMode', rollMode ? 'quick' : 'log');
 	});
 
 	let { totalRolls, averageValue, nat20s, nat1s } = $derived(data.dashboard);
@@ -24,11 +29,11 @@
 </script>
 
 <div class="min-h-screen bg-slate-900 text-white">
-	<NavBar bind:activeTab user={data.user} onSignInClick={openLogin} />
+	<NavBar bind:activeTab bind:rollMode user={data.user} onSignInClick={openLogin} />
 
 	<main class="mx-auto max-w-225 pt-26" style="padding-bottom: max(5rem, env(safe-area-inset-bottom))">
 		{#if activeTab === 'roll'}
-			<DiceLogger {rightHanded} {isGuest} onSignInClick={openLogin} />
+			<DiceLogger {rightHanded} {isGuest} {rollMode} onSignInClick={openLogin} />
 		{:else if activeTab === 'stats'}
 			<StatsDashboard {totalRolls} {nat20s} {nat1s} {isGuest} />
 		{:else}
