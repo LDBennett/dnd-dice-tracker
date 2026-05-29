@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
 	import { DIE_COLOR } from '$lib/frontend/shared/ui/dice-colors';
@@ -30,24 +31,20 @@
 
 	let dieStates = $state<DieState[]>([]);
 
-	$effect(() => {
-		if (dice) {
-			dieStates = dice.map((dieType) => {
-				const finalValue = Math.floor(Math.random() * dieType) + 1;
-				return {
-					dieType,
-					finalValue,
-					displayValue: Math.floor(Math.random() * dieType) + 1,
-					rolling: true,
-					settled: false,
-					frame: 0
-				};
-			});
+	onMount(() => {
+		dieStates = dice.map((dieType) => {
+			const finalValue = Math.floor(Math.random() * dieType) + 1;
+			return {
+				dieType,
+				finalValue,
+				displayValue: Math.floor(Math.random() * dieType) + 1,
+				rolling: true,
+				settled: false,
+				frame: 0
+			};
+		});
 
-			dieStates.forEach((_, i) => tickDie(i));
-		} else {
-			dieStates = [];
-		}
+		dieStates.forEach((_, i) => tickDie(i));
 	});
 
 	let settledCount = $state(0);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import type { PageServerData } from './$types';
-	import { NavBar, LoginModal } from '$lib/frontend/shared/ui';
+	import { NavBar, LoginModal, HandednessToggle } from '$lib/frontend/shared/ui';
 	import { DiceLogger } from '$lib/frontend/widgets/dice-dashboard';
 	import { StatsDashboard } from '$lib/frontend/widgets/stats-dashboard';
 	import { HistoryEditor } from '$lib/frontend/widgets/history-editor';
@@ -44,13 +44,7 @@
 
 <!-- Floating handedness toggle (logged-in only) -->
 {#if data.user}
-	<button
-		type="button"
-		onclick={() => (rightHanded = !rightHanded)}
-		title="Switch handedness"
-		class="fixed z-40 flex h-13 w-13 items-center justify-center rounded-full bg-slate-800 text-xl shadow-lg ring-1 ring-slate-700 transition hover:bg-slate-700 active:scale-90"
-		style="bottom: max(1.5rem, env(safe-area-inset-bottom)); {rightHanded ? 'left: 1.5rem' : 'right: 1.5rem'}"
-	>{rightHanded ? '🤚' : '✋'}</button>
+	<HandednessToggle {rightHanded} onToggle={() => (rightHanded = !rightHanded)} />
 {/if}
 
 <LoginModal bind:open={showLogin} />
