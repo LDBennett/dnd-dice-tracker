@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { RollApplicationService } from '$lib/subdomains/dice_rolling';
+import { RollApplicationService } from '$lib/backend/dice_rolling';
 
 const rollService = new RollApplicationService();
 

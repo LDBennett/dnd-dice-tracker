@@ -81,4 +81,10 @@ export class PostgresRollRepository {
 			.set(update)
 			.where(and(eq(dbRollSessions.id, sessionId), eq(dbRollSessions.userId, userId)));
 	}
+
+	async deleteSession(sessionId: string, userId: string): Promise<void> {
+		await db
+			.delete(dbRollSessions)
+			.where(and(eq(dbRollSessions.id, sessionId), eq(dbRollSessions.userId, userId)));
+	}
 }

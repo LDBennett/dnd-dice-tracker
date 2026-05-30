@@ -19,6 +19,8 @@
 		{ id: 'stats', icon: '📊', label: 'Stats' },
 		{ id: 'history', icon: '📜', label: 'History' }
 	];
+
+	const pillStyle = $derived(`transform: translateX(${rollMode ? '100%' : '0%'})`);
 </script>
 
 <header
@@ -35,31 +37,42 @@
 
 			<div class="flex items-center gap-1">
 				<!-- Roll mode toggle -->
-				<button
-					type="button"
-					onclick={() => (rollMode = !rollMode)}
-					title={rollMode ? 'Quick Roll on — click for Log mode' : 'Log mode — click for Quick Roll'}
-					class="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition {rollMode
-						? 'bg-amber-400 text-slate-900'
-						: 'text-slate-400 hover:bg-slate-800 hover:text-white'}"
-				>
-					<span>🎲</span>
-					<span class="text-xs">{rollMode ? 'Quick' : 'Log'}</span>
-				</button>
+				<div class="relative flex overflow-hidden rounded-xl bg-slate-800 text-xs font-semibold">
+					<div
+						class="absolute inset-y-0 w-1/2 rounded-xl bg-amber-400 transition-transform duration-200 ease-out"
+						style={pillStyle}
+					></div>
+					<button
+						type="button"
+						onclick={() => (rollMode = false)}
+						class="relative z-10 px-4 py-2 transition-colors {rollMode
+							? 'text-slate-400'
+							: 'text-slate-900'}">Log</button
+					>
+					<button
+						type="button"
+						onclick={() => (rollMode = true)}
+						class="relative z-10 px-4 py-2 transition-colors {rollMode
+							? 'text-slate-900'
+							: 'text-slate-400'}">Quick</button
+					>
+				</div>
 
 				{#if user}
 					<form method="post" action="/signout">
 						<button
 							type="submit"
 							class="rounded-lg px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white"
-						>Sign out</button>
+							>Sign out</button
+						>
 					</form>
 				{:else}
 					<button
 						type="button"
 						onclick={onSignInClick}
 						class="rounded-lg bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-amber-300 active:scale-95"
-					>Sign In</button>
+						>Sign In</button
+					>
 				{/if}
 			</div>
 		</div>
@@ -70,7 +83,8 @@
 				<button
 					type="button"
 					onclick={() => (activeTab = tab.id)}
-					class="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2 text-sm font-semibold transition-colors {activeTab === tab.id
+					class="flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2 text-sm font-semibold transition-colors {activeTab ===
+					tab.id
 						? 'bg-amber-400 text-slate-900'
 						: 'text-slate-400 hover:text-white'}"
 				>

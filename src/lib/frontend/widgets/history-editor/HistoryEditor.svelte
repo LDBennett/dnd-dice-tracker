@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { SessionCard } from '$lib/frontend/entities/roll-session';
-	import { fetchSessions as apiFetchSessions, patchSession } from './historyEditor.api';
+	import { fetchSessions as apiFetchSessions, patchSession, deleteSession as apiDeleteSession } from './historyEditor.api';
 	import type { Session, RollRecord } from './historyEditor.api';
 
 	let { isGuest = false }: { isGuest?: boolean } = $props();
@@ -39,6 +39,11 @@
 			savingId = null;
 		}
 	}
+
+	async function deleteSession(id: string) {
+		await apiDeleteSession(id);
+		sessions = sessions.filter(s => s.id !== id);
+	}
 </script>
 
 <div class="px-4 py-6">
@@ -68,6 +73,7 @@
 					{savedId}
 					onSaveName={saveName}
 					onSaveRolls={saveRolls}
+					onDelete={deleteSession}
 				/>
 			{/each}
 		</div>

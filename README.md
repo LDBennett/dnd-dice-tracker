@@ -26,7 +26,7 @@ A mobile-first web app for logging, tracking, and analyzing dice rolls in tablet
 The project follows Domain-Driven Design (DDD) with a strict separation between domain logic, application services, and infrastructure.
 
 ```
-src/lib/subdomains/dice_rolling/
+src/lib/backend/dice_rolling/
 ├── domain/
 │   ├── models/
 │   │   ├── RollSession.ts      # Rolling session aggregate

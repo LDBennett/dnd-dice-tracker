@@ -22,3 +22,7 @@ export async function patchSession(id: string, body: object): Promise<void> {
 		body: JSON.stringify(body)
 	});
 }
+
+export async function deleteSession(id: string): Promise<void> {
+	await fetch(`/api/rolls/${id}`, { method: 'DELETE' });
+}

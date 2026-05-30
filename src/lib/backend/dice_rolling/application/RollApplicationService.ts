@@ -62,4 +62,8 @@ export class RollApplicationService {
 	async updateSession(sessionId: string, userId: string, fields: { name?: string; rolls?: RollRecord[] }) {
 		await rollRepo.updateSession(sessionId, userId, fields);
 	}
+
+	async deleteSession(sessionId: string, userId: string): Promise<void> {
+		await rollRepo.deleteSession(sessionId, userId);
+	}
 }
