@@ -1,0 +1,121 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+
+	const currentPath = $derived($page.url.pathname);
+</script>
+
+<nav
+	class="fixed right-0 bottom-0 left-0 z-50 flex justify-center"
+	style="padding-bottom: env(safe-area-inset-bottom)"
+>
+	<div
+		class="relative mx-4 mb-4 w-full max-w-sm"
+		style="filter: drop-shadow(0 4px 24px rgb(0 0 0 / 0.5))"
+	>
+		<!-- Bar with circular notch cut at top-center -->
+		<div
+			class="flex h-16 items-center justify-between rounded-2xl bg-slate-800 px-8"
+			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
+		>
+			<!-- History -->
+			<button
+				type="button"
+				onclick={() => goto(resolve('/history'))}
+				aria-label="History"
+				class="flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors {currentPath ===
+				'/history'
+					? 'text-amber-400'
+					: 'text-slate-400'}"
+			>
+				<svg
+					width="22"
+					height="22"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+					<rect x="9" y="3" width="6" height="4" rx="2" />
+					<path d="M9 12h6M9 16h4" />
+				</svg>
+				<span
+					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/history'
+						? 'bg-amber-400 opacity-100'
+						: 'opacity-0'}"
+				></span>
+			</button>
+
+			<!-- Center spacer — holds active dot for Roll page -->
+			<div class="relative flex w-18 shrink-0 items-end justify-center pb-2">
+				<span
+					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/'
+						? 'bg-amber-400 opacity-100'
+						: 'opacity-0'}"
+				></span>
+			</div>
+
+			<!-- Stats -->
+			<button
+				type="button"
+				onclick={() => goto(resolve('/stats'))}
+				aria-label="Stats"
+				class="flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors {currentPath ===
+				'/stats'
+					? 'text-amber-400'
+					: 'text-slate-400'}"
+			>
+				<svg
+					width="22"
+					height="22"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<path d="M18 20V10M12 20V4M6 20v-6" />
+				</svg>
+				<span
+					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/stats'
+						? 'bg-amber-400 opacity-100'
+						: 'opacity-0'}"
+				></span>
+			</button>
+		</div>
+
+		<!-- Floating center Roll button -->
+		<button
+			type="button"
+			onclick={() => goto(resolve('/'))}
+			aria-label="Roll Dice"
+			class="absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-amber-400 transition active:scale-95 {currentPath ===
+			'/'
+				? 'shadow-lg shadow-amber-400/40'
+				: 'opacity-90'}"
+		>
+			<!-- D20 icon -->
+			<svg
+				width="30"
+				height="30"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="white"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<polygon points="12,2 22,9 18,22 6,22 2,9" />
+				<polyline points="2,9 12,13 22,9" />
+				<line x1="12" y1="2" x2="12" y2="13" />
+				<line x1="18" y1="22" x2="12" y2="13" />
+				<line x1="6" y1="22" x2="12" y2="13" />
+			</svg>
+		</button>
+	</div>
+</nav>

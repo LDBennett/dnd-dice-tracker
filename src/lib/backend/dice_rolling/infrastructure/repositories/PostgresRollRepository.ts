@@ -67,6 +67,16 @@ export class PostgresRollRepository {
 		return this.mapRows(rows);
 	}
 
+	async findById(id: string, userId: string): Promise<SessionRecord | null> {
+		const rows = await db
+			.select()
+			.from(dbRollSessions)
+			.where(and(eq(dbRollSessions.id, id), eq(dbRollSessions.userId, userId)))
+			.limit(1);
+		const mapped = this.mapRows(rows);
+		return mapped[0] ?? null;
+	}
+
 	async updateSession(
 		sessionId: string,
 		userId: string,

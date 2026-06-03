@@ -54,6 +54,7 @@
 		"vitest-browser-svelte": "^2.1.0"
 	},
 	"dependencies": {
+		"@mdi/font": "^7.4.47",
 		"classnames": "^2.5.1"
 	}
 }

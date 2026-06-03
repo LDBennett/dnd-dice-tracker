@@ -8,6 +8,12 @@ const config = {
 	},
 	kit: {
 		adapter: adapter(),
+		alias: {
+			'@fe-shared':   'src/lib/frontend/1-shared',
+			'@fe-entities': 'src/lib/frontend/2-entities',
+			'@fe-features': 'src/lib/frontend/3-features',
+			'@fe-widgets':  'src/lib/frontend/4-widgets'
+		},
 		typescript: {
 			config: (config) => ({
 				...config,

@@ -1,0 +1,29 @@
+<script lang="ts">
+	let {
+		items,
+		value,
+		onchange,
+		activeClass = 'bg-amber-400 text-slate-900',
+		bg = 'bg-slate-700',
+		class: extraClass
+	}: {
+		items: { value: string; label: string }[];
+		value: string;
+		onchange?: (v: string) => void;
+		activeClass?: string;
+		bg?: string;
+		class?: string;
+	} = $props();
+</script>
+
+<div class="flex rounded-xl {bg} p-1 {extraClass ?? ''}">
+	{#each items as item}
+		<button
+			type="button"
+			onclick={() => onchange?.(item.value)}
+			class="flex-1 rounded-lg py-2 text-sm font-semibold transition {value === item.value
+				? activeClass
+				: 'text-slate-400 hover:text-white'}"
+		>{item.label}</button>
+	{/each}
+</div>

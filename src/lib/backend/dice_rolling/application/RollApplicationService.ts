@@ -31,6 +31,36 @@ export class RollApplicationService {
 		return { sessionId: session.id, total: session.totalScore, rolls: session.getRolls() };
 	}
 
+	async appendRollsToSession(
+		sessionId: string,
+		userId: string,
+		dice: Array<{ dieType: DiceResult['dieType']; value: number; note?: string }>,
+		modifier = 0
+	) {
+		const existing = await rollRepo.findById(sessionId, userId);
+		if (!existing) throw new Error('Session not found');
+
+		const newRolls: RollRecord[] = dice.map((d) => ({
+			dieType: d.dieType,
+			value: d.value,
+			note: d.note ?? ''
+		}));
+
+		const stats = await statsRepo.findByUserId(userId);
+		for (const roll of newRolls) {
+			stats.recordRoll(roll.dieType, roll.value);
+		}
+
+		await rollRepo.updateSession(sessionId, userId, { rolls: [...existing.rolls, ...newRolls] });
+		await statsRepo.save(stats);
+
+		return {
+			sessionId,
+			total: newRolls.reduce((s, r) => s + r.value, 0) + modifier,
+			rolls: newRolls
+		};
+	}
+
 	async getPlayerDashboard(userId: string) {
 		const stats = await statsRepo.findByUserId(userId);
 		return {
