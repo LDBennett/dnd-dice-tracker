@@ -2,7 +2,7 @@
 	import { StatCard, DIE_COLOR, Button } from '@fe-shared/ui';
 	import { computeExtended, sessionSummary, fmtLuck, luckClass, fmtDate } from '@fe-shared/lib';
 	import type { BreakdownEntry, SessionLuck, SessionRecord } from '@fe-shared/lib';
-	import { DieBreakdown } from '@fe-entities/die-roll';
+	import { DieBreakdown } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
 	import { fetchRollSessions, fetchDashboard } from '../api/statsDashboard.api';
 
@@ -108,7 +108,7 @@
 								<p class="text-xs text-slate-500">{fmtDate(s.rolledAt)}</p>
 							</div>
 							<div class="flex items-center gap-2">
-								<span class="shrink-0 text-sm font-bold {luckClass(s.luck)}">{fmtLuck(s.luck)}</span>
+								<span class={['shrink-0 text-sm font-bold', luckClass(s.luck)]}>{fmtLuck(s.luck)}</span>
 								<span class="text-xs text-slate-600">{isOpen ? '▲' : '▼'}</span>
 							</div>
 						</div>

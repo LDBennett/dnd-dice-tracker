@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
-	import { DiceExpandedCard } from '@fe-features/log-roll';
-	import type { RollResult } from '@fe-entities/roll-session';
+	import { RollEntryCard } from '@fe-features/log-roll';
+	import type { RollResult } from '@fe-entities/session';
 	import { DiceD100Icon } from '@fe-shared/ui';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
@@ -97,7 +97,7 @@
 	</div>
 
 	{#if selectedDie !== null}
-		<DiceExpandedCard
+		<RollEntryCard
 			die={selectedDie}
 			{sessionRolls}
 			{onConfirm}

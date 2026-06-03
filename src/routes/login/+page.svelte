@@ -18,14 +18,14 @@
 			<button
 				type="button"
 				onclick={() => (mode = 'login')}
-				class="flex-1 rounded-lg py-3 text-sm font-semibold transition-colors {mode === 'login' ? 'bg-amber-400 text-slate-900' : 'text-slate-400 hover:text-white'}"
+				class={['flex-1 rounded-lg py-3 text-sm font-semibold transition-colors', mode === 'login' ? 'bg-amber-400 text-slate-900' : 'text-slate-400 hover:text-white']}
 			>
 				Sign In
 			</button>
 			<button
 				type="button"
 				onclick={() => (mode = 'register')}
-				class="flex-1 rounded-lg py-3 text-sm font-semibold transition-colors {mode === 'register' ? 'bg-amber-400 text-slate-900' : 'text-slate-400 hover:text-white'}"
+				class={['flex-1 rounded-lg py-3 text-sm font-semibold transition-colors', mode === 'register' ? 'bg-amber-400 text-slate-900' : 'text-slate-400 hover:text-white']}
 			>
 				Register
 			</button>

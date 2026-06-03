@@ -30,16 +30,12 @@
 					<button
 						type="button"
 						onclick={() => (app.rollMode = false)}
-						class="relative z-10 px-4 py-2 transition-colors {app.rollMode
-							? 'text-slate-400'
-							: 'text-slate-900'}">Log</button
+						class={['relative z-10 px-4 py-2 transition-colors', app.rollMode ? 'text-slate-400' : 'text-slate-900']}>Log</button
 					>
 					<button
 						type="button"
 						onclick={() => (app.rollMode = true)}
-						class="relative z-10 px-4 py-2 transition-colors {app.rollMode
-							? 'text-slate-900'
-							: 'text-slate-400'}">Quick</button
+						class={['relative z-10 px-4 py-2 transition-colors', app.rollMode ? 'text-slate-900' : 'text-slate-400']}>Quick</button
 					>
 				</div>
 

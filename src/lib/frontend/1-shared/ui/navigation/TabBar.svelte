@@ -16,14 +16,15 @@
 	} = $props();
 </script>
 
-<div class="flex rounded-xl {bg} p-1 {extraClass ?? ''}">
-	{#each items as item}
+<div class={['flex rounded-xl p-1', bg, extraClass]}>
+	{#each items as item (item.value)}
 		<button
 			type="button"
 			onclick={() => onchange?.(item.value)}
-			class="flex-1 rounded-lg py-2 text-sm font-semibold transition {value === item.value
-				? activeClass
-				: 'text-slate-400 hover:text-white'}"
-		>{item.label}</button>
+			class={[
+				'flex-1 rounded-lg py-2 text-sm font-semibold transition',
+				value === item.value ? activeClass : 'text-slate-400 hover:text-white'
+			]}>{item.label}</button
+		>
 	{/each}
 </div>

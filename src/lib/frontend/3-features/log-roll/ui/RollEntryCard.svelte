@@ -70,7 +70,7 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class="absolute inset-x-0 top-0 z-20 rounded-3xl border-2 bg-slate-800 p-5 shadow-2xl {DIE_BORDER[die]}"
+	class={['absolute inset-x-0 top-0 z-20 rounded-3xl border-2 bg-slate-800 p-5 shadow-2xl', DIE_BORDER[die]]}
 >
 	<!-- Header -->
 	<div class="mb-3 flex items-center justify-between">

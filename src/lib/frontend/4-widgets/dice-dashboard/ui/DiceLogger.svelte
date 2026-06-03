@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
 	import { TabBar } from '@fe-shared/ui';
-	import { QuickRollOverlay } from '@fe-entities/die-roll';
-	import { QuickBatchRollOverlay, QuickBatchQueuePanel } from '@fe-features/quick-roll';
-	import { BatchPanel } from '@fe-features/batch-roll';
-	import { CurrentSessionPanel } from '@fe-features/current-session';
-	import type { RollResult } from '@fe-entities/roll-session';
+	import { QuickRollOverlay, QuickBatchRollOverlay, QuickBatchQueuePanel } from '@fe-features/quick-roll';
+	import { BatchEntryPanel } from '@fe-features/log-roll';
+	import { ActiveSessionPanel } from '@fe-features/active-session';
+	import type { RollResult } from '@fe-entities/session';
 	import DiceGrid from './DiceGrid.svelte';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
@@ -206,14 +205,14 @@
 
 	<!-- Battle+Log batch panel -->
 	{#if batchMode && !app.rollMode && batchEntries.length > 0}
-		<BatchPanel bind:entries={batchEntries} onConfirm={addBatchToSession} />
+		<BatchEntryPanel bind:entries={batchEntries} onConfirm={addBatchToSession} />
 	{/if}
 
-	<!-- Save error (saving indicator is in CurrentSessionPanel) -->
+	<!-- Save error (saving indicator is in ActiveSessionPanel) -->
 	{#if session.saveError}
 		<p class="rounded-lg bg-red-900/40 px-3 py-2 text-xs text-red-400">{session.saveError}</p>
 	{/if}
 
-	<!-- Current session -->
-	<CurrentSessionPanel />
+	<!-- Active session -->
+	<ActiveSessionPanel />
 </div>

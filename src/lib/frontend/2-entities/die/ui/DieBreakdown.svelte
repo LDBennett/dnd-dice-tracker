@@ -21,7 +21,7 @@
 					<div class="flex items-center gap-3 text-xs text-slate-400">
 						<span>{entry.count} {entry.count === 1 ? 'roll' : 'rolls'}</span>
 						<span class="font-semibold text-white">avg {entry.avg}</span>
-						<span class="font-semibold {luckClass(luckScore)}" title="luck vs expected {theoreticalAvg(entry.dieType)}">{fmtLuck(luckScore)}</span>
+						<span class={['font-semibold', luckClass(luckScore)]} title="luck vs expected {theoreticalAvg(entry.dieType)}">{fmtLuck(luckScore)}</span>
 					</div>
 				</div>
 				<div class="h-1.5 overflow-hidden rounded-full bg-slate-700">

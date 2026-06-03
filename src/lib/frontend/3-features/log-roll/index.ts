@@ -1,1 +1,2 @@
-export { default as DiceExpandedCard } from './ui/DiceExpandedCard.svelte';
+export { default as RollEntryCard }  from './ui/RollEntryCard.svelte';
+export { default as BatchEntryPanel } from './ui/BatchEntryPanel.svelte';

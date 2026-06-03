@@ -30,17 +30,17 @@
 {#if onclick}
 	<button
 		type="button"
-		class="flex w-full flex-col rounded-2xl p-5 text-left {cardClass} cursor-pointer transition hover:brightness-110 active:scale-95"
+		class={['flex w-full flex-col rounded-2xl p-5 text-left cursor-pointer transition hover:brightness-110 active:scale-95', cardClass]}
 		{onclick}
 	>
-		<span class="mb-1 text-xs font-semibold tracking-widest uppercase {labelClass}">{label}</span>
-		<span class="text-4xl font-extrabold {valueClass}" style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
+		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
 		{#if subtext}<span class="mt-1 text-xs text-slate-500">{subtext}</span>{/if}
 	</button>
 {:else}
-	<div class="flex flex-col rounded-2xl p-5 {cardClass}">
-		<span class="mb-1 text-xs font-semibold tracking-widest uppercase {labelClass}">{label}</span>
-		<span class="text-4xl font-extrabold {valueClass}" style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+	<div class={['flex flex-col rounded-2xl p-5', cardClass]}>
+		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
+		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
 		{#if subtext}<span class="mt-1 text-xs text-slate-500">{subtext}</span>{/if}
 	</div>
 {/if}

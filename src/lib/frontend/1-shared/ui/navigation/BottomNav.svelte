@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import NavTabButton from './NavTabButton.svelte';
 
 	const currentPath = $derived($page.url.pathname);
 </script>
@@ -20,86 +21,63 @@
 			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
 		>
 			<!-- History -->
-			<button
-				type="button"
-				onclick={() => goto(resolve('/history'))}
-				aria-label="History"
-				class="flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors {currentPath ===
-				'/history'
-					? 'text-amber-400'
-					: 'text-slate-400'}"
-			>
-				<svg
-					width="22"
-					height="22"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
-					<rect x="9" y="3" width="6" height="4" rx="2" />
-					<path d="M9 12h6M9 16h4" />
-				</svg>
-				<span
-					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/history'
-						? 'bg-amber-400 opacity-100'
-						: 'opacity-0'}"
-				></span>
-			</button>
+			<NavTabButton href="/history" label="History" active={currentPath === '/history'}>
+				{#snippet icon()}
+					<svg
+						width="22"
+						height="22"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+						<rect x="9" y="3" width="6" height="4" rx="2" />
+						<path d="M9 12h6M9 16h4" />
+					</svg>
+				{/snippet}
+			</NavTabButton>
 
 			<!-- Center spacer — holds active dot for Roll page -->
 			<div class="relative flex w-18 shrink-0 items-end justify-center pb-2">
 				<span
-					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/'
-						? 'bg-amber-400 opacity-100'
-						: 'opacity-0'}"
+					class={[
+						'h-1 w-1 rounded-full transition-opacity',
+						currentPath === '/' ? 'bg-amber-400 opacity-100' : 'opacity-0'
+					]}
 				></span>
 			</div>
 
 			<!-- Stats -->
-			<button
-				type="button"
-				onclick={() => goto(resolve('/stats'))}
-				aria-label="Stats"
-				class="flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors {currentPath ===
-				'/stats'
-					? 'text-amber-400'
-					: 'text-slate-400'}"
-			>
-				<svg
-					width="22"
-					height="22"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="M18 20V10M12 20V4M6 20v-6" />
-				</svg>
-				<span
-					class="h-1 w-1 rounded-full transition-opacity {currentPath === '/stats'
-						? 'bg-amber-400 opacity-100'
-						: 'opacity-0'}"
-				></span>
-			</button>
+			<NavTabButton href="/stats" label="Stats" active={currentPath === '/stats'}>
+				{#snippet icon()}
+					<svg
+						width="22"
+						height="22"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M18 20V10M12 20V4M6 20v-6" />
+					</svg>
+				{/snippet}
+			</NavTabButton>
 		</div>
 
-		<!-- Floating center Roll button -->
 		<button
 			type="button"
 			onclick={() => goto(resolve('/'))}
 			aria-label="Roll Dice"
-			class="absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-amber-400 transition active:scale-95 {currentPath ===
-			'/'
-				? 'shadow-lg shadow-amber-400/40'
-				: 'opacity-90'}"
+			class={[
+				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-amber-400 transition active:scale-95',
+				currentPath === '/' ? 'shadow-lg shadow-amber-400/40' : 'opacity-90'
+			]}
 		>
-			<!-- D20 icon -->
 			<svg
 				width="30"
 				height="30"

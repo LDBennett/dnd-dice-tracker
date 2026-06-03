@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
-	import { SessionCard } from '@fe-entities/roll-session';
-	import type { RollResult } from '@fe-entities/roll-session';
+	import { SessionCard } from '@fe-entities/session';
+	import type { RollResult } from '@fe-entities/session';
 
 	const app = getAppContext();
 	const session = app.session;

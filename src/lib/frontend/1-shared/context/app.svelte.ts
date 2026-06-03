@@ -1,5 +1,5 @@
 import { getContext } from 'svelte';
-import { Session } from '@fe-entities/roll-session';
+import { Session } from '@fe-entities/session';
 
 export type User = { name: string; email: string };
 

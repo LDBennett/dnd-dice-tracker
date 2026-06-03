@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SessionCard } from '@fe-entities/roll-session';
+	import { SessionCard } from '@fe-entities/session';
 	import { getAppContext } from '@fe-shared/context';
 	import { Button } from '@fe-shared/ui';
 	import { fetchSessions as apiFetchSessions, patchSession, deleteSession as apiDeleteSession } from '../api/historyEditor.api';
