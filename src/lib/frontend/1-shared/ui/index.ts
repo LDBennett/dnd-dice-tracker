@@ -2,6 +2,7 @@ export { default as NavBar }           from './navigation/NavBar.svelte';
 export { default as BottomNav }        from './navigation/BottomNav.svelte';
 export { default as TabBar }           from './navigation/TabBar.svelte';
 export { default as LoginModal }       from './modals/LoginModal.svelte';
+export { default as ConfirmModal }     from './modals/ConfirmModal.svelte';
 export { default as StatCard }         from './cards/StatCard.svelte';
 export { default as HandednessToggle } from './overlays/HandednessToggle.svelte';
 export { default as DiceD100Icon }     from './icons/DiceD100Icon.svelte';

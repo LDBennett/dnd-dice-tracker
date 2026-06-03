@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
@@ -98,7 +98,7 @@
 		onpointerdown={(e) => e.stopPropagation()}
 		role="presentation"
 	>
-		<p class="text-xs font-semibold tracking-widest text-slate-400 uppercase">
+		<p class="text-xs font-semibold tracking-widest text-stone-400 uppercase">
 			Rolling {dieStates.length}
 			{dieStates.length === 1 ? 'die' : 'dice'}
 		</p>
@@ -109,7 +109,7 @@
 		>
 			{#each dieStates as s, i (i)}
 				<div
-					class="flex flex-col items-center gap-2 rounded-2xl border-2 bg-slate-800 px-3 py-4 shadow-xl"
+					class="flex flex-col items-center gap-2 rounded-2xl border-2 bg-stone-800 px-3 py-4 shadow-xl"
 					style="border-color: {DIE_COLOR[s.dieType]};"
 				>
 					<p class="text-sm font-extrabold" style="color: {DIE_COLOR[s.dieType]}">d{s.dieType}</p>
@@ -140,11 +140,11 @@
 		</div>
 
 		{#if allDone}
-			<p in:fade={{ duration: 200 }} class="text-xs text-slate-500">tap to dismiss</p>
+			<p in:fade={{ duration: 200 }} class="text-xs text-stone-500">tap to dismiss</p>
 		{:else if settledCount === dieStates.length}
-			<p class="text-xs text-slate-500">tap to dismiss</p>
+			<p class="text-xs text-stone-500">tap to dismiss</p>
 		{:else}
-			<p class="text-sm text-slate-500">Rolling…</p>
+			<p class="text-sm text-stone-500">Rolling…</p>
 		{/if}
 	</div>
 </button>

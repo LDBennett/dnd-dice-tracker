@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { fmtDate } from '@fe-shared/lib';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
@@ -43,32 +43,32 @@
 <div class="flex max-h-72 flex-col gap-4 overflow-y-auto pr-1">
 	{#if sessionRolls.length > 0}
 		<div>
-			<p class="mb-1.5 text-xs font-semibold tracking-wider text-slate-500 uppercase">This session</p>
+			<p class="mb-1.5 text-xs font-semibold tracking-wider text-stone-500 uppercase">This session</p>
 			<div class="flex flex-col gap-1.5">
 				{#each sessionRolls as r, i (i)}
 					<div class="flex items-center gap-3">
 						<span class="w-8 text-right text-xl font-black text-white">{r.value}</span>
-						{#if r.note}<span class="text-xs text-slate-400">{r.note}</span>{/if}
+						{#if r.note}<span class="text-xs text-stone-400">{r.note}</span>{/if}
 					</div>
 				{/each}
 			</div>
 		</div>
 	{/if}
 	<div>
-		<p class="mb-1.5 text-xs font-semibold tracking-wider text-slate-500 uppercase">Overall</p>
+		<p class="mb-1.5 text-xs font-semibold tracking-wider text-stone-500 uppercase">Overall</p>
 		{#if historyLoading}
-			<p class="text-xs text-slate-500">Loading…</p>
+			<p class="text-xs text-stone-500">Loading…</p>
 		{:else if historyRolls.length === 0}
-			<p class="text-xs text-slate-500">No past rolls for d{die}.</p>
+			<p class="text-xs text-stone-500">No past rolls for d{die}.</p>
 		{:else}
 			<div class="flex flex-col gap-1.5">
 				{#each historyRolls as h, i (i)}
 					<div class="flex items-center justify-between gap-2">
 						<div class="flex items-center gap-3">
 							<span class="w-8 text-right text-xl font-black text-white">{h.value}</span>
-							{#if h.note}<span class="text-xs text-slate-400">{h.note}</span>{/if}
+							{#if h.note}<span class="text-xs text-stone-400">{h.note}</span>{/if}
 						</div>
-						<span class="shrink-0 text-xs text-slate-600">{fmtDate(h.date)}</span>
+						<span class="shrink-0 text-xs text-stone-600">{fmtDate(h.date)}</span>
 					</div>
 				{/each}
 			</div>

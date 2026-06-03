@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { browser } from '$app/environment';
 	import { setContext, untrack } from 'svelte';
 	import type { LayoutServerData } from './$types';
@@ -31,7 +31,7 @@
 	});
 </script>
 
-<div class="min-h-screen bg-slate-900 text-white">
+<div class="min-h-screen bg-stone-900 text-white">
 	<NavBar />
 
 	<main

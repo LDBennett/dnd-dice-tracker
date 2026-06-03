@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { DIE_COLOR } from '@fe-shared/ui';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
@@ -14,13 +14,13 @@
 	} = $props();
 </script>
 
-<div class="rounded-2xl border border-slate-700 bg-slate-800 p-4">
-	<p class="mb-3 text-xs font-semibold tracking-widest text-slate-500 uppercase">Roll Queue</p>
+<div class="rounded-2xl border border-stone-700 bg-stone-800 p-4">
+	<p class="mb-3 text-xs font-semibold tracking-widest text-stone-500 uppercase">Roll Queue</p>
 	<div class="mb-4 flex flex-wrap gap-2">
 		{#each [...new Set(queue)] as die (die)}
 			{@const count = queue.filter((d) => d === die).length}
 			<span
-				class="rounded-full px-3 py-1 text-sm font-bold text-slate-900"
+				class="rounded-full px-3 py-1 text-sm font-bold text-stone-900"
 				style="background: {DIE_COLOR[die]}"
 			>{count > 1 ? `${count}×` : ''}d{die}</span>
 		{/each}
@@ -29,13 +29,13 @@
 		<button
 			type="button"
 			onclick={onRollAll}
-			class="flex-1 rounded-2xl py-3 text-base font-black text-slate-900 transition hover:brightness-110 active:scale-95"
+			class="flex-1 rounded-2xl py-3 text-base font-black text-stone-900 transition hover:brightness-110 active:scale-95"
 			style="background: #fbbf24"
 		>Roll All! ({queue.length})</button>
 		<button
 			type="button"
 			onclick={onClear}
-			class="rounded-2xl px-4 py-3 text-sm font-semibold text-slate-400 transition hover:bg-slate-700 hover:text-white"
+			class="rounded-2xl px-4 py-3 text-sm font-semibold text-stone-400 transition hover:bg-stone-700 hover:text-white"
 		>Clear</button>
 	</div>
 </div>

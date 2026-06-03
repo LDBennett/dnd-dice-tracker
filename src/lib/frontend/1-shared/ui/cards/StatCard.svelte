@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	let {
 		label,
 		value,
@@ -15,14 +15,14 @@
 		onclick?: () => void;
 	} = $props();
 
-	const cardClass  = $derived(accent === 'amber' ? 'bg-amber-400/10 ring-1 ring-amber-400/30'
+	const cardClass  = $derived(accent === 'amber' ? 'bg-orange-400/10 ring-1 ring-orange-400/30'
 	                 : accent === 'red'   ? 'bg-red-900/20 ring-1 ring-red-800/40'
-	                 :                      'bg-slate-800');
-	const labelClass = $derived(accent === 'amber' ? 'text-amber-500'
+	                 :                      'bg-stone-800');
+	const labelClass = $derived(accent === 'amber' ? 'text-orange-500'
 	                 : accent === 'red'   ? 'text-red-500'
-	                 :                      'text-slate-500');
+	                 :                      'text-stone-500');
 	const valueClass = $derived(valueColor         ? ''
-	                 : accent === 'amber' ? 'text-amber-400'
+	                 : accent === 'amber' ? 'text-orange-400'
 	                 : accent === 'red'   ? 'text-red-400'
 	                 :                      'text-white');
 </script>
@@ -35,12 +35,12 @@
 	>
 		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
 		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
-		{#if subtext}<span class="mt-1 text-xs text-slate-500">{subtext}</span>{/if}
+		{#if subtext}<span class="mt-1 text-xs text-stone-500">{subtext}</span>{/if}
 	</button>
 {:else}
 	<div class={['flex flex-col rounded-2xl p-5', cardClass]}>
 		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
 		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
-		{#if subtext}<span class="mt-1 text-xs text-slate-500">{subtext}</span>{/if}
+		{#if subtext}<span class="mt-1 text-xs text-stone-500">{subtext}</span>{/if}
 	</div>
 {/if}

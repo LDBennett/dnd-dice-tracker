@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
 	import { TabBar } from '@fe-shared/ui';
 	import { QuickRollOverlay, QuickBatchRollOverlay, QuickBatchQueuePanel } from '@fe-features/quick-roll';
@@ -128,7 +128,7 @@
 	{#if session.currentSessionId !== null}
 		<div class="flex items-center justify-between px-1">
 			<div class="flex min-w-0 items-center gap-1">
-				<span class="shrink-0 text-xs text-slate-600">Session Active —</span>
+				<span class="shrink-0 text-xs text-stone-600">Session Active —</span>
 				{#if editingTitle}
 					<input
 						type="text"
@@ -137,7 +137,7 @@
 						onkeydown={onTitleKeydown}
 						placeholder="Unnamed session"
 						use:focusOnMount
-						class="min-w-0 flex-1 rounded-md bg-slate-700 px-1.5 py-0.5 text-xs text-white placeholder-slate-500 focus:ring-1 focus:ring-amber-400/60 focus:outline-none"
+						class="min-w-0 flex-1 rounded-md bg-stone-700 px-1.5 py-0.5 text-xs text-white placeholder-stone-500 focus:ring-1 focus:ring-orange-400/60 focus:outline-none"
 					/>
 				{:else}
 					<button
@@ -145,17 +145,17 @@
 						onclick={startEditTitle}
 						class="flex min-w-0 items-center gap-1 rounded hover:text-white"
 					>
-						<span class="truncate text-xs text-slate-400"
+						<span class="truncate text-xs text-stone-400"
 							>{session.currentSessionName || 'Unnamed session'}</span
 						>
-						<span class="shrink-0 text-slate-600 hover:text-slate-400">✎</span>
+						<span class="shrink-0 text-stone-600 hover:text-stone-400">✎</span>
 					</button>
 				{/if}
 			</div>
 			<button
 				type="button"
 				onclick={() => session.reset()}
-				class="shrink-0 rounded-lg px-3 py-1 text-xs font-semibold text-slate-500 transition hover:bg-slate-800 hover:text-white"
+				class="shrink-0 rounded-lg px-3 py-1 text-xs font-semibold text-stone-500 transition hover:bg-stone-800 hover:text-white"
 				>+ New Session</button
 			>
 		</div>
@@ -165,7 +165,7 @@
 			items={modeTabs}
 			value={batchMode ? 'battle' : 'rp'}
 			onchange={(v) => setMode(v === 'battle')}
-			bg="bg-slate-800"
+			bg="bg-stone-800"
 		/>
 	</div>
 

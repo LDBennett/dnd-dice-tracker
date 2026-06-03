@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { fade, scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
 	import cx from 'classnames';
@@ -41,7 +41,7 @@
 			type="button"
 			onclick={confirm}
 			class={cx(
-				'absolute bottom-16 flex min-h-12 items-center rounded-full bg-slate-700 px-4 py-2 text-sm font-semibold whitespace-nowrap text-white shadow-lg ring-1 ring-slate-600 transition hover:bg-slate-600  active:scale-95',
+				'absolute bottom-16 flex min-h-12 items-center rounded-full bg-stone-700 px-4 py-2 text-sm font-semibold whitespace-nowrap text-white shadow-lg ring-1 ring-stone-600 transition hover:bg-stone-600  active:scale-95',
 				app.rightHanded ? 'left-0' : 'right-0'
 			)}
 			transition:scale={{ start: 0.5, duration: 250, easing: backOut }}>{optionLabel}</button
@@ -54,8 +54,8 @@
 		title="Switch handedness"
 		aria-expanded={open}
 		class={cx(
-			'flex h-13 w-13 items-center justify-center rounded-full bg-slate-800 text-xl shadow-lg ring-1 ring-slate-700 transition hover:bg-slate-700 active:scale-90',
-			open ? 'ring-amber-500' : ''
+			'flex h-13 w-13 items-center justify-center rounded-full bg-stone-800 text-xl shadow-lg ring-1 ring-stone-700 transition hover:bg-stone-700 active:scale-90',
+			open ? 'ring-orange-500' : ''
 		)}
 	>
 		{#if app.rightHanded}

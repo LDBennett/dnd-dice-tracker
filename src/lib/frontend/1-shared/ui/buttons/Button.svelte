@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import type { Snippet } from 'svelte';
 
 	let {
@@ -18,8 +18,8 @@
 	const cls = $derived(
 		[
 			variant === 'primary'
-				? 'rounded-2xl bg-amber-400 py-4 text-base font-black text-slate-900 shadow-lg transition hover:brightness-110 active:scale-95 disabled:opacity-50'
-				: 'rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-slate-800 hover:text-white disabled:opacity-50',
+				? 'rounded-2xl bg-orange-400 py-4 text-base font-black text-stone-900 shadow-lg transition hover:brightness-110 active:scale-95 disabled:opacity-50'
+				: 'rounded-lg px-3 py-2 text-sm text-stone-400 transition hover:bg-stone-800 hover:text-white disabled:opacity-50',
 			fullWidth ? 'w-full' : '',
 			extraClass ?? ''
 		]

@@ -1,8 +1,8 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
 	import { RollEntryCard } from '@fe-features/log-roll';
 	import type { RollResult } from '@fe-entities/session';
-	import { DiceD100Icon } from '@fe-shared/ui';
+	import { DiceD100Icon, DIE_COLOR } from '@fe-shared/ui';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 	interface BatchEntry {
@@ -23,15 +23,6 @@
 		100: null
 	};
 
-	const DIE_BORDER: Record<DieType, string> = {
-		4: 'border-red-500/70 text-red-400',
-		6: 'border-orange-500/70 text-orange-400',
-		8: 'border-yellow-500/70 text-yellow-400',
-		10: 'border-green-500/70 text-green-400',
-		12: 'border-teal-500/70 text-teal-400',
-		20: 'border-amber-400/70 text-amber-400',
-		100: 'border-purple-500/70 text-purple-400'
-	};
 
 	let {
 		batchMode,
@@ -68,13 +59,8 @@
 			<button
 				type="button"
 				onclick={() => onDieClick(die)}
-				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing ===
-				die
-					? 'scale(0.82)'
-					: 'scale(1)'};"
-				class="relative flex min-h-22 flex-col items-center justify-center rounded-2xl border-2 bg-slate-800 font-bold shadow-lg hover:bg-slate-700 {DIE_BORDER[
-					die
-				]}"
+				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing === die ? 'scale(0.82)' : 'scale(1)'}; border-color: {DIE_COLOR[die]}b3; color: {DIE_COLOR[die]};"
+				class="relative flex min-h-22 flex-col items-center justify-center rounded-2xl border-2 bg-stone-800 font-bold shadow-lg hover:bg-stone-700"
 			>
 				{#if DIE_ICON[die]}
 					<span class="mdi {DIE_ICON[die]} text-5xl"></span>
@@ -87,7 +73,7 @@
 						: batchEntries.filter((e) => e.dieType === die).length}
 					{#if count > 0}
 						<span
-							class="absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-400 px-1 text-xs font-black text-slate-900"
+							class="absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-400 px-1 text-xs font-black text-stone-900"
 							>×{count}</span
 						>
 					{/if}

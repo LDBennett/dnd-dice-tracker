@@ -1,7 +1,7 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { DIE_COLOR, DiceD100Icon, IconButton, Badge } from '@fe-shared/ui';
+	import { DIE_COLOR, DiceD100Icon, IconButton, Badge, ConfirmModal } from '@fe-shared/ui';
 	import EditRollModal from './EditRollModal.svelte';
 
 	interface RollRecord {
@@ -40,6 +40,7 @@
 	let name = $state(untrack(() => session.name));
 	let rolls = $state(untrack(() => session.rolls.map((r) => ({ ...r }))));
 	let editingIndex = $state<number | null>(null);
+	let confirmingDelete = $state(false);
 
 	// In live mode: append new rolls without overwriting in-progress edits; reset on clear
 	$effect(() => {
@@ -90,7 +91,7 @@
 	{/if}
 {/snippet}
 
-<div class="rounded-2xl bg-slate-800 p-4">
+<div class="rounded-2xl bg-stone-800 p-4">
 	<!-- Session name -->
 	<div class="relative mb-3 flex items-center gap-2">
 		{#if isGuest}
@@ -101,14 +102,15 @@
 				bind:value={name}
 				onblur={() => onSaveName(session.id, name)}
 				placeholder="Unnamed session"
-				class="flex-1 rounded-xl border border-slate-600 bg-slate-700/60 px-3 py-2 text-sm font-semibold text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
+				class="flex-1 rounded-xl border border-stone-600 bg-stone-700/60 px-3 py-2 text-sm font-semibold text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 			/>
 			<IconButton
 				icon="mdi-trash-can-outline"
 				size="sm"
+				iconSize="lg"
 				hoverColor="red"
 				rounded="lg"
-				onclick={() => onDelete(session.id)}
+				onclick={() => (confirmingDelete = true)}
 				aria-label="Delete session"
 			/>
 		{/if}
@@ -117,12 +119,12 @@
 	<!-- Date + total -->
 	<div class="mb-3 flex items-center justify-between">
 		<div>
-			<p class="text-xs font-semibold text-slate-400">{formatDate(session.rolledAt)}</p>
-			<p class="text-xs text-slate-500">{formatTime(session.rolledAt)}</p>
+			<p class="text-xs font-semibold text-stone-400">{formatDate(session.rolledAt)}</p>
+			<p class="text-xs text-stone-500">{formatTime(session.rolledAt)}</p>
 		</div>
 		<div class="text-right">
-			<p class="text-xs text-slate-500">Total Rolls</p>
-			<p class="text-lg font-black text-amber-400">{session.rolls.length}</p>
+			<p class="text-xs text-stone-500">Total Rolls</p>
+			<p class="text-lg font-black text-orange-400">{session.rolls.length}</p>
 		</div>
 	</div>
 
@@ -132,20 +134,20 @@
 			<div class="flex items-center gap-2">
 				{#if isGuest}
 					<span
-						class="w-20 rounded-full px-2.5 py-1 text-center text-xs font-bold text-slate-900"
+						class="w-20 rounded-full px-2.5 py-1 text-center text-xs font-bold text-stone-900"
 						style="background: {dieColor(roll.dieType)}"
 						>{@render dieIcon(roll.dieType)}<span class="mdi mdi-arrow-right-bold"
 						></span>{roll.value}</span
 					>
 					{#if roll.note}
-						<span class="min-w-1 flex-1 text-xs leading-5 text-slate-400">{roll.note}</span>
+						<span class="min-w-1 flex-1 text-xs leading-5 text-stone-400">{roll.note}</span>
 					{/if}
 				{:else}
 					<button
 						type="button"
 						onclick={() => (editingIndex = i)}
 						title="Edit roll value"
-						class="w-20 shrink-0 rounded-full px-2.5 py-1 text-center text-xs font-bold text-slate-900 ring-offset-slate-800 transition hover:scale-105 hover:ring-2 hover:brightness-125 active:scale-95"
+						class="flex w-20 shrink-0 items-center justify-center gap-1 rounded-full px-2.5 py-1 text-center text-xs font-bold text-stone-900 ring-offset-stone-800 transition hover:scale-105 hover:ring-2 hover:brightness-125 active:scale-95"
 						style="background: {dieColor(roll.dieType)}; --tw-ring-color: {dieColor(
 							roll.dieType
 						)}60;"
@@ -159,7 +161,7 @@
 						bind:value={rolls[i].note}
 						onblur={() => onSaveRolls(session.id, rolls)}
 						placeholder="Notes (optional)"
-						class="flex-1 rounded-lg border border-slate-600 bg-slate-700/60 px-2.5 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/30 focus:outline-none"
+						class="flex-1 rounded-lg border border-stone-600 bg-stone-700/60 px-2.5 py-1.5 text-xs text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 					/>
 					<IconButton
 						icon="mdi-trash-can-outline"
@@ -181,12 +183,12 @@
 
 	<!-- Save indicator -->
 	{#if !isGuest && savingId === session.id}
-		<p class="mt-2 text-right text-xs text-slate-500">Saving…</p>
+		<p class="mt-2 text-right text-xs text-stone-500">Saving…</p>
 	{:else if !isGuest && savedId === session.id}
 		<p
 			in:fade={{ duration: 150 }}
 			out:fade={{ duration: 400 }}
-			class="mt-2 text-right text-xs font-semibold text-amber-400"
+			class="mt-2 text-right text-xs font-semibold text-orange-400"
 		>
 			<span class="mdi mdi-check"></span> Saved
 		</p>
@@ -199,5 +201,18 @@
 		currentValue={rolls[editingIndex].value}
 		onConfirm={(v) => handleEditConfirm(editingIndex!, v)}
 		onCancel={() => (editingIndex = null)}
+	/>
+{/if}
+
+{#if confirmingDelete}
+	<ConfirmModal
+		title="Delete session?"
+		message="This will permanently remove the session and all its rolls."
+		confirmLabel="Delete"
+		onConfirm={() => {
+			confirmingDelete = false;
+			onDelete(session.id);
+		}}
+		onCancel={() => (confirmingDelete = false)}
 	/>
 {/if}

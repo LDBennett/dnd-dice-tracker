@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut, cubicOut } from 'svelte/easing';
@@ -42,7 +42,7 @@
 		8: 'border-yellow-500/70 text-yellow-400',
 		10: 'border-green-500/70 text-green-400',
 		12: 'border-teal-500/70 text-teal-400',
-		20: 'border-amber-400/70 text-amber-400',
+		20: 'border-orange-400/70 text-orange-400',
 		100: 'border-purple-500/70 text-purple-400'
 	};
 
@@ -70,7 +70,7 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class={['absolute inset-x-0 top-0 z-20 rounded-3xl border-2 bg-slate-800 p-5 shadow-2xl', DIE_BORDER[die]]}
+	class={['absolute inset-x-0 top-0 z-20 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl', DIE_BORDER[die]]}
 >
 	<!-- Header -->
 	<div class="mb-3 flex items-center justify-between">
@@ -84,7 +84,7 @@
 			items={dieTabs}
 			value={dieTab}
 			onchange={(v) => (dieTab = v as 'roll' | 'history')}
-			activeClass="bg-slate-900 text-white"
+			activeClass="bg-stone-900 text-white"
 			class="mb-4"
 		/>
 	{/if}
@@ -93,7 +93,7 @@
 		<!-- Slider + value -->
 		<div class="flex items-stretch gap-4" class:flex-row-reverse={app.rightHanded}>
 			<div
-				class="flex flex-col justify-between py-1 text-sm font-semibold text-slate-500"
+				class="flex flex-col justify-between py-1 text-sm font-semibold text-stone-500"
 				class:items-end={!app.rightHanded}
 				class:items-start={app.rightHanded}
 			>
@@ -151,7 +151,7 @@
 		<TextInput
 			bind:value={rollNote}
 			placeholder="Note for this roll (optional)"
-			class="mt-4 bg-slate-700"
+			class="mt-4 bg-stone-700"
 		/>
 
 		<Button variant="primary" fullWidth onclick={confirmRoll} style="background: {DIE_COLOR[die]};" class="mt-3">Log Roll</Button>

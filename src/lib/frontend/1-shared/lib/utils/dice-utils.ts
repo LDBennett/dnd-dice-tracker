@@ -1,4 +1,4 @@
-import type { BreakdownEntry, ExtendedStats, SessionLuck, SessionRecord, SessionSummary } from '../types/api-types';
+﻿import type { BreakdownEntry, ExtendedStats, SessionLuck, SessionRecord, SessionSummary } from '../types/api-types';
 
 export function computeExtended(sessions: SessionRecord[]): ExtendedStats {
 	const counts: Partial<Record<number, { count: number; sum: number }>> = {};
@@ -73,7 +73,7 @@ export function fmtLuck(n: number): string {
 }
 
 export function luckClass(n: number): string {
-	return n > 0.1 ? 'text-green-400' : n < -0.1 ? 'text-red-400' : 'text-slate-500';
+	return n > 0.1 ? 'text-green-400' : n < -0.1 ? 'text-red-400' : 'text-stone-500';
 }
 
 export function fmtDate(iso: string): string {

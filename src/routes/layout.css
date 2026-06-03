@@ -25,3 +25,51 @@
 .rolling {
 	animation: wobble 0.45s ease-in-out infinite;
 }
+
+@keyframes spin360 {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes bounceY {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	40% {
+		transform: translateY(-5px);
+	}
+	70% {
+		transform: translateY(-2px);
+	}
+}
+
+@keyframes scalePop {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.3);
+	}
+}
+
+.anim-spin360 {
+	animation: spin360 0.5s ease-in-out;
+}
+
+.anim-bounce {
+	animation: bounceY 0.4s ease-out;
+}
+
+.anim-pop {
+	animation: scalePop 0.35s ease-out;
+}
+
+button {
+	@apply cursor-pointer;
+}

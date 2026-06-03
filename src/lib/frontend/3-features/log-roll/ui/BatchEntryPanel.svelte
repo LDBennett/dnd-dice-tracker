@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { DIE_COLOR, Button, IconButton, TextInput, Badge } from '@fe-shared/ui';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
@@ -88,12 +88,12 @@
 	}
 </script>
 
-<div class="rounded-2xl bg-slate-800 p-4">
-	<h3 class="mb-3 text-sm font-semibold text-slate-300">Battle rolls</h3>
+<div class="rounded-2xl bg-stone-800 p-4">
+	<h3 class="mb-3 text-sm font-semibold text-stone-300">Battle rolls</h3>
 
 	<div class="mb-3 flex flex-col gap-3">
 		{#each entries as entry (entry.id)}
-			<div class="rounded-xl bg-slate-700/50 p-3">
+			<div class="rounded-xl bg-stone-700/50 p-3">
 				<input
 					type="range"
 					min="1"
@@ -106,23 +106,23 @@
 				/>
 				<div class="flex items-center gap-3">
 					<span
-						class="shrink-0 rounded-full px-2.5 py-1 text-xs font-black text-slate-900"
+						class="shrink-0 rounded-full px-2.5 py-1 text-xs font-black text-stone-900"
 						style="background: {DIE_COLOR[entry.dieType]}">d{entry.dieType}</span
 					>
 					<div
-						class="flex flex-1 items-center justify-center gap-3 rounded-xl bg-slate-700 px-2 py-1"
+						class="flex flex-1 items-center justify-center gap-3 rounded-xl bg-stone-700 px-2 py-1"
 					>
 						<button
 							type="button"
 							onclick={() => step(entry.id, -1)}
-							class="flex h-9 w-9 items-center justify-center rounded-lg text-xl text-slate-300 transition hover:bg-slate-600 active:scale-90"
+							class="flex h-9 w-9 items-center justify-center rounded-lg text-xl text-stone-300 transition hover:bg-stone-600 active:scale-90"
 							aria-label="Decrease"><span class="mdi mdi-minus"></span></button
 						>
 						<span class="min-w-[3ch] text-center text-xl font-black text-white">{entry.value}</span>
 						<button
 							type="button"
 							onclick={() => step(entry.id, 1)}
-							class="flex h-9 w-9 items-center justify-center rounded-lg text-xl text-slate-300 transition hover:bg-slate-600 active:scale-90"
+							class="flex h-9 w-9 items-center justify-center rounded-lg text-xl text-stone-300 transition hover:bg-stone-600 active:scale-90"
 							aria-label="Increase">+</button
 						>
 					</div>
@@ -144,7 +144,7 @@
 				type="button"
 				onclick={applyQuickFill}
 				disabled={!quickFillReady}
-				class="shrink-0 rounded-xl bg-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:bg-slate-600 hover:text-white disabled:opacity-40"
+				class="shrink-0 rounded-xl bg-stone-700 px-4 py-2.5 text-sm font-semibold text-stone-300 transition hover:bg-stone-600 hover:text-white disabled:opacity-40"
 				>Apply</button
 			>
 		</div>
@@ -165,7 +165,7 @@
 					{/if}
 				{/each}
 				{#if entries.length > quickFillValidation.length}
-					<span class="rounded-full bg-slate-700/60 px-2.5 py-0.5 text-xs text-slate-500">
+					<span class="rounded-full bg-stone-700/60 px-2.5 py-0.5 text-xs text-stone-500">
 						+{entries.length - quickFillValidation.length} unfilled
 					</span>
 				{/if}
@@ -173,14 +173,14 @@
 		{/if}
 	</div>
 
-	<p class="mb-3 text-sm text-slate-400">
-		Total: <span class="font-black text-amber-400">{batchTotal}</span>
+	<p class="mb-3 text-sm text-stone-400">
+		Total: <span class="font-black text-orange-400">{batchTotal}</span>
 	</p>
 
 	<TextInput
 		bind:value={batchNote}
 		placeholder="Note for all rolls (optional)"
-		class="mb-3 bg-slate-700"
+		class="mb-3 bg-stone-700"
 	/>
 
 	<Button variant="primary" fullWidth onclick={confirm}>

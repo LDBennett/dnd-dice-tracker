@@ -1,10 +1,10 @@
-<script lang="ts">
+﻿<script lang="ts">
 	let {
 		items,
 		value,
 		onchange,
-		activeClass = 'bg-amber-400 text-slate-900',
-		bg = 'bg-slate-700',
+		activeClass = 'bg-orange-400 text-stone-900',
+		bg = 'bg-stone-700',
 		class: extraClass
 	}: {
 		items: { value: string; label: string }[];
@@ -23,7 +23,7 @@
 			onclick={() => onchange?.(item.value)}
 			class={[
 				'flex-1 rounded-lg py-2 text-sm font-semibold transition',
-				value === item.value ? activeClass : 'text-slate-400 hover:text-white'
+				value === item.value ? activeClass : 'text-stone-400 hover:text-white'
 			]}>{item.label}</button
 		>
 	{/each}

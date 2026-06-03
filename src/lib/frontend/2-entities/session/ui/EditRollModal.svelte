@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut, cubicOut } from 'svelte/easing';
@@ -60,7 +60,7 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class="fixed left-1/2 top-1/2 z-50 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-slate-800 p-5 shadow-2xl"
+	class="fixed left-1/2 top-1/2 z-50 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl"
 	style="border-color: {color}40;"
 >
 	<div class="mb-3 flex items-center justify-between">
@@ -70,7 +70,7 @@
 
 	<div class="flex items-stretch gap-4" class:flex-row-reverse={app.rightHanded}>
 		<div
-			class="flex flex-col justify-between py-1 text-sm font-semibold text-slate-500"
+			class="flex flex-col justify-between py-1 text-sm font-semibold text-stone-500"
 			class:items-end={!app.rightHanded}
 			class:items-start={app.rightHanded}
 		>

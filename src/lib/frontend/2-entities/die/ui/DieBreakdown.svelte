@@ -11,20 +11,20 @@
 </script>
 
 <div class="mt-6">
-	<h3 class="mb-3 text-xs font-semibold tracking-widest text-slate-500 uppercase">Die Breakdown</h3>
+	<h3 class="mb-3 text-xs font-semibold tracking-widest text-stone-500 uppercase">Die Breakdown</h3>
 	<div class="grid grid-cols-2 gap-2">
 		{#each breakdown as entry (entry.dieType)}
 			{@const luckScore = luck(entry)}
-			<div class="rounded-2xl bg-slate-800 px-4 py-3">
+			<div class="rounded-2xl bg-stone-800 px-4 py-3">
 				<div class="mb-2 flex items-center justify-between">
 					<span class="text-sm font-bold" style="color: {color(entry.dieType)}">d{entry.dieType}</span>
-					<div class="flex items-center gap-3 text-xs text-slate-400">
+					<div class="flex items-center gap-3 text-xs text-stone-400">
 						<span>{entry.count} {entry.count === 1 ? 'roll' : 'rolls'}</span>
 						<span class="font-semibold text-white">avg {entry.avg}</span>
 						<span class={['font-semibold', luckClass(luckScore)]} title="luck vs expected {theoreticalAvg(entry.dieType)}">{fmtLuck(luckScore)}</span>
 					</div>
 				</div>
-				<div class="h-1.5 overflow-hidden rounded-full bg-slate-700">
+				<div class="h-1.5 overflow-hidden rounded-full bg-stone-700">
 					<div
 						class="h-full rounded-full"
 						style="width: {(entry.avg / entry.dieType) * 100}%; background: {color(entry.dieType)}; opacity: 0.7;"

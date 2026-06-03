@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import type { Snippet } from 'svelte';
 
 	let {
@@ -15,8 +15,8 @@
 		{
 			success: 'bg-green-900/40 text-green-400',
 			danger: 'bg-red-900/40 text-red-400',
-			warning: 'bg-amber-400/20 text-amber-400',
-			neutral: 'bg-slate-700 text-slate-400'
+			warning: 'bg-orange-400/20 text-orange-400',
+			neutral: 'bg-stone-700 text-stone-400'
 		}[variant]
 	);
 </script>

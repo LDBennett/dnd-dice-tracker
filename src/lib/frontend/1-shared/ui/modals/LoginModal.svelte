@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { fade, scale } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
@@ -71,7 +71,7 @@
 
 	<!-- Modal card -->
 	<div
-		class="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-sm -translate-y-1/2 rounded-3xl bg-slate-800 p-6 shadow-2xl"
+		class="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-sm -translate-y-1/2 rounded-3xl bg-stone-800 p-6 shadow-2xl"
 		in:scale={{ start: 0.92, duration: 220, easing: cubicOut }}
 		out:scale={{ start: 0.92, duration: 150, easing: cubicOut }}
 		role="dialog"
@@ -86,7 +86,7 @@
 			<button
 				type="button"
 				onclick={close}
-				class="flex h-8 w-8 items-center justify-center rounded-xl text-slate-400 transition hover:bg-slate-700 hover:text-white"
+				class="flex h-8 w-8 items-center justify-center rounded-xl text-stone-400 transition hover:bg-stone-700 hover:text-white"
 				aria-label="Close"><span class="mdi mdi-close"></span></button
 			>
 		</div>
@@ -109,7 +109,7 @@
 					bind:value={name}
 					placeholder="Name"
 					autocomplete="name"
-					class="w-full rounded-xl border border-slate-600 bg-slate-700 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
+					class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
 				/>
 			{/if}
 
@@ -118,7 +118,7 @@
 				bind:value={email}
 				placeholder="Email"
 				autocomplete="email"
-				class="w-full rounded-xl border border-slate-600 bg-slate-700 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
+				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
 			/>
 
 			<input
@@ -126,7 +126,7 @@
 				bind:value={password}
 				placeholder="Password"
 				autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
-				class="w-full rounded-xl border border-slate-600 bg-slate-700 px-4 py-3 text-sm text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400/30"
+				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
 			/>
 
 			{#if error}
@@ -137,7 +137,7 @@
 				type="button"
 				onclick={submit}
 				disabled={loading}
-				class="mt-1 w-full rounded-xl bg-amber-400 py-3.5 text-sm font-bold text-slate-900 transition hover:bg-amber-300 active:scale-95 disabled:opacity-50"
+				class="mt-1 w-full rounded-xl bg-orange-400 py-3.5 text-sm font-bold text-stone-900 transition hover:bg-orange-300 active:scale-95 disabled:opacity-50"
 			>
 				{#if loading}
 					{mode === 'login' ? 'Signing in…' : 'Creating account…'}

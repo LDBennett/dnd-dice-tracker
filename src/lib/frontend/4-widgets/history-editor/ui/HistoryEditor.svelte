@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { SessionCard } from '@fe-entities/session';
 	import { getAppContext } from '@fe-shared/context';
 	import { Button } from '@fe-shared/ui';
@@ -55,9 +55,9 @@
 	</div>
 
 	{#if loading}
-		<div class="py-16 text-center text-slate-500">Loading…</div>
+		<div class="py-16 text-center text-stone-500">Loading…</div>
 	{:else if sessions.length === 0}
-		<div class="py-16 text-center text-slate-500">
+		<div class="py-16 text-center text-stone-500">
 			<p class="mb-2 text-4xl">📜</p>
 			<p>No sessions yet. Go roll some dice!</p>
 		</div>

@@ -5,6 +5,14 @@
 	import NavTabButton from './NavTabButton.svelte';
 
 	const currentPath = $derived($page.url.pathname);
+
+	let isRollAnimating = $state(false);
+
+	function handleRollClick() {
+		isRollAnimating = true;
+		setTimeout(() => { isRollAnimating = false; }, 500);
+		goto(resolve('/'));
+	}
 </script>
 
 <nav
@@ -17,11 +25,11 @@
 	>
 		<!-- Bar with circular notch cut at top-center -->
 		<div
-			class="flex h-16 items-center justify-between rounded-2xl bg-slate-800 px-8"
+			class="flex h-16 items-center justify-between rounded-2xl bg-stone-800 px-8"
 			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
 		>
 			<!-- History -->
-			<NavTabButton href="/history" label="History" active={currentPath === '/history'}>
+			<NavTabButton href="/history" label="History" active={currentPath === '/history'} animClass="anim-bounce">
 				{#snippet icon()}
 					<svg
 						width="22"
@@ -40,18 +48,18 @@
 				{/snippet}
 			</NavTabButton>
 
-			<!-- Center spacer — holds active dot for Roll page -->
+			<!-- Center spacer — label for Roll page -->
 			<div class="relative flex w-18 shrink-0 items-end justify-center pb-2">
 				<span
 					class={[
-						'h-1 w-1 rounded-full transition-opacity',
-						currentPath === '/' ? 'bg-amber-400 opacity-100' : 'opacity-0'
-					]}
-				></span>
+						'mt-8.5 text-xs font-semibold transition-colors',
+						currentPath === '/' ? 'text-orange-400' : 'text-stone-500'
+					]}>Roll</span
+				>
 			</div>
 
 			<!-- Stats -->
-			<NavTabButton href="/stats" label="Stats" active={currentPath === '/stats'}>
+			<NavTabButton href="/stats" label="Stats" active={currentPath === '/stats'} animClass="anim-pop">
 				{#snippet icon()}
 					<svg
 						width="22"
@@ -71,11 +79,11 @@
 
 		<button
 			type="button"
-			onclick={() => goto(resolve('/'))}
+			onclick={handleRollClick}
 			aria-label="Roll Dice"
 			class={[
-				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-amber-400 transition active:scale-95',
-				currentPath === '/' ? 'shadow-lg shadow-amber-400/40' : 'opacity-90'
+				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-orange-400 transition active:scale-95',
+				currentPath === '/' ? 'shadow-lg shadow-orange-400/40' : 'opacity-90'
 			]}
 		>
 			<svg
@@ -87,6 +95,7 @@
 				stroke-width="2"
 				stroke-linecap="round"
 				stroke-linejoin="round"
+				class={[isRollAnimating && 'anim-spin360']}
 			>
 				<polygon points="12,2 22,9 18,22 6,22 2,9" />
 				<polyline points="2,9 12,13 22,9" />

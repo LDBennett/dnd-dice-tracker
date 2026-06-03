@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
@@ -65,7 +65,7 @@
 
 	<div
 		in:scale={{ start: 0.4, duration: 380, easing: backOut }}
-		class="flex flex-col items-center gap-5 rounded-3xl border-2 bg-slate-800 px-10 py-8 shadow-2xl"
+		class="flex flex-col items-center gap-5 rounded-3xl border-2 bg-stone-800 px-10 py-8 shadow-2xl"
 		style="border-color: {DIE_COLOR[die]}; min-width: 220px;"
 		class:rolling
 		onpointerdown={(event) => event.stopPropagation()}
@@ -94,11 +94,11 @@
 					{:else if isNat1}
 						<Badge variant="danger" class="px-3 py-1 text-sm font-bold">NAT 1 💀</Badge>
 					{:else}
-						<span class="text-xs text-slate-500">tap to dismiss</span>
+						<span class="text-xs text-stone-500">tap to dismiss</span>
 					{/if}
 				</span>
 			{:else}
-				<span class="text-sm text-slate-500">Rolling…</span>
+				<span class="text-sm text-stone-500">Rolling…</span>
 			{/if}
 		</div>
 	</div>
