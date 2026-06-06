@@ -1,4 +1,5 @@
 import type { RollResult, SubmitResult } from '../types/session.types';
+import type { SessionRecord } from '@fe-shared/lib';
 export type { RollResult, SubmitResult };
 
 export async function submitRollSession(
@@ -15,6 +16,12 @@ export async function submitRollSession(
 		const text = await res.text().catch(() => res.statusText);
 		throw new Error(`Save failed (${res.status}): ${text}`);
 	}
+	return res.json();
+}
+
+export async function fetchSessions(): Promise<SessionRecord[]> {
+	const res = await fetch('/api/rolls');
+	if (!res.ok) return [];
 	return res.json();
 }
 

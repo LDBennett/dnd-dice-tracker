@@ -1,4 +1,4 @@
-import type { DieType } from './api-types';
+import type { DieType, SessionRecord } from './api-types';
 
 export interface RollResult {
 	dieType: DieType;
@@ -15,5 +15,6 @@ export interface ISession {
 	saveError: string | null;
 	autoSave(rolls: RollResult[]): Promise<void>;
 	patch(fields: { name?: string; rolls?: RollResult[] }): Promise<void>;
+	load(record: SessionRecord): void;
 	reset(): void;
 }

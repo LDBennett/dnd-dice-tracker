@@ -1,6 +1,6 @@
 import { submitRollSession, updateRollSession } from '../api/sessionApi';
 import type { RollResult } from '../types/session.types';
-import type { ISession } from '@fe-shared/lib';
+import type { ISession, SessionRecord } from '@fe-shared/lib';
 import { SvelteDate } from 'svelte/reactivity';
 
 export class Session implements ISession {
@@ -39,6 +39,14 @@ export class Session implements ISession {
 		if (fields.rolls !== undefined) this.currentSessionRolls = fields.rolls;
 		if (fields.name !== undefined) this.currentSessionName = fields.name;
 		await updateRollSession(this.currentSessionId, fields);
+	}
+
+	load(record: SessionRecord) {
+		this.currentSessionId = record.id;
+		this.currentSessionRolls = record.rolls as RollResult[];
+		this.currentSessionName = record.name;
+		this.rolledAt = record.rolledAt;
+		this.saveError = null;
 	}
 
 	reset() {

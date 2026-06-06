@@ -9,7 +9,8 @@
 	} from '@fe-features/quick-roll';
 	import { BatchEntryPanel } from '@fe-features/log-roll';
 	import { ActiveSessionPanel } from '@fe-features/active-session';
-	import type { DieType, RollResult } from '@fe-shared/lib';
+	import { fetchSessions } from '@fe-entities/session';
+	import type { DieType, RollResult, SessionRecord } from '@fe-shared/lib';
 	import type { BatchEntry } from '@fe-features/log-roll';
 	import DiceGrid from './DiceGrid.svelte';
 
@@ -121,6 +122,29 @@
 	function addBatchToSession(rolls: RollResult[]) {
 		session.autoSave(rolls);
 	}
+
+	// Session picker
+	let pickerOpen = $state(false);
+	let pickerSessions = $state<SessionRecord[]>([]);
+	let pickerLoading = $state(false);
+
+	const pickerItems = $derived(
+		pickerSessions.filter((s) => s.id !== session.currentSessionId).slice(0, 8)
+	);
+
+	async function openPicker() {
+		pickerOpen = true;
+		pickerLoading = true;
+		pickerSessions = await fetchSessions();
+		pickerLoading = false;
+	}
+
+	function continueSession(record: SessionRecord) {
+		session.load(record);
+		selectedDie = null;
+		batchEntries = [];
+		pickerOpen = false;
+	}
 </script>
 
 <div class="flex flex-col gap-6 px-4 py-6">
@@ -154,15 +178,53 @@
 						</p>
 					{/if}
 				</div>
-				<div class="flex shrink-0 flex-col items-end gap-1">
+				<div class="flex shrink-0 items-center gap-3">
+					{#if !pickerOpen}
+						<button
+							type="button"
+							onclick={openPicker}
+							class="text-sm font-medium text-stone-400 transition hover:text-stone-200"
+							>Continue</button
+						>
+					{:else}
+						<button
+							type="button"
+							onclick={() => (pickerOpen = false)}
+							class="text-sm font-medium text-stone-400 transition hover:text-stone-200"
+							>Cancel</button
+						>
+					{/if}
 					<button
 						type="button"
-						onclick={() => session.reset()}
+						onclick={() => { session.reset(); pickerOpen = false; }}
 						class="text-sm font-medium text-orange-400 transition hover:text-orange-300"
 						>+ New</button
 					>
 				</div>
 			</div>
+
+			{#if pickerOpen}
+				<div class="flex flex-col overflow-hidden rounded-2xl bg-stone-800/60">
+					{#if pickerLoading}
+						<p class="px-4 py-3 text-xs text-stone-500">Loading…</p>
+					{:else if pickerItems.length === 0}
+						<p class="px-4 py-3 text-xs text-stone-500">No other sessions</p>
+					{:else}
+						{#each pickerItems as s (s.id)}
+							<button
+								type="button"
+								onclick={() => continueSession(s)}
+								class="flex items-center gap-3 px-4 py-2.5 text-left transition hover:bg-stone-700/60 active:bg-stone-700"
+							>
+								<span class="min-w-0 flex-1 truncate text-sm text-white"
+									>{s.name || 'Unnamed session'}</span
+								>
+								<span class="shrink-0 text-xs text-stone-500">{fmtDate(s.rolledAt)}</span>
+							</button>
+						{/each}
+					{/if}
+				</div>
+			{/if}
 		{/if}
 		<TabBar
 			items={modeTabs}
