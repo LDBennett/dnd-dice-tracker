@@ -7,7 +7,7 @@
 		bg = 'bg-stone-700',
 		class: extraClass
 	}: {
-		items: { value: string; label: string }[];
+		items: { value: string; label: string; icon?: string }[];
 		value: string;
 		onchange?: (v: string) => void;
 		activeClass?: string;
@@ -22,9 +22,14 @@
 			type="button"
 			onclick={() => onchange?.(item.value)}
 			class={[
-				'flex-1 rounded-lg py-2 text-sm font-semibold transition',
+				'flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-sm font-semibold transition',
 				value === item.value ? activeClass : 'text-stone-400 hover:text-white'
-			]}>{item.label}</button
+			]}
 		>
+			{#if item.icon}
+				<span class={['mdi', item.icon, 'text-base']}></span>
+			{/if}
+			{item.label}
+		</button>
 	{/each}
 </div>

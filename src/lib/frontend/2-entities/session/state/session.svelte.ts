@@ -1,8 +1,9 @@
 import { submitRollSession, updateRollSession } from '../api/sessionApi';
 import type { RollResult } from '../types/session.types';
+import type { ISession } from '@fe-shared/lib';
 import { SvelteDate } from 'svelte/reactivity';
 
-export class Session {
+export class Session implements ISession {
 	currentSessionId = $state<string | null>(null);
 	currentSessionRolls = $state<RollResult[]>([]);
 	currentSessionName = $state('');
@@ -10,7 +11,7 @@ export class Session {
 	saving = $state(false);
 	saveError = $state<string | null>(null);
 
-	async autoSave(rolls: RollResult[]) {
+	async autoSave(rolls: RollResult[]): Promise<void> {
 		this.saving = true;
 		this.saveError = null;
 		try {
@@ -21,7 +22,13 @@ export class Session {
 			}
 			this.currentSessionRolls = [...this.currentSessionRolls, ...rolls];
 		} catch (e) {
-			this.saveError = e instanceof Error ? e.message : 'Network error';
+			const msg = e instanceof Error ? e.message : 'Network error';
+			if (msg.includes('Session not found') && this.currentSessionId) {
+				// Stale localStorage ID — session was deleted server-side. Reset and create a new one.
+				this.reset();
+				return this.autoSave(rolls);
+			}
+			this.saveError = msg;
 		} finally {
 			this.saving = false;
 		}

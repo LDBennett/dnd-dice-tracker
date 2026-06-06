@@ -45,10 +45,10 @@
 	});
 </script>
 
-<!-- Backdrop — z-40 so the card (z-50) wins all hit-testing inside its bounds -->
+<!-- Backdrop — z-60 so the card (z-70) wins all hit-testing inside its bounds -->
 <button
 	type="button"
-	class="fixed inset-0 z-40 cursor-default backdrop-blur-sm"
+	class="fixed inset-0 z-60 cursor-default backdrop-blur-sm"
 	style="background: rgba(0,0,0,0.72);"
 	onclick={() => { if (backdropReady) onCancel(); }}
 	aria-label="Dismiss"
@@ -60,7 +60,7 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class="fixed left-1/2 top-1/2 z-50 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl"
+	class="fixed left-1/2 top-1/2 z-70 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl"
 	style="border-color: {color}40;"
 >
 	<div class="mb-3 flex items-center justify-between">

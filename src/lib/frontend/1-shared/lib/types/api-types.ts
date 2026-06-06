@@ -32,8 +32,17 @@ export interface SessionSummary {
 
 export interface ExtendedStats {
 	sessionCount: number;
-	favDie: number | null;
+	topDice: number[];
 	breakdown: BreakdownEntry[];
 	sessionLucks: SessionLuck[];
 	avgLuckPerSession: number;
+}
+
+export interface SingleSessionStats {
+	totalRolls: number;
+	nat20s: number;
+	nat1s: number;
+	topDice: number[];
+	luck: number | null;
+	breakdown: BreakdownEntry[];
 }

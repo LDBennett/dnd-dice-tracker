@@ -1,18 +1,22 @@
 ﻿<script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	let {
 		label,
-		value,
+		value = '',
 		subtext = '',
 		accent = 'default',
 		valueColor = '',
-		onclick = undefined
+		onclick = undefined,
+		children = undefined
 	}: {
 		label: string;
-		value: string | number;
+		value?: string | number;
 		subtext?: string;
 		accent?: 'amber' | 'red' | 'default';
 		valueColor?: string;
 		onclick?: () => void;
+		children?: Snippet;
 	} = $props();
 
 	const cardClass  = $derived(accent === 'amber' ? 'bg-orange-400/10 ring-1 ring-orange-400/30'
@@ -34,13 +38,21 @@
 		{onclick}
 	>
 		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
-		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+		{#if children}
+			{@render children()}
+		{:else}
+			<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+		{/if}
 		{#if subtext}<span class="mt-1 text-xs text-stone-500">{subtext}</span>{/if}
 	</button>
 {:else}
 	<div class={['flex flex-col rounded-2xl p-5', cardClass]}>
 		<span class={['mb-1 text-xs font-semibold tracking-widest uppercase', labelClass]}>{label}</span>
-		<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+		{#if children}
+			{@render children()}
+		{:else}
+			<span class={['text-4xl font-extrabold', valueClass]} style={valueColor ? `color: ${valueColor}` : ''}>{value}</span>
+		{/if}
 		{#if subtext}<span class="mt-1 text-xs text-stone-500">{subtext}</span>{/if}
 	</div>
 {/if}

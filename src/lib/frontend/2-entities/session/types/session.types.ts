@@ -1,8 +1,6 @@
-export interface RollResult {
-	dieType: 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	value: number;
-	note: string;
-}
+import type { RollResult } from '@fe-shared/lib';
+
+export type { RollResult };
 
 export interface SubmitResult {
 	sessionId: string;

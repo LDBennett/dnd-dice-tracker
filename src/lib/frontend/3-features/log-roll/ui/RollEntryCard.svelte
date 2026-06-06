@@ -7,7 +7,11 @@
 	import DiceHistory from './DiceHistory.svelte';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface RollResult { dieType: DieType; value: number; note: string; }
+	interface RollResult {
+		dieType: DieType;
+		value: number;
+		note: string;
+	}
 
 	let {
 		die,
@@ -23,12 +27,14 @@
 
 	const app = getAppContext();
 
-	let sliderValue    = $state(untrack(() => Math.ceil(die / 2)));
-	let rollNote       = $state('');
-	let dieTab         = $state<'roll' | 'history'>('roll');
-	let editingNumber  = $state(false);
+	let sliderValue = $state(untrack(() => Math.ceil(die / 2)));
+	let rollNote = $state('');
+	let dieTab = $state<'roll' | 'history'>('roll');
+	let editingNumber = $state(false);
 
-	function focusOnMount(node: HTMLElement) { node.focus(); }
+	function focusOnMount(node: HTMLElement) {
+		node.focus();
+	}
 
 	function commitNumber(raw: string) {
 		const n = parseInt(raw, 10);
@@ -38,11 +44,11 @@
 
 	const DIE_BORDER: Record<DieType, string> = {
 		4: 'border-red-500/70 text-red-400',
-		6: 'border-orange-500/70 text-orange-400',
-		8: 'border-yellow-500/70 text-yellow-400',
-		10: 'border-green-500/70 text-green-400',
-		12: 'border-teal-500/70 text-teal-400',
-		20: 'border-orange-400/70 text-orange-400',
+		6: 'border-blue-500/70 text-blue-400',
+		8: 'border-green-500/70 text-green-400',
+		10: 'border-cyan-500/70 text-cyan-400',
+		12: 'border-pink-500/70 text-pink-400',
+		20: 'border-yellow-500/70 text-yellow-400',
 		100: 'border-purple-500/70 text-purple-400'
 	};
 
@@ -59,7 +65,7 @@
 <!-- Backdrop -->
 <button
 	type="button"
-	class="fixed inset-0 z-10 cursor-default"
+	class="fixed inset-0 z-60 cursor-default bg-black/60 backdrop-blur-sm"
 	onclick={onCancel}
 	aria-label="Dismiss"
 	in:fade={{ duration: 150 }}
@@ -70,7 +76,10 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class={['absolute inset-x-0 top-0 z-20 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl', DIE_BORDER[die]]}
+	class={[
+		'fixed inset-x-4 top-16 z-70 mx-auto max-w-sm rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl',
+		DIE_BORDER[die]
+	]}
 >
 	<!-- Header -->
 	<div class="mb-3 flex items-center justify-between">
@@ -91,7 +100,7 @@
 
 	{#if dieTab === 'roll' || app.isGuest}
 		<!-- Slider + value -->
-		<div class="flex items-stretch gap-4" class:flex-row-reverse={app.rightHanded}>
+		<div class="mx-3 flex items-stretch gap-4" class:flex-row-reverse={app.rightHanded}>
 			<div
 				class="flex flex-col justify-between py-1 text-sm font-semibold text-stone-500"
 				class:items-end={!app.rightHanded}
@@ -106,7 +115,9 @@
 					min="1"
 					max={die}
 					bind:value={sliderValue}
-					style="writing-mode: vertical-lr; direction: rtl; height: 200px; width: 44px; cursor: pointer; accent-color: {DIE_COLOR[die]};"
+					style="writing-mode: vertical-lr; direction: rtl; height: 200px; width: 44px; cursor: pointer; accent-color: {DIE_COLOR[
+						die
+					]};"
 					aria-label="Roll value"
 				/>
 			</div>
@@ -123,7 +134,7 @@
 							if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
 							if (e.key === 'Escape') editingNumber = false;
 						}}
-						class="w-20 bg-transparent text-center text-5xl leading-none font-black text-white border-b-2 focus:outline-none"
+						class="w-20 border-b-2 bg-transparent text-center text-5xl leading-none font-black text-white focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 						style="border-color: {DIE_COLOR[die]};"
 					/>
 				{:else}
@@ -132,7 +143,8 @@
 						onclick={() => (editingNumber = true)}
 						title="Tap to type a value"
 						class="text-6xl leading-none font-black text-white transition hover:opacity-70 active:scale-95"
-					>{sliderValue}</button>
+						>{sliderValue}</button
+					>
 				{/if}
 				{#if die === 20}
 					{#if sliderValue === 20}
@@ -154,7 +166,13 @@
 			class="mt-4 bg-stone-700"
 		/>
 
-		<Button variant="primary" fullWidth onclick={confirmRoll} style="background: {DIE_COLOR[die]};" class="mt-3">Log Roll</Button>
+		<Button
+			variant="primary"
+			fullWidth
+			onclick={confirmRoll}
+			style="background: {DIE_COLOR[die]};"
+			class="mt-3">Log Roll</Button
+		>
 	{:else}
 		<DiceHistory {die} {sessionRolls} />
 	{/if}

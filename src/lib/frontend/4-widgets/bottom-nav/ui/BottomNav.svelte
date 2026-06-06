@@ -2,16 +2,28 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { scale } from 'svelte/transition';
+	import { backOut } from 'svelte/easing';
+	import { getAppContext } from '@fe-shared/context';
 	import NavTabButton from './NavTabButton.svelte';
 
+	const app = getAppContext();
 	const currentPath = $derived($page.url.pathname);
 
 	let isRollAnimating = $state(false);
+	let open = $state(false);
 
 	function handleRollClick() {
 		isRollAnimating = true;
-		setTimeout(() => { isRollAnimating = false; }, 500);
+		setTimeout(() => {
+			isRollAnimating = false;
+		}, 500);
 		goto(resolve('/'));
+	}
+
+	function setRollMode(quick: boolean) {
+		app.rollMode = quick;
+		open = false;
 	}
 </script>
 
@@ -19,6 +31,35 @@
 	class="fixed right-0 bottom-0 left-0 z-50 flex justify-center"
 	style="padding-bottom: env(safe-area-inset-bottom)"
 >
+	{#if open}
+		<div
+			transition:scale={{ duration: 250, start: 0.5, easing: backOut }}
+			class="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 overflow-hidden rounded-2xl bg-stone-800 shadow-xl"
+		>
+			<button
+				type="button"
+				onclick={() => setRollMode(false)}
+				class={[
+					'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold transition hover:bg-stone-700 active:scale-95',
+					!app.rollMode ? 'text-orange-400' : 'text-stone-400'
+				]}
+			>
+				<span class="mdi mdi-script-outline text-base"></span>
+				Log Roll
+			</button>
+			<button
+				type="button"
+				onclick={() => setRollMode(true)}
+				class={[
+					'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold transition hover:bg-stone-700 active:scale-95',
+					app.rollMode ? 'text-orange-400' : 'text-stone-400'
+				]}
+			>
+				<span class="mdi mdi-creation-outline text-base"></span>
+				Quick Roll
+			</button>
+		</div>
+	{/if}
 	<div
 		class="relative mx-4 mb-4 w-full max-w-sm"
 		style="filter: drop-shadow(0 4px 24px rgb(0 0 0 / 0.5))"
@@ -29,7 +70,12 @@
 			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
 		>
 			<!-- History -->
-			<NavTabButton href="/history" label="History" active={currentPath === '/history'} animClass="anim-bounce">
+			<NavTabButton
+				href="/history"
+				label="History"
+				active={currentPath === '/history'}
+				animClass="anim-bounce"
+			>
 				{#snippet icon()}
 					<svg
 						width="22"
@@ -48,18 +94,16 @@
 				{/snippet}
 			</NavTabButton>
 
-			<!-- Center spacer — label for Roll page -->
-			<div class="relative flex w-18 shrink-0 items-end justify-center pb-2">
-				<span
-					class={[
-						'mt-8.5 text-xs font-semibold transition-colors',
-						currentPath === '/' ? 'text-orange-400' : 'text-stone-500'
-					]}>Roll</span
-				>
-			</div>
+			<!-- Center spacer (layout only — mode button is absolute sibling below) -->
+			<div class="w-18 shrink-0"></div>
 
 			<!-- Stats -->
-			<NavTabButton href="/stats" label="Stats" active={currentPath === '/stats'} animClass="anim-pop">
+			<NavTabButton
+				href="/stats"
+				label="Stats"
+				active={currentPath === '/stats'}
+				animClass="anim-pop"
+			>
 				{#snippet icon()}
 					<svg
 						width="22"
@@ -76,6 +120,23 @@
 				{/snippet}
 			</NavTabButton>
 		</div>
+
+		<!-- Mode toggle: sits above the roll button in z-order so its label area is tappable -->
+		<button
+			type="button"
+			onclick={() => (open = !open)}
+			aria-label="Change roll mode"
+			class={[
+				'absolute bottom-1.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-0.5 transition-colors',
+				open || currentPath === '/' ? 'text-orange-400' : 'text-stone-500'
+			]}
+		>
+			<span class={['mdi text-sm', app.rollMode ? 'mdi-creation-outline' : 'mdi-script-outline']}
+			></span>
+			<span class="text-[10px] leading-none font-semibold"
+				>{app.rollMode ? 'Quick Roll' : 'Log Roll'}</span
+			>
+		</button>
 
 		<button
 			type="button"

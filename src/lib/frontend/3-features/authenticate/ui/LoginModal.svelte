@@ -1,9 +1,7 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { invalidateAll } from '$app/navigation';
-	import { fade, scale } from 'svelte/transition';
-	import { cubicOut } from 'svelte/easing';
 	import { PUBLIC_ALLOW_REGISTRATION } from '$env/static/public';
-	import TabBar from '../navigation/TabBar.svelte';
+	import { Modal, TabBar } from '@fe-shared/ui';
 
 	const allowRegistration = PUBLIC_ALLOW_REGISTRATION === 'true';
 
@@ -59,26 +57,7 @@
 </script>
 
 {#if open}
-	<!-- Backdrop -->
-	<button
-		type="button"
-		class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
-		onclick={close}
-		aria-label="Close"
-		in:fade={{ duration: 150 }}
-		out:fade={{ duration: 120 }}
-	></button>
-
-	<!-- Modal card -->
-	<div
-		class="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-sm -translate-y-1/2 rounded-3xl bg-stone-800 p-6 shadow-2xl"
-		in:scale={{ start: 0.92, duration: 220, easing: cubicOut }}
-		out:scale={{ start: 0.92, duration: 150, easing: cubicOut }}
-		role="dialog"
-		aria-modal="true"
-		aria-label="Sign in"
-	>
-		<!-- Header -->
+	<Modal onclose={close} class="p-6" aria-label="Sign in">
 		<div class="mb-5 flex items-center justify-between">
 			<h2 class="text-lg font-bold text-white">
 				{mode === 'login' ? 'Sign In' : 'Create Account'}
@@ -87,11 +66,10 @@
 				type="button"
 				onclick={close}
 				class="flex h-8 w-8 items-center justify-center rounded-xl text-stone-400 transition hover:bg-stone-700 hover:text-white"
-				aria-label="Close"><span class="mdi mdi-close"></span></button
-			>
+				aria-label="Close"
+			><span class="mdi mdi-close"></span></button>
 		</div>
 
-		<!-- Mode toggle -->
 		{#if allowRegistration}
 			<TabBar
 				items={authTabs}
@@ -101,7 +79,6 @@
 			/>
 		{/if}
 
-		<!-- Form -->
 		<div class="flex flex-col gap-3">
 			{#if mode === 'register'}
 				<input
@@ -146,5 +123,5 @@
 				{/if}
 			</button>
 		</div>
-	</div>
+	</Modal>
 {/if}

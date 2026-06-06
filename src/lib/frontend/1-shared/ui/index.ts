@@ -1,13 +1,10 @@
-export { default as NavBar }           from './navigation/NavBar.svelte';
-export { default as BottomNav }        from './navigation/BottomNav.svelte';
 export { default as TabBar }           from './navigation/TabBar.svelte';
-export { default as LoginModal }       from './modals/LoginModal.svelte';
+export { default as Modal }            from './modals/Modal.svelte';
 export { default as ConfirmModal }     from './modals/ConfirmModal.svelte';
 export { default as StatCard }         from './cards/StatCard.svelte';
-export { default as HandednessToggle } from './overlays/HandednessToggle.svelte';
-export { default as DiceD100Icon }     from './icons/DiceD100Icon.svelte';
-export { DIE_COLOR }                   from './static/dice-colors';
+export { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from './static/dice-colors';
 export { default as Button }           from './buttons/Button.svelte';
 export { default as IconButton }       from './buttons/IconButton.svelte';
 export { default as TextInput }        from './inputs/TextInput.svelte';
+export { default as SelectDropdown }   from './inputs/SelectDropdown.svelte';
 export { default as Badge }            from './badges/Badge.svelte';

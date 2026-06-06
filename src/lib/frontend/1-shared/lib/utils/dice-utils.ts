@@ -1,4 +1,4 @@
-﻿import type { BreakdownEntry, ExtendedStats, SessionLuck, SessionRecord, SessionSummary } from '../types/api-types';
+﻿import type { BreakdownEntry, ExtendedStats, SessionLuck, SessionRecord, SessionSummary, SingleSessionStats } from '../types/api-types';
 
 export function computeExtended(sessions: SessionRecord[]): ExtendedStats {
 	const counts: Partial<Record<number, { count: number; sum: number }>> = {};
@@ -17,10 +17,10 @@ export function computeExtended(sessions: SessionRecord[]): ExtendedStats {
 		}))
 		.sort((a, b) => a.dieType - b.dieType);
 
-	const fav = breakdown.reduce<BreakdownEntry | null>(
-		(best, e) => (!best || e.count > best.count ? e : best),
-		null
-	);
+	const topDice = [...breakdown]
+		.sort((a, b) => b.count - a.count)
+		.slice(0, 3)
+		.map((e) => e.dieType);
 
 	const sessionLucks: SessionLuck[] = sessions
 		.filter((s) => s.rolls.length > 0)
@@ -41,7 +41,7 @@ export function computeExtended(sessions: SessionRecord[]): ExtendedStats {
 
 	return {
 		sessionCount: sessions.length,
-		favDie: fav?.dieType ?? null,
+		topDice,
 		breakdown,
 		sessionLucks,
 		avgLuckPerSession
@@ -68,6 +68,41 @@ export function sessionSummary(sessions: SessionRecord[], id: string): SessionSu
 	return { dice, totalSum, avg, rollCount: s.rolls.length };
 }
 
+export function singleSessionStats(session: SessionRecord): SingleSessionStats {
+	const counts: Partial<Record<number, { count: number; sum: number }>> = {};
+	let nat20s = 0;
+	let nat1s = 0;
+	let luckDelta = 0;
+
+	for (const r of session.rolls) {
+		const d = counts[r.dieType] ?? { count: 0, sum: 0 };
+		counts[r.dieType] = { count: d.count + 1, sum: d.sum + r.value };
+		if (r.dieType === 20) {
+			if (r.value === 20) nat20s++;
+			if (r.value === 1) nat1s++;
+		}
+		luckDelta += r.value - (r.dieType + 1) / 2;
+	}
+
+	const breakdown: BreakdownEntry[] = Object.entries(counts)
+		.map(([dt, st]) => ({
+			dieType: Number(dt),
+			count: st!.count,
+			avg: Number((st!.sum / st!.count).toFixed(2))
+		}))
+		.sort((a, b) => a.dieType - b.dieType);
+
+	const topDice = [...breakdown]
+		.sort((a, b) => b.count - a.count)
+		.slice(0, 3)
+		.map((e) => e.dieType);
+
+	const totalRolls = session.rolls.length;
+	const luck = totalRolls > 0 ? Number((luckDelta / totalRolls).toFixed(2)) : null;
+
+	return { totalRolls, nat20s, nat1s, topDice, luck, breakdown };
+}
+
 export function fmtLuck(n: number): string {
 	return (n >= 0 ? '+' : '') + n.toFixed(2);
 }
@@ -78,4 +113,8 @@ export function luckClass(n: number): string {
 
 export function fmtDate(iso: string): string {
 	return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
+export function fmtTime(iso: string): string {
+	return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 }

@@ -1,8 +1,8 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
 	import { RollEntryCard } from '@fe-features/log-roll';
 	import type { RollResult } from '@fe-entities/session';
-	import { DiceD100Icon, DIE_COLOR } from '@fe-shared/ui';
+	import { DIE_COLOR } from '@fe-shared/ui';
 
 	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 	interface BatchEntry {
@@ -13,16 +13,21 @@
 
 	const DICE: DieType[] = [4, 6, 8, 10, 12, 20, 100];
 
-	const DIE_ICON: Record<DieType, string | null> = {
-		4: 'mdi-dice-d4',
-		6: 'mdi-dice-d6',
-		8: 'mdi-dice-d8',
-		10: 'mdi-dice-d10',
-		12: 'mdi-dice-d12',
-		20: 'mdi-dice-d20',
-		100: null
+	// SVG polygon points for each die silhouette (100×100 viewBox, inset ~6px for stroke)
+	const DIE_SHAPE: Record<DieType, string | null> = {
+		4:   '50,6 94,90 6,90',               // triangle up
+		6:   '6,6 94,6 94,94 6,94',            // square
+		8:   '50,6 94,50 50,94 6,50',          // diamond
+		10:  '50,6 92,40 75,94 25,94 8,40',    // kite
+		12:  '50,6 92,36 76,86 24,86 8,36',    // pentagon
+		20:  '50,6 88,28 88,72 50,94 12,72 12,28', // hexagon
+		100: null                              // circle — rendered separately
 	};
 
+	// Y coordinate of each shape's visual centroid, for centering the label text
+	const DIE_TEXT_Y: Record<DieType, number> = {
+		4: 62, 6: 50, 8: 50, 10: 55, 12: 50, 20: 50, 100: 50
+	};
 
 	let {
 		batchMode,
@@ -59,14 +64,39 @@
 			<button
 				type="button"
 				onclick={() => onDieClick(die)}
-				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing === die ? 'scale(0.82)' : 'scale(1)'}; border-color: {DIE_COLOR[die]}b3; color: {DIE_COLOR[die]};"
-				class="relative flex min-h-22 flex-col items-center justify-center rounded-2xl border-2 bg-stone-800 font-bold shadow-lg hover:bg-stone-700"
+				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing === die ? 'scale(0.82)' : 'scale(1)'};"
+				class="relative flex aspect-square items-center justify-center"
 			>
-				{#if DIE_ICON[die]}
-					<span class="mdi {DIE_ICON[die]} text-5xl"></span>
-				{:else}
-					<DiceD100Icon class="text-5xl" />
-				{/if}
+				<svg viewBox="0 0 100 100" class="h-full w-full">
+					{#if DIE_SHAPE[die]}
+						<polygon
+							points={DIE_SHAPE[die]!}
+							fill="{DIE_COLOR[die]}33"
+							stroke={DIE_COLOR[die]}
+							stroke-width="5"
+							stroke-linejoin="round"
+						/>
+					{:else}
+						<circle
+							cx="50"
+							cy="50"
+							r="44"
+							fill="{DIE_COLOR[die]}33"
+							stroke={DIE_COLOR[die]}
+							stroke-width="5"
+						/>
+					{/if}
+					<text
+						x="50"
+						y={DIE_TEXT_Y[die]}
+						text-anchor="middle"
+						dominant-baseline="middle"
+						fill={DIE_COLOR[die]}
+						font-size={die === 100 ? 14 : 18}
+						font-weight="800"
+						font-family="system-ui, sans-serif"
+					>d{die}</text>
+				</svg>
 				{#if batchMode}
 					{@const count = app.rollMode
 						? quickBatchQueue.filter((d) => d === die).length

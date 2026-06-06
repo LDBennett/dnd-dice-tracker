@@ -1,5 +1,5 @@
 import { getContext } from 'svelte';
-import { Session } from '@fe-entities/session';
+import type { ISession } from '../lib/types/session.types';
 
 export type User = { name: string; email: string };
 
@@ -9,9 +9,10 @@ export class AppContext {
 	showLogin   = $state(false);
 	user        = $state<User | null>(null);
 	isGuest     = $derived(!this.user);
-	session     = new Session();
+	session: ISession;
 
-	constructor(init: { user?: User | null; rollMode?: boolean; rightHanded?: boolean } = {}) {
+	constructor(init: { user?: User | null; rollMode?: boolean; rightHanded?: boolean; session: ISession }) {
+		this.session     = init.session;
 		this.user        = init.user ?? null;
 		this.rollMode    = init.rollMode ?? false;
 		this.rightHanded = init.rightHanded ?? false;
