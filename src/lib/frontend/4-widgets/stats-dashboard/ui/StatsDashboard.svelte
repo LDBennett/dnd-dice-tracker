@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { StatCard, DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y, Button, TabBar, SelectDropdown } from '@fe-shared/ui';
+	import { StatCard, DIE_COLOR, Button, TabBar, SelectDropdown } from '@fe-shared/ui';
 	import { computeExtended, sessionSummary, fmtLuck, luckClass, fmtDate } from '@fe-shared/lib';
 	import type { BreakdownEntry, SessionLuck, SessionRecord } from '@fe-shared/lib';
-	import { DieBreakdown } from '@fe-entities/die';
+	import { DieBreakdown, TopDiceList } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
 	import { fetchRollSessions, fetchDashboard } from '../api/statsDashboard.api';
 	import SessionStatsPanel from './SessionStatsPanel.svelte';
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
 
 	interface Props {
 		totalRolls: number;
@@ -28,6 +30,16 @@
 
 	let activeTab = $state<'overall' | 'session'>('overall');
 	let selectedSessionId = $state<string | null>(null);
+
+	const animTotalRolls = tweened(0, { duration: 500, easing: cubicOut });
+	const animNat20s     = tweened(0, { duration: 500, easing: cubicOut });
+	const animNat1s      = tweened(0, { duration: 500, easing: cubicOut });
+	const animSessions   = tweened(0, { duration: 500, easing: cubicOut });
+
+	$effect(() => { animTotalRolls.set(totalRolls); });
+	$effect(() => { animNat20s.set(nat20s); });
+	$effect(() => { animNat1s.set(nat1s); });
+	$effect(() => { animSessions.set(sessionCount); });
 
 	const TAB_ITEMS = [
 		{ value: 'overall', label: 'Overall', icon: 'mdi-clipboard-list-outline' },
@@ -91,43 +103,19 @@
 
 	{#if activeTab === 'overall'}
 		<div class="grid grid-cols-2 gap-4">
-			<StatCard label="Total Rolls" value={totalRolls} />
+			<StatCard label="Total Rolls" value={Math.round($animTotalRolls)} />
 			<StatCard label="Top Dice">
 				<div class="mt-1 flex gap-2">
 					{#if topDice.length === 0}
 						<span class="text-4xl font-extrabold text-stone-600">—</span>
 					{:else}
-						{#each topDice as die (die)}
-							<svg viewBox="0 0 100 100" width="38" height="38">
-								{#if DIE_SHAPE[die]}
-									<polygon
-										points={DIE_SHAPE[die]!}
-										fill="{DIE_COLOR[die]}33"
-										stroke={DIE_COLOR[die]}
-										stroke-width="5"
-										stroke-linejoin="round"
-									/>
-								{:else}
-									<circle cx="50" cy="50" r="44" fill="{DIE_COLOR[die]}33" stroke={DIE_COLOR[die]} stroke-width="5" />
-								{/if}
-								<text
-									x="50"
-									y={DIE_TEXT_Y[die]}
-									text-anchor="middle"
-									dominant-baseline="middle"
-									fill={DIE_COLOR[die]}
-									font-size={die === 100 ? 14 : 18}
-									font-weight="800"
-									font-family="system-ui, sans-serif"
-								>d{die}</text>
-							</svg>
-						{/each}
+						<TopDiceList dice={topDice} />
 					{/if}
 				</div>
 			</StatCard>
-			<StatCard label="Nat 20s" value={nat20s} accent="amber" subtext="d20 critical hits" />
-			<StatCard label="Nat 1s" value={nat1s} accent="red" subtext="d20 critical fails" />
-			<StatCard label="Sessions" value={sessionCount} />
+			<StatCard label="Nat 20s" value={Math.round($animNat20s)} accent="amber" subtext="d20 critical hits" />
+			<StatCard label="Nat 1s" value={Math.round($animNat1s)} accent="red" subtext="d20 critical fails" />
+			<StatCard label="Sessions" value={Math.round($animSessions)} />
 			<StatCard
 				label="Avg Luck/Session"
 				value={sessionCount > 0 ? fmtLuck(avgLuckPerSession) : '—'}

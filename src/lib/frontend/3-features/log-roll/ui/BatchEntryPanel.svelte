@@ -1,17 +1,7 @@
 ﻿<script lang="ts">
 	import { DIE_COLOR, Button, IconButton, TextInput, Badge } from '@fe-shared/ui';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface BatchEntry {
-		id: number;
-		dieType: DieType;
-		value: number;
-	}
-	interface RollResult {
-		dieType: DieType;
-		value: number;
-		note: string;
-	}
+	import type { DieType, RollResult } from '@fe-shared/lib';
+	import type { BatchEntry } from '../types/log-roll.types';
 
 	let {
 		entries = $bindable<BatchEntry[]>([]),

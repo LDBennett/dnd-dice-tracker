@@ -7,11 +7,11 @@
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
 
-	let mode    = $state<'login' | 'register'>('login');
-	let email   = $state('');
+	let mode = $state<'login' | 'register'>('login');
+	let email = $state('');
 	let password = $state('');
-	let name    = $state('');
-	let error   = $state('');
+	let name = $state('');
+	let error = $state('');
 	let loading = $state(false);
 
 	function close() {
@@ -20,15 +20,11 @@
 	}
 
 	async function submit() {
-		error   = '';
+		error = '';
 		loading = true;
 		try {
-			const endpoint = mode === 'login'
-				? '/api/auth/sign-in/email'
-				: '/api/auth/sign-up/email';
-			const body = mode === 'login'
-				? { email, password }
-				: { email, password, name };
+			const endpoint = mode === 'login' ? '/api/auth/sign-in/email' : '/api/auth/sign-up/email';
+			const body = mode === 'login' ? { email, password } : { email, password, name };
 
 			const res = await fetch(endpoint, {
 				method: 'POST',
@@ -57,7 +53,7 @@
 </script>
 
 {#if open}
-	<Modal onclose={close} class="p-6" aria-label="Sign in">
+	<Modal onclose={close} class="p-6" label="Sign in">
 		<div class="mb-5 flex items-center justify-between">
 			<h2 class="text-lg font-bold text-white">
 				{mode === 'login' ? 'Sign In' : 'Create Account'}
@@ -66,15 +62,18 @@
 				type="button"
 				onclick={close}
 				class="flex h-8 w-8 items-center justify-center rounded-xl text-stone-400 transition hover:bg-stone-700 hover:text-white"
-				aria-label="Close"
-			><span class="mdi mdi-close"></span></button>
+				aria-label="Close"><span class="mdi mdi-close"></span></button
+			>
 		</div>
 
 		{#if allowRegistration}
 			<TabBar
 				items={authTabs}
 				value={mode}
-				onchange={(v) => { mode = v as 'login' | 'register'; error = ''; }}
+				onchange={(v) => {
+					mode = v as 'login' | 'register';
+					error = '';
+				}}
 				class="mb-5"
 			/>
 		{/if}
@@ -86,7 +85,7 @@
 					bind:value={name}
 					placeholder="Name"
 					autocomplete="name"
-					class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
+					class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 				/>
 			{/if}
 
@@ -95,7 +94,7 @@
 				bind:value={email}
 				placeholder="Email"
 				autocomplete="email"
-				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
+				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 			/>
 
 			<input
@@ -103,7 +102,7 @@
 				bind:value={password}
 				placeholder="Password"
 				autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
-				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-1 focus:ring-orange-400/30"
+				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 			/>
 
 			{#if error}

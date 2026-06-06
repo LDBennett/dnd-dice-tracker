@@ -1,8 +1,7 @@
 ﻿<script lang="ts">
 	import { fmtDate } from '@fe-shared/lib';
+	import type { DieType, RollResult } from '@fe-shared/lib';
 
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface RollResult { dieType: DieType; value: number; note: string; }
 	interface HistoryEntry { value: number; note: string; date: string; }
 
 	let {

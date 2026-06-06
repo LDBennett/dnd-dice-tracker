@@ -1,12 +1,22 @@
+export type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
+
+export interface SelectOption {
+	value: string;
+	label: string;
+	subtext?: string;
+}
+
 export interface RollRecord {
 	dieType: number;
 	value: number;
+	note: string;
 }
 
 export interface SessionRecord {
 	id: string;
 	name: string;
 	rolledAt: string;
+	modifier: number;
 	rolls: RollRecord[];
 }
 

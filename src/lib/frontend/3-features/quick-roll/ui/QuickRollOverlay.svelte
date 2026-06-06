@@ -3,8 +3,7 @@
 	import { fade, scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
 	import { DIE_COLOR, Badge } from '@fe-shared/ui';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
+	import type { DieType } from '@fe-shared/lib';
 
 	let {
 		die,

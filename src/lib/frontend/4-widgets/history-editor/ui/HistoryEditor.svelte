@@ -3,11 +3,11 @@
 	import { getAppContext } from '@fe-shared/context';
 	import { Button } from '@fe-shared/ui';
 	import { fetchSessions as apiFetchSessions, patchSession, deleteSession as apiDeleteSession } from '../api/historyEditor.api';
-	import type { Session, RollRecord } from '../api/historyEditor.api';
+	import type { SessionRecord, RollRecord } from '@fe-shared/lib';
 
 	const app = getAppContext();
 
-	let sessions  = $state<Session[]>([]);
+	let sessions  = $state<SessionRecord[]>([]);
 	let loading   = $state(true);
 	let savingId  = $state<string | null>(null);
 	let savedId   = $state<string | null>(null);

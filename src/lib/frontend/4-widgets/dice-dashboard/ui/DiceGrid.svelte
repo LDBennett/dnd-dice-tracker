@@ -1,33 +1,11 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
 	import { RollEntryCard } from '@fe-features/log-roll';
-	import type { RollResult } from '@fe-entities/session';
-	import { DIE_COLOR } from '@fe-shared/ui';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface BatchEntry {
-		id: number;
-		dieType: DieType;
-		value: number;
-	}
+	import type { DieType, RollResult } from '@fe-shared/lib';
+	import type { BatchEntry } from '@fe-features/log-roll';
+	import { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from '@fe-shared/ui';
 
 	const DICE: DieType[] = [4, 6, 8, 10, 12, 20, 100];
-
-	// SVG polygon points for each die silhouette (100×100 viewBox, inset ~6px for stroke)
-	const DIE_SHAPE: Record<DieType, string | null> = {
-		4:   '50,6 94,90 6,90',               // triangle up
-		6:   '6,6 94,6 94,94 6,94',            // square
-		8:   '50,6 94,50 50,94 6,50',          // diamond
-		10:  '50,6 92,40 75,94 25,94 8,40',    // kite
-		12:  '50,6 92,36 76,86 24,86 8,36',    // pentagon
-		20:  '50,6 88,28 88,72 50,94 12,72 12,28', // hexagon
-		100: null                              // circle — rendered separately
-	};
-
-	// Y coordinate of each shape's visual centroid, for centering the label text
-	const DIE_TEXT_Y: Record<DieType, number> = {
-		4: 62, 6: 50, 8: 50, 10: 55, 12: 50, 20: 50, 100: 50
-	};
 
 	let {
 		batchMode,

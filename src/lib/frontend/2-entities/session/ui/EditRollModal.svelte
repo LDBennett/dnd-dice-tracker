@@ -4,8 +4,7 @@
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { DIE_COLOR, IconButton, Button, Badge } from '@fe-shared/ui';
 	import { getAppContext } from '@fe-shared/context';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
+	import type { DieType } from '@fe-shared/lib';
 
 	let {
 		dieType,

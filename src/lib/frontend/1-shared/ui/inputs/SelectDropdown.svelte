@@ -1,12 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import TextInput from './TextInput.svelte';
-
-	interface Option {
-		value: string;
-		label: string;
-		subtext?: string;
-	}
+	import type { SelectOption } from '../../lib/types/api-types';
 
 	let {
 		options,
@@ -14,7 +9,7 @@
 		placeholder = 'Select…',
 		class: extraClass
 	}: {
-		options: Option[];
+		options: SelectOption[];
 		value?: string | null;
 		placeholder?: string;
 		class?: string;
@@ -41,7 +36,7 @@
 		if (!open) query = '';
 	}
 
-	function select(opt: Option) {
+	function select(opt: SelectOption) {
 		value = opt.value;
 		open = false;
 		query = '';

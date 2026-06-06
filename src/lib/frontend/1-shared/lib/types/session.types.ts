@@ -1,5 +1,7 @@
+import type { DieType } from './api-types';
+
 export interface RollResult {
-	dieType: 4 | 6 | 8 | 10 | 12 | 20 | 100;
+	dieType: DieType;
 	value: number;
 	note: string;
 }

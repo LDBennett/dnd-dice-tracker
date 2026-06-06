@@ -8,3 +8,5 @@ export { default as IconButton }       from './buttons/IconButton.svelte';
 export { default as TextInput }        from './inputs/TextInput.svelte';
 export { default as SelectDropdown }   from './inputs/SelectDropdown.svelte';
 export { default as Badge }            from './badges/Badge.svelte';
+export type { SelectOption }           from '../lib/types/api-types';
+

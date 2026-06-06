@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { StatCard, DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from '@fe-shared/ui';
+	import { StatCard } from '@fe-shared/ui';
 	import { singleSessionStats, fmtLuck, luckClass, fmtDate } from '@fe-shared/lib';
 	import type { SessionRecord, SessionLuck } from '@fe-shared/lib';
-	import { DieBreakdown } from '@fe-entities/die';
+	import { DieBreakdown, TopDiceList } from '@fe-entities/die';
 
 	let {
 		session,
@@ -30,31 +30,7 @@
 			{#if stats.topDice.length === 0}
 				<span class="text-4xl font-extrabold text-stone-600">—</span>
 			{:else}
-				{#each stats.topDice as die (die)}
-					<svg viewBox="0 0 100 100" width="38" height="38">
-						{#if DIE_SHAPE[die]}
-							<polygon
-								points={DIE_SHAPE[die]!}
-								fill="{DIE_COLOR[die]}33"
-								stroke={DIE_COLOR[die]}
-								stroke-width="5"
-								stroke-linejoin="round"
-							/>
-						{:else}
-							<circle cx="50" cy="50" r="44" fill="{DIE_COLOR[die]}33" stroke={DIE_COLOR[die]} stroke-width="5" />
-						{/if}
-						<text
-							x="50"
-							y={DIE_TEXT_Y[die]}
-							text-anchor="middle"
-							dominant-baseline="middle"
-							fill={DIE_COLOR[die]}
-							font-size={die === 100 ? 14 : 18}
-							font-weight="800"
-							font-family="system-ui, sans-serif"
-						>d{die}</text>
-					</svg>
-				{/each}
+				<TopDiceList dice={stats.topDice} />
 			{/if}
 		</div>
 	</StatCard>

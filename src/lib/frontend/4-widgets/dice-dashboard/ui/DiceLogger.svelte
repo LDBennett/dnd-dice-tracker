@@ -9,15 +9,9 @@
 	} from '@fe-features/quick-roll';
 	import { BatchEntryPanel } from '@fe-features/log-roll';
 	import { ActiveSessionPanel } from '@fe-features/active-session';
-	import type { RollResult } from '@fe-entities/session';
+	import type { DieType, RollResult } from '@fe-shared/lib';
+	import type { BatchEntry } from '@fe-features/log-roll';
 	import DiceGrid from './DiceGrid.svelte';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface BatchEntry {
-		id: number;
-		dieType: DieType;
-		value: number;
-	}
 
 	const app = getAppContext();
 	const session = app.session;
@@ -131,42 +125,45 @@
 
 <div class="flex flex-col gap-6 px-4 py-6">
 	<div class="flex flex-col gap-2">
-		<div class="flex items-center gap-3 rounded-2xl bg-stone-800/60 px-4 py-2.5">
-			<div class="flex min-w-0 flex-1 flex-col gap-0.5">
-				<div class="flex items-center gap-1.5">
-					{#if editingTitle}
-						<input
-							type="text"
-							bind:value={titleDraft}
-							onblur={commitTitle}
-							onkeydown={onTitleKeydown}
-							placeholder="Unnamed session"
-							use:focusOnMount
-							class="min-w-0 flex-1 rounded-md bg-stone-700 px-2 py-0.5 text-sm font-semibold text-white placeholder-stone-500 focus:ring-1 focus:ring-orange-400/60 focus:outline-none"
-						/>
-					{:else if session.currentSessionId !== null}
-						<span class="truncate text-sm font-semibold text-white"
-							>{session.currentSessionName || 'Unnamed session'}</span
-						>
-						<IconButton icon="mdi-pencil-outline" size="sm" onclick={startEditTitle} />
-					{:else}
-						<span class="text-sm font-semibold text-stone-500">No session</span>
+		{#if !app.isGuest}
+			<div class="flex items-center gap-3 rounded-2xl bg-stone-800/60 px-4 py-2.5">
+				<div class="flex min-w-0 flex-1 flex-col gap-0.5">
+					<div class="flex items-center gap-1.5">
+						{#if editingTitle}
+							<input
+								type="text"
+								bind:value={titleDraft}
+								onblur={commitTitle}
+								onkeydown={onTitleKeydown}
+								placeholder="Unnamed session"
+								use:focusOnMount
+								class="min-w-0 flex-1 rounded-md bg-stone-700 px-2 py-0.5 text-sm font-semibold text-white placeholder-stone-500 focus:ring-1 focus:ring-orange-400/60 focus:outline-none"
+							/>
+						{:else if session.currentSessionId !== null}
+							<span class="truncate text-sm font-semibold text-white"
+								>{session.currentSessionName || 'Unnamed session'}</span
+							>
+							<IconButton icon="mdi-pencil-outline" size="sm" onclick={startEditTitle} />
+						{:else}
+							<span class="text-sm font-semibold text-stone-500">No session</span>
+						{/if}
+					</div>
+					{#if session.rolledAt !== null}
+						<p class="text-xs text-stone-500">
+							{fmtDate(session.rolledAt)} · {fmtTime(session.rolledAt)}
+						</p>
 					{/if}
 				</div>
-				{#if session.rolledAt !== null}
-					<p class="text-xs text-stone-500">
-						{fmtDate(session.rolledAt)} · {fmtTime(session.rolledAt)}
-					</p>
-				{/if}
+				<div class="flex shrink-0 flex-col items-end gap-1">
+					<button
+						type="button"
+						onclick={() => session.reset()}
+						class="text-sm font-medium text-orange-400 transition hover:text-orange-300"
+						>+ New</button
+					>
+				</div>
 			</div>
-			<div class="flex shrink-0 flex-col items-end gap-1">
-				<button
-					type="button"
-					onclick={() => session.reset()}
-					class="text-sm font-medium text-orange-400 transition hover:text-orange-300">+ New</button
-				>
-			</div>
-		</div>
+		{/if}
 		<TabBar
 			items={modeTabs}
 			value={batchMode ? 'battle' : 'rp'}

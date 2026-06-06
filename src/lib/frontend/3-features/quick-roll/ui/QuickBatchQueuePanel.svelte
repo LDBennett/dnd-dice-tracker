@@ -1,7 +1,6 @@
 ﻿<script lang="ts">
 	import { DIE_COLOR } from '@fe-shared/ui';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
+	import type { DieType } from '@fe-shared/lib';
 
 	let {
 		queue,

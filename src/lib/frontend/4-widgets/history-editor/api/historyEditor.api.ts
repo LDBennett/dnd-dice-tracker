@@ -1,15 +1,6 @@
-export interface RollRecord { dieType: number; value: number; note: string; }
+import type { SessionRecord } from '@fe-shared/lib';
 
-export interface Session {
-	id: string;
-	rolls: RollRecord[];
-	modifier: number;
-	rolledAt: string;
-	name: string;
-	total: number;
-}
-
-export async function fetchSessions(): Promise<Session[]> {
+export async function fetchSessions(): Promise<SessionRecord[]> {
 	const res = await fetch('/api/rolls');
 	if (!res.ok) return [];
 	return res.json();

@@ -4,14 +4,8 @@
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { DIE_COLOR, IconButton, Button, TabBar, TextInput, Badge } from '@fe-shared/ui';
 	import { getAppContext } from '@fe-shared/context';
+	import type { DieType, RollResult } from '@fe-shared/lib';
 	import DiceHistory from './DiceHistory.svelte';
-
-	type DieType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
-	interface RollResult {
-		dieType: DieType;
-		value: number;
-		note: string;
-	}
 
 	let {
 		die,
