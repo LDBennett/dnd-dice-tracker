@@ -206,6 +206,14 @@
 			placeholder="Select a session…"
 			class="mb-4"
 		/>
+		{#if selectedSessionId}
+			<a
+				href="/history?session={selectedSessionId}"
+				class="mb-4 flex items-center gap-1 text-xs text-accent hover:underline"
+			>
+				View in Roll History →
+			</a>
+		{/if}
 		{#if selectedSession !== null}
 			<SessionStatsPanel session={selectedSession} {sessionLucks} {avgLuckPerSession} />
 		{:else}

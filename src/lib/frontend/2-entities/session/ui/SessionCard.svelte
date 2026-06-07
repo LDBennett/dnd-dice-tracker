@@ -1,11 +1,12 @@
 ﻿<script lang="ts">
 	import { untrack } from 'svelte';
-	import { fade } from 'svelte/transition';
-	import { DIE_COLOR, IconButton, Badge, ConfirmModal, TextInput } from '@fe-shared/ui';
+	import { fade, scale } from 'svelte/transition';
+	import { backOut } from 'svelte/easing';
+	import { IconButton, Badge, ConfirmModal, TextInput } from '@fe-shared/ui';
 	import { singleSessionStats, fmtLuck, luckClass } from '@fe-shared/lib/utils/dice-utils';
 	import type { RollRecord, SessionRecord } from '@fe-shared/lib';
-	import { DieChip } from '@fe-entities/die';
 	import EditRollModal from './EditRollModal.svelte';
+	import RollGridCell from './RollGridCell.svelte';
 
 	let {
 		session,
@@ -59,10 +60,6 @@
 		else onSaveRolls(session.id, updated);
 	}
 
-	function dieColor(t: number) {
-		return DIE_COLOR[t] ?? '#94a3b8';
-	}
-
 	function formatDate(iso: string) {
 		return new Date(iso).toLocaleDateString(undefined, {
 			month: 'short',
@@ -80,7 +77,9 @@
 	{#if !live}
 		<div class="relative mb-3 flex items-center gap-2">
 			{#if isGuest || !editMode}
-				<p class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest && 'px-3']}>
+				<p
+					class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest || (editMode && 'px-3')]}
+				>
 					{name || 'Unnamed session'}
 				</p>
 			{:else}
@@ -112,12 +111,12 @@
 			</div>
 			<div class="text-right">
 				<p class="text-xs text-stone-500">Total Rolls</p>
-				<p class="text-lg font-black text-accent">{session.rolls.length}</p>
+				<p class="text-accent text-lg font-black">{session.rolls.length}</p>
 			</div>
 		{:else}
 			<div class="flex items-center gap-1">
 				<p class="text-base text-stone-500">Rolls:</p>
-				<p class="text-lg font-black text-accent">{session.rolls.length}</p>
+				<p class="text-accent text-lg font-black">{session.rolls.length}</p>
 			</div>
 			<div class="text-right">
 				<p class="text-xs text-stone-500">Luck</p>
@@ -128,57 +127,31 @@
 		{/if}
 	</div>
 
-	<!-- Per-roll editors -->
-	<div class="flex flex-col gap-2">
-		{#each rolls as roll, i (i)}
-			<div class="flex items-center gap-2">
-				{#if isGuest || !editMode}
-					<span
-						class="flex w-16 shrink-0 flex-col items-center gap-1 rounded-3xl px-2 py-2.5 font-bold text-stone-900"
-						style="background: {dieColor(roll.dieType)}"
-					>
-						<DieChip dieType={roll.dieType} value={roll.value} />
-					</span>
-					{#if roll.note}
-						<span class="min-w-1 flex-1 text-xs leading-5 text-stone-400">{roll.note}</span>
-					{/if}
-				{:else}
-					<button
-						type="button"
-						onclick={() => (editingIndex = i)}
-						title="Edit roll value"
-						class="flex w-16 shrink-0 flex-col items-center gap-1 rounded-3xl px-2 py-2.5 font-bold text-stone-900 ring-offset-stone-800 transition hover:scale-105 hover:ring-2 hover:brightness-125 active:scale-95"
-						style="background: {dieColor(roll.dieType)}; --tw-ring-color: {dieColor(
-							roll.dieType
-						)}60;"
-					>
-						<DieChip dieType={roll.dieType} value={roll.value} />
-					</button>
-					<input
-						id={'note-' + i}
-						type="text"
-						bind:value={rolls[i].note}
+	<!-- Per-roll grid / edit list -->
+	{#key editMode}
+		<div class={editMode ? 'flex flex-col gap-2' : 'grid grid-cols-3 gap-2 md:grid-cols-4'}>
+			{#each rolls as roll, i (i)}
+				<div in:scale={{ delay: i * 25, duration: 220, start: 0.75, easing: backOut }}>
+					<RollGridCell
+						dieType={roll.dieType}
+						value={roll.value}
+						bind:note={rolls[i].note}
+						index={i}
+						{editMode}
+						{isGuest}
+						onedit={() => (editingIndex = i)}
 						onblur={() => onSaveRolls(session.id, rolls)}
-						placeholder="Notes (optional)"
-						class="flex-1 rounded-lg border border-stone-600 bg-stone-700/60 px-2.5 py-1.5 text-xs text-white placeholder-stone-500 accent-focus"
+						ondelete={() => deleteRoll(i)}
 					/>
-					<IconButton
-						icon="mdi-trash-can-outline"
-						size="sm"
-						hoverColor="red"
-						rounded="lg"
-						onclick={() => deleteRoll(i)}
-						aria-label="Delete roll"
-					/>
-				{/if}
-			</div>
-		{/each}
-		{#if session.modifier !== 0}
-			<Badge variant="neutral" class="self-start">
-				modifier {session.modifier >= 0 ? `+${session.modifier}` : session.modifier}
-			</Badge>
-		{/if}
-	</div>
+				</div>
+			{/each}
+		</div>
+	{/key}
+	{#if session.modifier !== 0}
+		<Badge variant="neutral" class="mt-2 self-start">
+			modifier {session.modifier >= 0 ? `+${session.modifier}` : session.modifier}
+		</Badge>
+	{/if}
 
 	<!-- Save indicator -->
 	{#if !isGuest && savingId === session.id}
@@ -187,7 +160,7 @@
 		<p
 			in:fade={{ duration: 150 }}
 			out:fade={{ duration: 400 }}
-			class="mt-2 text-right text-xs font-semibold text-accent"
+			class="text-accent mt-2 text-right text-xs font-semibold"
 		>
 			<span class="mdi mdi-check"></span> Saved
 		</p>
