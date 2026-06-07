@@ -54,13 +54,13 @@
 		aria-expanded={open}
 		class={[
 			'flex h-13 w-13 items-center justify-center rounded-full bg-stone-800 text-xl shadow-lg ring-1 ring-stone-700 transition hover:bg-stone-700 active:scale-90',
-			open ? 'ring-orange-500' : ''
+			open ? 'ring-accent' : ''
 		]}
 	>
 		{#if app.rightHanded}
-			<span class="mdi mdi-hand-front-right-outline text-orange-500"></span>
+			<span class="mdi mdi-hand-front-right-outline text-accent"></span>
 		{:else}
-			<span class="mdi mdi-hand-front-left-outline text-orange-500"></span>
+			<span class="mdi mdi-hand-front-left-outline text-accent"></span>
 		{/if}
 	</button>
 </div>

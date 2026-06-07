@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import { PUBLIC_ALLOW_REGISTRATION } from '$env/static/public';
-	import { Modal, TabBar } from '@fe-shared/ui';
+	import { Modal, TabBar, TextInput } from '@fe-shared/ui';
 
 	const allowRegistration = PUBLIC_ALLOW_REGISTRATION === 'true';
 
@@ -80,29 +80,16 @@
 
 		<div class="flex flex-col gap-3">
 			{#if mode === 'register'}
-				<input
-					type="text"
-					bind:value={name}
-					placeholder="Name"
-					autocomplete="name"
-					class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
-				/>
+				<TextInput bind:value={name} placeholder="Name" autocomplete="name" />
 			{/if}
 
-			<input
-				type="email"
-				bind:value={email}
-				placeholder="Email"
-				autocomplete="email"
-				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
-			/>
+			<TextInput type="email" bind:value={email} placeholder="Email" autocomplete="email" />
 
-			<input
+			<TextInput
 				type="password"
 				bind:value={password}
 				placeholder="Password"
 				autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
-				class="w-full rounded-xl border border-stone-600 bg-stone-700 px-4 py-3 text-sm text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
 			/>
 
 			{#if error}
@@ -113,7 +100,7 @@
 				type="button"
 				onclick={submit}
 				disabled={loading}
-				class="mt-1 w-full rounded-xl bg-orange-400 py-3.5 text-sm font-bold text-stone-900 transition hover:bg-orange-300 active:scale-95 disabled:opacity-50"
+				class="mt-1 w-full rounded-xl bg-accent py-3.5 text-sm font-bold text-stone-900 transition hover:brightness-110 active:scale-95 disabled:opacity-50"
 			>
 				{#if loading}
 					{mode === 'login' ? 'Signing in…' : 'Creating account…'}

@@ -15,7 +15,7 @@
 		{
 			success: 'bg-green-900/40 text-green-400',
 			danger: 'bg-red-900/40 text-red-400',
-			warning: 'bg-orange-400/20 text-orange-400',
+			warning: 'bg-accent-tint text-accent',
 			neutral: 'bg-stone-700 text-stone-400'
 		}[variant]
 	);

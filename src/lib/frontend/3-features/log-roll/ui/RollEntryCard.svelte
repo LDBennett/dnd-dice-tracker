@@ -1,11 +1,12 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { backOut, cubicOut } from 'svelte/easing';
-	import { DIE_COLOR, IconButton, Button, TabBar, TextInput, Badge } from '@fe-shared/ui';
+	import { DIE_COLOR, IconButton, Button, TabBar, TextInput } from '@fe-shared/ui';
 	import { getAppContext } from '@fe-shared/context';
 	import type { DieType, RollResult } from '@fe-shared/lib';
 	import DiceHistory from './DiceHistory.svelte';
+	import { DieValuePicker } from '@fe-entities/die';
 
 	let {
 		die,
@@ -24,17 +25,6 @@
 	let sliderValue = $state(untrack(() => Math.ceil(die / 2)));
 	let rollNote = $state('');
 	let dieTab = $state<'roll' | 'history'>('roll');
-	let editingNumber = $state(false);
-
-	function focusOnMount(node: HTMLElement) {
-		node.focus();
-	}
-
-	function commitNumber(raw: string) {
-		const n = parseInt(raw, 10);
-		if (!isNaN(n)) sliderValue = Math.max(1, Math.min(die, n));
-		editingNumber = false;
-	}
 
 	const DIE_BORDER: Record<DieType, string> = {
 		4: 'border-red-500/70 text-red-400',
@@ -93,66 +83,7 @@
 	{/if}
 
 	{#if dieTab === 'roll' || app.isGuest}
-		<!-- Slider + value -->
-		<div class="mx-3 flex items-stretch gap-4" class:flex-row-reverse={app.rightHanded}>
-			<div
-				class="flex flex-col justify-between py-1 text-sm font-semibold text-stone-500"
-				class:items-end={!app.rightHanded}
-				class:items-start={app.rightHanded}
-			>
-				<span>{die}</span>
-				<span>1</span>
-			</div>
-			<div class="flex flex-1 items-center justify-center">
-				<input
-					type="range"
-					min="1"
-					max={die}
-					bind:value={sliderValue}
-					style="writing-mode: vertical-lr; direction: rtl; height: 200px; width: 44px; cursor: pointer; accent-color: {DIE_COLOR[
-						die
-					]};"
-					aria-label="Roll value"
-				/>
-			</div>
-			<div class="flex w-20 flex-col items-center justify-center gap-1">
-				{#if editingNumber}
-					<input
-						type="number"
-						min="1"
-						max={die}
-						value={sliderValue}
-						use:focusOnMount
-						onblur={(e) => commitNumber((e.target as HTMLInputElement).value)}
-						onkeydown={(e) => {
-							if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
-							if (e.key === 'Escape') editingNumber = false;
-						}}
-						class="w-20 border-b-2 bg-transparent text-center text-5xl leading-none font-black text-white focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-						style="border-color: {DIE_COLOR[die]};"
-					/>
-				{:else}
-					<button
-						type="button"
-						onclick={() => (editingNumber = true)}
-						title="Tap to type a value"
-						class="text-6xl leading-none font-black text-white transition hover:opacity-70 active:scale-95"
-						>{sliderValue}</button
-					>
-				{/if}
-				{#if die === 20}
-					{#if sliderValue === 20}
-						<span in:fade={{ duration: 120 }}>
-							<Badge variant="warning" class="font-bold">NAT 20!</Badge>
-						</span>
-					{:else if sliderValue === 1}
-						<span in:fade={{ duration: 120 }}>
-							<Badge variant="danger" class="font-bold">NAT 1</Badge>
-						</span>
-					{/if}
-				{/if}
-			</div>
-		</div>
+		<DieValuePicker dieType={die} bind:value={sliderValue} color={DIE_COLOR[die]} class="mx-3" />
 
 		<TextInput
 			bind:value={rollNote}

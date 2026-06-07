@@ -4,11 +4,13 @@ import type { ISession } from '../lib/types/session.types';
 export type User = { name: string; email: string };
 
 export class AppContext {
-	rollMode    = $state(false);
-	rightHanded = $state(false);
-	showLogin   = $state(false);
-	user        = $state<User | null>(null);
-	isGuest     = $derived(!this.user);
+	rollMode        = $state(false);
+	rightHanded     = $state(false);
+	showLogin       = $state(false);
+	showThemePicker = $state(false);
+	theme           = $state('default');
+	user            = $state<User | null>(null);
+	isGuest         = $derived(!this.user);
 	session: ISession;
 
 	constructor(init: { user?: User | null; rollMode?: boolean; rightHanded?: boolean; session: ISession }) {
@@ -18,8 +20,10 @@ export class AppContext {
 		this.rightHanded = init.rightHanded ?? false;
 	}
 
-	openLogin()  { this.showLogin = true; }
-	closeLogin() { this.showLogin = false; }
+	openLogin()        { this.showLogin = true; }
+	closeLogin()       { this.showLogin = false; }
+	openThemePicker()  { this.showThemePicker = true; }
+	closeThemePicker() { this.showThemePicker = false; }
 }
 
 export const APP_CONTEXT_KEY = Symbol('app');

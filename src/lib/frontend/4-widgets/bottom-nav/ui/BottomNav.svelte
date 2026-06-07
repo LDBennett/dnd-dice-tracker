@@ -2,16 +2,15 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { scale } from 'svelte/transition';
-	import { backOut } from 'svelte/easing';
 	import { getAppContext } from '@fe-shared/context';
+	import { DropdownMenu } from '@fe-shared/ui';
+	import type { DropdownItem } from '@fe-shared/ui';
 	import NavTabButton from './NavTabButton.svelte';
 
 	const app = getAppContext();
 	const currentPath = $derived($page.url.pathname);
 
 	let isRollAnimating = $state(false);
-	let open = $state(false);
 
 	function handleRollClick() {
 		isRollAnimating = true;
@@ -21,45 +20,16 @@
 		goto(resolve('/'));
 	}
 
-	function setRollMode(quick: boolean) {
-		app.rollMode = quick;
-		open = false;
-	}
+	const rollModeItems = $derived<DropdownItem[]>([
+		{ label: 'Log Roll', icon: 'mdi-script-outline', onclick: () => (app.rollMode = false), active: !app.rollMode },
+		{ label: 'Quick Roll', icon: 'mdi-creation-outline', onclick: () => (app.rollMode = true), active: app.rollMode }
+	]);
 </script>
 
 <nav
 	class="fixed right-0 bottom-0 left-0 z-50 flex justify-center"
 	style="padding-bottom: env(safe-area-inset-bottom)"
 >
-	{#if open}
-		<div
-			transition:scale={{ duration: 250, start: 0.5, easing: backOut }}
-			class="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 overflow-hidden rounded-2xl bg-stone-800 shadow-xl"
-		>
-			<button
-				type="button"
-				onclick={() => setRollMode(false)}
-				class={[
-					'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold transition hover:bg-stone-700 active:scale-95',
-					!app.rollMode ? 'text-orange-400' : 'text-stone-400'
-				]}
-			>
-				<span class="mdi mdi-script-outline text-base"></span>
-				Log Roll
-			</button>
-			<button
-				type="button"
-				onclick={() => setRollMode(true)}
-				class={[
-					'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold transition hover:bg-stone-700 active:scale-95',
-					app.rollMode ? 'text-orange-400' : 'text-stone-400'
-				]}
-			>
-				<span class="mdi mdi-creation-outline text-base"></span>
-				Quick Roll
-			</button>
-		</div>
-	{/if}
 	<div
 		class="relative mx-4 mb-4 w-full max-w-sm"
 		style="filter: drop-shadow(0 4px 24px rgb(0 0 0 / 0.5))"
@@ -122,29 +92,32 @@
 		</div>
 
 		<!-- Mode toggle: sits above the roll button in z-order so its label area is tappable -->
-		<button
-			type="button"
-			onclick={() => (open = !open)}
-			aria-label="Change roll mode"
-			class={[
-				'absolute bottom-1.5 left-1/2 z-10 flex -translate-x-1/2 items-center gap-0.5 transition-colors',
-				open || currentPath === '/' ? 'text-orange-400' : 'text-stone-500'
-			]}
-		>
-			<span class={['mdi text-sm', app.rollMode ? 'mdi-creation-outline' : 'mdi-script-outline']}
-			></span>
-			<span class="text-[10px] leading-none font-semibold"
-				>{app.rollMode ? 'Quick Roll' : 'Log Roll'}</span
-			>
-		</button>
+		<div class="absolute bottom-1.5 left-1/2 z-10 -translate-x-1/2">
+			<DropdownMenu items={rollModeItems} direction="up" align="center">
+				{#snippet trigger(toggle, isOpen)}
+					<button
+						type="button"
+						onclick={toggle}
+						aria-label="Change roll mode"
+						class={[
+							'flex items-center gap-0.5 transition-colors',
+							isOpen || currentPath === '/' ? 'text-accent' : 'text-stone-500'
+						]}
+					>
+						<span class={['mdi text-sm', app.rollMode ? 'mdi-creation-outline' : 'mdi-script-outline']}></span>
+						<span class="text-[10px] leading-none font-semibold">{app.rollMode ? 'Quick Roll' : 'Log Roll'}</span>
+					</button>
+				{/snippet}
+			</DropdownMenu>
+		</div>
 
 		<button
 			type="button"
 			onclick={handleRollClick}
 			aria-label="Roll Dice"
 			class={[
-				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-orange-400 transition active:scale-95',
-				currentPath === '/' ? 'shadow-lg shadow-orange-400/40' : 'opacity-90'
+				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent transition active:scale-95',
+				currentPath === '/' ? 'shadow-accent-glow' : 'opacity-90'
 			]}
 		>
 			<svg

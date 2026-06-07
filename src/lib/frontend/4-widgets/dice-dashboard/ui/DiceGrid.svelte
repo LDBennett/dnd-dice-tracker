@@ -81,7 +81,7 @@
 						: batchEntries.filter((e) => e.dieType === die).length}
 					{#if count > 0}
 						<span
-							class="absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-orange-400 px-1 text-xs font-black text-stone-900"
+							class="absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-black text-stone-900"
 							>×{count}</span
 						>
 					{/if}

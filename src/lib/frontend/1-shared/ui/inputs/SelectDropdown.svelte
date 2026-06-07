@@ -80,7 +80,7 @@
 							onclick={() => select(opt)}
 							class={[
 								'flex min-h-12 w-full flex-col justify-center px-4 py-2.5 text-left text-sm transition hover:bg-stone-700',
-								opt.value === value ? 'text-orange-400' : 'text-white'
+								opt.value === value ? 'text-accent' : 'text-white'
 							]}
 						>
 							<span class="font-semibold">{opt.label}</span>

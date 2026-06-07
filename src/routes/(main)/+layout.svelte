@@ -5,6 +5,7 @@
 	import { NavBar } from '@fe-widgets/nav-bar';
 	import { BottomNav } from '@fe-widgets/bottom-nav';
 	import { LoginModal } from '@fe-features/authenticate';
+	import { ThemePickerModal } from '@fe-features/pick-theme';
 	import { HandednessToggle } from '@fe-features/toggle-handedness';
 	import { AppContext, APP_CONTEXT_KEY } from '@fe-shared/context';
 	import { Session } from '@fe-entities/session';
@@ -24,6 +25,7 @@
 	if (browser) {
 		app.session.currentSessionId = localStorage.getItem('currentSessionId');
 		app.session.rolledAt = localStorage.getItem('sessionRolledAt');
+		app.theme = localStorage.getItem('theme') ?? 'default';
 	}
 
 	$effect(() => {
@@ -38,18 +40,20 @@
 		else localStorage.removeItem('currentSessionId');
 	});
 	$effect(() => {
-		if (app.session.rolledAt)
-			localStorage.setItem('sessionRolledAt', app.session.rolledAt);
+		if (app.session.rolledAt) localStorage.setItem('sessionRolledAt', app.session.rolledAt);
 		else localStorage.removeItem('sessionRolledAt');
+	});
+	$effect(() => {
+		localStorage.setItem('theme', app.theme);
 	});
 </script>
 
-<div class="min-h-screen bg-stone-900 text-white">
+<div class="min-h-screen bg-stone-900 text-white" data-theme={app.theme}>
 	<NavBar />
 
 	<main
-		class="mx-auto max-w-225 pt-14 pb-14"
-		style="padding-bottom: calc(5.5rem + env(safe-area-inset-bottom))"
+		class="mx-auto max-w-225 pt-14"
+		style="padding-bottom: calc(10rem + env(safe-area-inset-bottom))"
 	>
 		{@render children()}
 	</main>
@@ -60,3 +64,4 @@
 <HandednessToggle />
 
 <LoginModal bind:open={app.showLogin} />
+<ThemePickerModal bind:open={app.showThemePicker} />

@@ -73,3 +73,34 @@
 button {
 	@apply cursor-pointer;
 }
+
+/* ── Accent theme ── */
+:root                    { --accent: #fb923c; }
+[data-theme="default"]   { --accent: #fb923c; }
+[data-theme="sorcerer"]  { --accent: #fb923c; }
+[data-theme="barbarian"] { --accent: #ef4444; }
+[data-theme="ranger"]    { --accent: #22c55e; }
+[data-theme="druid"]     { --accent: #f59e0b; }
+[data-theme="paladin"]   { --accent: #facc15; }
+[data-theme="rogue"]     { --accent: #8b5cf6; }
+[data-theme="artificer"] { --accent: #2dd4bf; }
+[data-theme="wizard"]    { --accent: #6366f1; }
+[data-theme="pugilist"]  { --accent: #b45309; }
+[data-theme="fighter"]   { --accent: #94a3b8; }
+[data-theme="bard"]      { --accent: #ec4899; }
+
+.text-accent      { color: var(--accent); }
+.bg-accent        { background-color: var(--accent); }
+.bg-accent-tint   { background-color: color-mix(in srgb, var(--accent) 10%, transparent); }
+.ring-accent-sm   { box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 30%, transparent); }
+.ring-accent      { --tw-ring-color: var(--accent); }
+.shadow-accent-glow {
+	box-shadow:
+		0 10px 15px -3px color-mix(in srgb, var(--accent) 40%, transparent),
+		0 4px 6px -4px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.accent-focus:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent);
+}

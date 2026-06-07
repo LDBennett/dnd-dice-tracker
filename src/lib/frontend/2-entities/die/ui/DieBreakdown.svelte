@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import type { BreakdownEntry } from '@fe-shared/lib';
-	import { DIE_COLOR } from '@fe-shared/ui';
+	import { DIE_COLOR, DieIcon } from '@fe-shared/ui';
 	import { fmtLuck, luckClass } from '@fe-shared/lib';
 
 	let { breakdown }: { breakdown: BreakdownEntry[] } = $props();
@@ -40,18 +40,22 @@
 				style="opacity: {visible ? 1 : 0}; transform: translateY({visible ? 0 : 16}px); transition: opacity 0.35s ease-out, transform 0.35s ease-out; transition-delay: {i * 80}ms;"
 			>
 				<div class="mb-2 flex items-center justify-between">
-					<span class="text-sm font-bold" style="color: {color(entry.dieType)}">d{entry.dieType}</span>
+					<DieIcon dieType={entry.dieType} size={48} />
 					<div class="flex items-center gap-3 text-xs text-stone-400">
 						<span>{entry.count} {entry.count === 1 ? 'roll' : 'rolls'}</span>
-						<span class="font-semibold text-white">avg {entry.avg}</span>
 						<span class={['font-semibold', luckClass(luckScore)]} title="luck vs expected {theoreticalAvg(entry.dieType)}">{fmtLuck(luckScore)}</span>
 					</div>
 				</div>
-				<div class="h-1.5 overflow-hidden rounded-full bg-stone-700">
-					<div
-						class="h-full rounded-full"
-						style="width: {visible ? (entry.avg / entry.dieType) * 100 : 0}%; background: {color(entry.dieType)}; opacity: 0.7; transition: width 0.7s cubic-bezier(0.33, 1, 0.68, 1); transition-delay: {i * 80 + 250}ms;"
-					></div>
+				<div class="relative h-6 rounded-full bg-stone-700">
+					<div class="absolute inset-0 overflow-hidden rounded-full">
+						<div
+							class="h-full rounded-full"
+							style="width: {visible ? (entry.avg / entry.dieType) * 100 : 0}%; background: {color(entry.dieType)}; opacity: 0.7; transition: width 0.7s cubic-bezier(0.33, 1, 0.68, 1); transition-delay: {i * 80 + 250}ms;"
+						></div>
+					</div>
+					<div class="absolute inset-0 flex items-center justify-center">
+						<span class="text-xs font-bold text-white drop-shadow">avg {entry.avg}</span>
+					</div>
 				</div>
 			</div>
 		{/each}

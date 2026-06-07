@@ -1,7 +1,7 @@
 ﻿<script lang="ts">
 	import { SessionCard } from '@fe-entities/session';
 	import { getAppContext } from '@fe-shared/context';
-	import { Button } from '@fe-shared/ui';
+	import { Button, IconButton } from '@fe-shared/ui';
 	import { fetchSessions as apiFetchSessions, patchSession, deleteSession as apiDeleteSession } from '../api/historyEditor.api';
 	import type { SessionRecord, RollRecord } from '@fe-shared/lib';
 
@@ -11,6 +11,7 @@
 	let loading   = $state(true);
 	let savingId  = $state<string | null>(null);
 	let savedId   = $state<string | null>(null);
+	let editMode  = $state(false);
 
 	$effect(() => { fetchSessions(); });
 
@@ -51,7 +52,18 @@
 <div class="px-4 py-6">
 	<div class="mb-5 flex items-center justify-between">
 		<h2 class="text-xl font-bold text-white">{app.isGuest ? "Lee's" : 'Your'} Roll History</h2>
-		<Button onclick={fetchSessions}>↻ Refresh</Button>
+		<div class="flex items-center gap-2">
+			<IconButton
+				icon="mdi-book-edit-outline"
+				size="sm"
+				iconSize="lg"
+				rounded="lg"
+				onclick={() => (editMode = !editMode)}
+				aria-label="Toggle edit mode"
+				class={editMode ? 'text-accent!' : ''}
+			/>
+			<Button onclick={fetchSessions}>↻ Refresh</Button>
+		</div>
 	</div>
 
 	{#if loading}
@@ -67,6 +79,7 @@
 				<SessionCard
 					{session}
 					isGuest={app.isGuest}
+					{editMode}
 					{savingId}
 					{savedId}
 					onSaveName={saveName}

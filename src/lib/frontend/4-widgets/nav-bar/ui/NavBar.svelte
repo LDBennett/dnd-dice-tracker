@@ -1,25 +1,20 @@
 <script lang="ts">
 	import Logo from '$lib/assets/logo.png';
 	import { getAppContext } from '@fe-shared/context';
-	import { IconButton, ConfirmModal } from '@fe-shared/ui';
+	import { IconButton, ConfirmModal, DropdownMenu } from '@fe-shared/ui';
+	import type { DropdownItem } from '@fe-shared/ui';
 
 	const app = getAppContext();
 
-	let dropdownOpen = $state(false);
 	let confirmingSignOut = $state(false);
 	let signOutForm = $state<HTMLFormElement | null>(null);
-	let accountMenu = $state<HTMLElement | null>(null);
 
-	$effect(() => {
-		if (!dropdownOpen) return;
-		function handleClick(e: MouseEvent) {
-			if (accountMenu && !accountMenu.contains(e.target as Node)) {
-				dropdownOpen = false;
-			}
-		}
-		window.addEventListener('click', handleClick, { capture: true });
-		return () => window.removeEventListener('click', handleClick, { capture: true });
-	});
+	const accountItems = $derived<DropdownItem[]>([
+		{ label: 'Theme', icon: 'mdi-palette-outline', onclick: () => app.openThemePicker() },
+		...(app.user
+			? [{ label: 'Sign out', icon: 'mdi-logout', onclick: () => (confirmingSignOut = true) }]
+			: [{ label: 'Sign in', icon: 'mdi-login', onclick: () => app.openLogin() }])
+	]);
 
 	function submitSignOut() {
 		confirmingSignOut = false;
@@ -35,40 +30,19 @@
 		<div class="flex h-14 items-center justify-between px-4">
 			<div class="flex items-center gap-2">
 				<img src={Logo} alt="Logo" class="h-6 w-6" />
-				<span class="font-bold text-orange-400">D&D Dice Tracker</span>
+				<span class="font-bold text-accent">D&D Dice Tracker</span>
 			</div>
 
 			<div class="flex items-center gap-1">
-				<!-- Account button + dropdown -->
-				<div class="relative" bind:this={accountMenu}>
-					<IconButton
-						icon="mdi-account-circle-outline"
-						onclick={() => (dropdownOpen = !dropdownOpen)}
-						aria-label="Account"
-					/>
-
-					{#if dropdownOpen}
-						<div class="absolute top-full right-0 z-50 mt-2 w-36 overflow-hidden rounded-xl bg-stone-800 shadow-lg ring-1 ring-white/10">
-							{#if app.user}
-								<button
-									type="button"
-									onclick={() => { dropdownOpen = false; confirmingSignOut = true; }}
-									class="flex w-full items-center gap-2 px-4 py-3 text-sm text-stone-300 hover:bg-stone-700 hover:text-white"
-								>
-									<span class="mdi mdi-logout text-base"></span> Sign out
-								</button>
-							{:else}
-								<button
-									type="button"
-									onclick={() => { dropdownOpen = false; app.openLogin(); }}
-									class="flex w-full items-center gap-2 px-4 py-3 text-sm text-stone-300 hover:bg-stone-700 hover:text-white"
-								>
-									<span class="mdi mdi-login text-base"></span> Sign in
-								</button>
-							{/if}
-						</div>
-					{/if}
-				</div>
+				<DropdownMenu items={accountItems} direction="down" align="right">
+					{#snippet trigger(toggle)}
+						<IconButton
+							icon="mdi-account-circle-outline"
+							onclick={toggle}
+							aria-label="Account"
+						/>
+					{/snippet}
+				</DropdownMenu>
 			</div>
 		</div>
 	</div>

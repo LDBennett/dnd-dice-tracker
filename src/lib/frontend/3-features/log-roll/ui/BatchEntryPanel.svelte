@@ -164,7 +164,7 @@
 	</div>
 
 	<p class="mb-3 text-sm text-stone-400">
-		Total: <span class="font-black text-orange-400">{batchTotal}</span>
+		Total: <span class="font-black text-accent">{batchTotal}</span>
 	</p>
 
 	<TextInput

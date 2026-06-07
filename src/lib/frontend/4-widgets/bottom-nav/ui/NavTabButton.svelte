@@ -26,10 +26,10 @@
 	type="button"
 	onclick={handleClick}
 	aria-label={label}
-	class={['flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors', active ? 'text-orange-400' : 'text-stone-400']}
+	class={['flex min-h-12 min-w-12 flex-col items-center justify-center gap-1 transition-colors', active ? 'text-accent' : 'text-stone-400']}
 >
 	<span class={[isAnimating && animClass]}>
 		{@render icon()}
 	</span>
-	<span class={['text-xs font-semibold transition-colors', active ? 'text-orange-400' : 'text-stone-500']}>{label}</span>
+	<span class={['text-xs font-semibold transition-colors', active ? 'text-accent' : 'text-stone-500']}>{label}</span>
 </button>

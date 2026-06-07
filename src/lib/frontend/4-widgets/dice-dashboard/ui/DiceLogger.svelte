@@ -1,6 +1,7 @@
 ﻿<script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
-	import { TabBar, IconButton } from '@fe-shared/ui';
+	import { TabBar, IconButton, DropdownMenu, TextInput } from '@fe-shared/ui';
+	import type { DropdownItem } from '@fe-shared/ui';
 	import { fmtDate, fmtTime } from '@fe-shared/lib';
 	import {
 		QuickRollOverlay,
@@ -45,10 +46,6 @@
 		if (e.key === 'Escape') {
 			editingTitle = false;
 		}
-	}
-
-	function focusOnMount(node: HTMLElement) {
-		node.focus();
 	}
 
 	// Quick-batch state
@@ -128,6 +125,11 @@
 	let pickerSessions = $state<SessionRecord[]>([]);
 	let pickerLoading = $state(false);
 
+	const sessionMenuItems: DropdownItem[] = [
+		{ label: 'New', icon: 'mdi-plus-circle-outline', onclick: () => { session.reset(); pickerOpen = false; } },
+		{ label: 'Continue', icon: 'mdi-play-circle-outline', onclick: openPicker }
+	];
+
 	const pickerItems = $derived(
 		pickerSessions.filter((s) => s.id !== session.currentSessionId).slice(0, 8)
 	);
@@ -154,14 +156,14 @@
 				<div class="flex min-w-0 flex-1 flex-col gap-0.5">
 					<div class="flex items-center gap-1.5">
 						{#if editingTitle}
-							<input
-								type="text"
+							<TextInput
+								id="session-name"
 								bind:value={titleDraft}
 								onblur={commitTitle}
 								onkeydown={onTitleKeydown}
 								placeholder="Unnamed session"
-								use:focusOnMount
-								class="min-w-0 flex-1 rounded-md bg-stone-700 px-2 py-0.5 text-sm font-semibold text-white placeholder-stone-500 focus:ring-1 focus:ring-orange-400/60 focus:outline-none"
+								autofocus
+								class="font-semibold"
 							/>
 						{:else if session.currentSessionId !== null}
 							<span class="truncate text-sm font-semibold text-white"
@@ -178,29 +180,11 @@
 						</p>
 					{/if}
 				</div>
-				<div class="flex shrink-0 items-center gap-3">
-					{#if !pickerOpen}
-						<button
-							type="button"
-							onclick={openPicker}
-							class="text-sm font-medium text-stone-400 transition hover:text-stone-200"
-							>Continue</button
-						>
-					{:else}
-						<button
-							type="button"
-							onclick={() => (pickerOpen = false)}
-							class="text-sm font-medium text-stone-400 transition hover:text-stone-200"
-							>Cancel</button
-						>
-					{/if}
-					<button
-						type="button"
-						onclick={() => { session.reset(); pickerOpen = false; }}
-						class="text-sm font-medium text-orange-400 transition hover:text-orange-300"
-						>+ New</button
-					>
-				</div>
+				<DropdownMenu items={sessionMenuItems} direction="down" align="right">
+					{#snippet trigger(toggle)}
+						<IconButton icon="mdi-dots-vertical" size="sm" onclick={toggle} />
+					{/snippet}
+				</DropdownMenu>
 			</div>
 
 			{#if pickerOpen}

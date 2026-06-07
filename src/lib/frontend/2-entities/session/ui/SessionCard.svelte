@@ -1,7 +1,7 @@
 ﻿<script lang="ts">
 	import { untrack } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import { DIE_COLOR, IconButton, Badge, ConfirmModal } from '@fe-shared/ui';
+	import { DIE_COLOR, IconButton, Badge, ConfirmModal, TextInput } from '@fe-shared/ui';
 	import { singleSessionStats, fmtLuck, luckClass } from '@fe-shared/lib/utils/dice-utils';
 	import type { RollRecord, SessionRecord } from '@fe-shared/lib';
 	import { DieChip } from '@fe-entities/die';
@@ -11,6 +11,7 @@
 		session,
 		isGuest = false,
 		live = false,
+		editMode = false,
 		savingId = null,
 		savedId = null,
 		onSaveName,
@@ -20,6 +21,7 @@
 		session: SessionRecord;
 		isGuest?: boolean;
 		live?: boolean;
+		editMode?: boolean;
 		savingId?: string | null;
 		savedId?: string | null;
 		onSaveName: (id: string, name: string) => void;
@@ -71,22 +73,22 @@
 	function formatTime(iso: string) {
 		return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 	}
-
 </script>
 
 <div class="rounded-2xl bg-stone-800 p-4">
 	<!-- Session name -->
 	{#if !live}
 		<div class="relative mb-3 flex items-center gap-2">
-			{#if isGuest}
-				<p class="flex-1 px-3 py-2 text-sm font-semibold text-white">{name || 'Unnamed session'}</p>
+			{#if isGuest || !editMode}
+				<p class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest && 'px-3']}>
+					{name || 'Unnamed session'}
+				</p>
 			{:else}
-				<input
-					type="text"
+				<TextInput
 					bind:value={name}
 					onblur={() => onSaveName(session.id, name)}
 					placeholder="Unnamed session"
-					class="flex-1 rounded-xl border border-stone-600 bg-stone-700/60 px-3 py-2 text-sm font-semibold text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
+					class="flex-1 font-semibold"
 				/>
 				<IconButton
 					icon="mdi-trash-can-outline"
@@ -110,12 +112,12 @@
 			</div>
 			<div class="text-right">
 				<p class="text-xs text-stone-500">Total Rolls</p>
-				<p class="text-lg font-black text-orange-400">{session.rolls.length}</p>
+				<p class="text-lg font-black text-accent">{session.rolls.length}</p>
 			</div>
 		{:else}
 			<div class="flex items-center gap-1">
 				<p class="text-base text-stone-500">Rolls:</p>
-				<p class="text-lg font-black text-orange-400">{session.rolls.length}</p>
+				<p class="text-lg font-black text-accent">{session.rolls.length}</p>
 			</div>
 			<div class="text-right">
 				<p class="text-xs text-stone-500">Luck</p>
@@ -130,7 +132,7 @@
 	<div class="flex flex-col gap-2">
 		{#each rolls as roll, i (i)}
 			<div class="flex items-center gap-2">
-				{#if isGuest}
+				{#if isGuest || !editMode}
 					<span
 						class="flex w-16 shrink-0 flex-col items-center gap-1 rounded-3xl px-2 py-2.5 font-bold text-stone-900"
 						style="background: {dieColor(roll.dieType)}"
@@ -158,7 +160,7 @@
 						bind:value={rolls[i].note}
 						onblur={() => onSaveRolls(session.id, rolls)}
 						placeholder="Notes (optional)"
-						class="flex-1 rounded-lg border border-stone-600 bg-stone-700/60 px-2.5 py-1.5 text-xs text-white placeholder-stone-500 focus:border-orange-400 focus:ring-1 focus:ring-orange-400/30 focus:outline-none"
+						class="flex-1 rounded-lg border border-stone-600 bg-stone-700/60 px-2.5 py-1.5 text-xs text-white placeholder-stone-500 accent-focus"
 					/>
 					<IconButton
 						icon="mdi-trash-can-outline"
@@ -185,7 +187,7 @@
 		<p
 			in:fade={{ duration: 150 }}
 			out:fade={{ duration: 400 }}
-			class="mt-2 text-right text-xs font-semibold text-orange-400"
+			class="mt-2 text-right text-xs font-semibold text-accent"
 		>
 			<span class="mdi mdi-check"></span> Saved
 		</p>

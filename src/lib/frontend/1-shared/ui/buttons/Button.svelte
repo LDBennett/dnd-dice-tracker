@@ -18,7 +18,7 @@
 	const cls = $derived(
 		[
 			variant === 'primary'
-				? 'rounded-2xl bg-orange-400 py-4 text-base font-black text-stone-900 shadow-lg transition hover:brightness-110 active:scale-95 disabled:opacity-50'
+				? 'rounded-2xl bg-accent py-4 text-base font-black text-stone-900 shadow-lg transition hover:brightness-110 active:scale-95 disabled:opacity-50'
 				: 'rounded-lg px-3 py-2 text-sm text-stone-400 transition hover:bg-stone-800 hover:text-white disabled:opacity-50',
 			fullWidth ? 'w-full' : '',
 			extraClass ?? ''

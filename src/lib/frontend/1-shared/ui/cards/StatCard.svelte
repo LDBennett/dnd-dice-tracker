@@ -19,14 +19,14 @@
 		children?: Snippet;
 	} = $props();
 
-	const cardClass  = $derived(accent === 'amber' ? 'bg-orange-400/10 ring-1 ring-orange-400/30'
+	const cardClass  = $derived(accent === 'amber' ? 'bg-accent-tint ring-accent-sm'
 	                 : accent === 'red'   ? 'bg-red-900/20 ring-1 ring-red-800/40'
 	                 :                      'bg-stone-800');
-	const labelClass = $derived(accent === 'amber' ? 'text-orange-500'
+	const labelClass = $derived(accent === 'amber' ? 'text-accent'
 	                 : accent === 'red'   ? 'text-red-500'
 	                 :                      'text-stone-500');
 	const valueClass = $derived(valueColor         ? ''
-	                 : accent === 'amber' ? 'text-orange-400'
+	                 : accent === 'amber' ? 'text-accent'
 	                 : accent === 'red'   ? 'text-red-400'
 	                 :                      'text-white');
 </script>
