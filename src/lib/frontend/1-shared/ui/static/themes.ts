@@ -39,8 +39,8 @@ export const THEMES: Theme[] = [
 		id: 'druid',
 		label: 'Druid',
 		icon: 'mdi-paw',
-		accent: '#f59e0b',
-		palette: ['#f59e0b', '#b45309', '#78350f', '#fde68a']
+		accent: '#84cc16',
+		palette: ['#84cc16', '#4d7c0f', '#365314', '#d9f99d']
 	},
 	{
 		id: 'fighter',
@@ -81,8 +81,8 @@ export const THEMES: Theme[] = [
 		id: 'sorcerer',
 		label: 'Sorcerer',
 		icon: 'mdi-fire',
-		accent: '#fb923c',
-		palette: ['#fb923c', '#c2410c', '#7c3b1a', '#fed7aa']
+		accent: '#d946ef',
+		palette: ['#d946ef', '#a21caf', '#701a75', '#f0abfc']
 	},
 	{
 		id: 'wizard',

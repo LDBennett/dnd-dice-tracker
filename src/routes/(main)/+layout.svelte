@@ -12,20 +12,30 @@
 
 	let { data, children }: { data: LayoutServerData; children: import('svelte').Snippet } = $props();
 
+	const session = new Session();
 	const app = new AppContext({
 		user: untrack(() => data.user),
 		rollMode: browser ? localStorage.getItem('rollMode') === 'quick' : false,
 		rightHanded: browser ? localStorage.getItem('handedness') === 'right' : false,
-		session: new Session()
+		session
 	});
 	setContext(APP_CONTEXT_KEY, app);
 	$effect(() => {
 		app.user = data.user;
 	});
+	$effect(() => {
+		session.guestMode = app.isGuest;
+	});
 	if (browser) {
 		app.session.currentSessionId = localStorage.getItem('currentSessionId');
 		app.session.rolledAt = localStorage.getItem('sessionRolledAt');
 		app.theme = localStorage.getItem('theme') ?? 'default';
+		if (!data.user) {
+			const saved = localStorage.getItem('guestSessionRolls');
+			if (saved) {
+				try { session.currentSessionRolls = JSON.parse(saved); } catch {}
+			}
+		}
 	}
 
 	$effect(() => {
@@ -44,6 +54,16 @@
 		else localStorage.removeItem('sessionRolledAt');
 	});
 	$effect(() => {
+		if (app.isGuest) {
+			if (app.session.currentSessionRolls.length > 0)
+				localStorage.setItem('guestSessionRolls', JSON.stringify(app.session.currentSessionRolls));
+			else
+				localStorage.removeItem('guestSessionRolls');
+		} else {
+			localStorage.removeItem('guestSessionRolls');
+		}
+	});
+	$effect(() => {
 		localStorage.setItem('theme', app.theme);
 	});
 </script>
@@ -59,9 +79,8 @@
 	</main>
 
 	<BottomNav />
+	<HandednessToggle />
 </div>
-
-<HandednessToggle />
 
 <LoginModal bind:open={app.showLogin} />
 <ThemePickerModal bind:open={app.showThemePicker} />

@@ -40,7 +40,7 @@
 			type="button"
 			onclick={confirm}
 			class={[
-				'absolute bottom-16 flex min-h-12 items-center rounded-full bg-stone-700 px-4 py-2 text-sm font-semibold whitespace-nowrap text-white shadow-lg ring-1 ring-stone-600 transition hover:bg-stone-600 active:scale-95',
+				'absolute bottom-16 flex min-h-12 items-center rounded-full bg-accent px-4 py-2 text-sm font-semibold whitespace-nowrap text-stone-900 shadow-lg ring-accent-sm transition hover:brightness-110 active:scale-95',
 				app.rightHanded ? 'left-0' : 'right-0'
 			]}
 			transition:scale={{ start: 0.5, duration: 250, easing: backOut }}>{optionLabel}</button
@@ -53,8 +53,8 @@
 		title="Switch handedness"
 		aria-expanded={open}
 		class={[
-			'flex h-13 w-13 items-center justify-center rounded-full bg-stone-800 text-xl shadow-lg ring-1 ring-stone-700 transition hover:bg-stone-700 active:scale-90',
-			open ? 'ring-accent' : ''
+			'flex h-13 w-13 items-center justify-center rounded-full bg-stone-800 text-xl shadow-lg ring-accent-sm transition hover:bg-stone-700 active:scale-90',
+			open ? 'shadow-accent-glow' : ''
 		]}
 	>
 		{#if app.rightHanded}

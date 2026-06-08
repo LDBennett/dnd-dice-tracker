@@ -77,10 +77,10 @@ button {
 /* ── Accent theme ── */
 :root                    { --accent: #fb923c; }
 [data-theme="default"]   { --accent: #fb923c; }
-[data-theme="sorcerer"]  { --accent: #fb923c; }
+[data-theme="sorcerer"]  { --accent: #d946ef; }
 [data-theme="barbarian"] { --accent: #ef4444; }
 [data-theme="ranger"]    { --accent: #22c55e; }
-[data-theme="druid"]     { --accent: #f59e0b; }
+[data-theme="druid"]     { --accent: #84cc16; }
 [data-theme="paladin"]   { --accent: #facc15; }
 [data-theme="rogue"]     { --accent: #8b5cf6; }
 [data-theme="artificer"] { --accent: #2dd4bf; }

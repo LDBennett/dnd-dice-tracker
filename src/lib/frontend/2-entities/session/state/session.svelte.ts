@@ -10,8 +10,17 @@ export class Session implements ISession {
 	rolledAt = $state<string | null>(null);
 	saving = $state(false);
 	saveError = $state<string | null>(null);
+	guestMode = $state(false);
 
 	async autoSave(rolls: RollResult[]): Promise<void> {
+		if (this.guestMode) {
+			if (!this.currentSessionId) {
+				this.currentSessionId = crypto.randomUUID();
+				this.rolledAt = new SvelteDate().toISOString();
+			}
+			this.currentSessionRolls = [...this.currentSessionRolls, ...rolls];
+			return;
+		}
 		this.saving = true;
 		this.saveError = null;
 		try {
@@ -38,6 +47,7 @@ export class Session implements ISession {
 		if (!this.currentSessionId) return;
 		if (fields.rolls !== undefined) this.currentSessionRolls = fields.rolls;
 		if (fields.name !== undefined) this.currentSessionName = fields.name;
+		if (this.guestMode) return;
 		await updateRollSession(this.currentSessionId, fields);
 	}
 
