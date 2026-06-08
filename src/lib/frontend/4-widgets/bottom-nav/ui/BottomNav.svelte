@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { getAppContext } from '@fe-shared/context';
-	import { DropdownMenu } from '@fe-shared/ui';
+	import { DropdownMenu, Logo } from '@fe-shared/ui';
 	import type { DropdownItem } from '@fe-shared/ui';
 	import NavTabButton from './NavTabButton.svelte';
 
@@ -120,23 +120,7 @@
 				currentPath === '/' ? 'shadow-accent-glow' : 'opacity-90'
 			]}
 		>
-			<svg
-				width="30"
-				height="30"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="white"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class={[isRollAnimating && 'anim-spin360']}
-			>
-				<polygon points="12,2 22,9 18,22 6,22 2,9" />
-				<polyline points="2,9 12,13 22,9" />
-				<line x1="12" y1="2" x2="12" y2="13" />
-				<line x1="18" y1="22" x2="12" y2="13" />
-				<line x1="6" y1="22" x2="12" y2="13" />
-			</svg>
+			<Logo class={isRollAnimating ? 'w-8 h-8 anim-spin360' : 'w-8 h-8'} style="--logo-fill: white; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4))" />
 		</button>
 	</div>
 </nav>

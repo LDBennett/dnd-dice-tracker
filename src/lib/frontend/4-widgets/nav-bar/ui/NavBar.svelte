@@ -1,7 +1,6 @@
 <script lang="ts">
-	import Logo from '$lib/assets/logo.png';
 	import { getAppContext } from '@fe-shared/context';
-	import { IconButton, ConfirmModal, DropdownMenu } from '@fe-shared/ui';
+	import { IconButton, ConfirmModal, DropdownMenu, Logo } from '@fe-shared/ui';
 	import type { DropdownItem } from '@fe-shared/ui';
 
 	const app = getAppContext();
@@ -29,18 +28,15 @@
 	<div class="mx-auto max-w-225">
 		<div class="flex h-14 items-center justify-between px-4">
 			<div class="flex items-center gap-2">
-				<img src={Logo} alt="Logo" class="h-6 w-6" />
-				<span class="font-bold text-accent">D&D Dice Tracker</span>
+				<Logo class="h-6 w-6" />
+
+				<span class="text-accent font-bold">Tabula Rollsa</span>
 			</div>
 
 			<div class="flex items-center gap-1">
 				<DropdownMenu items={accountItems} direction="down" align="right">
 					{#snippet trigger(toggle)}
-						<IconButton
-							icon="mdi-account-circle-outline"
-							onclick={toggle}
-							aria-label="Account"
-						/>
+						<IconButton icon="mdi-account-circle-outline" onclick={toggle} aria-label="Account" />
 					{/snippet}
 				</DropdownMenu>
 			</div>

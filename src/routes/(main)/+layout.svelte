@@ -30,7 +30,7 @@
 		app.session.currentSessionId = localStorage.getItem('currentSessionId');
 		app.session.rolledAt = localStorage.getItem('sessionRolledAt');
 		app.theme = localStorage.getItem('theme') ?? 'default';
-		if (!data.user) {
+		if (!untrack(() => data.user)) {
 			const saved = localStorage.getItem('guestSessionRolls');
 			if (saved) {
 				try { session.currentSessionRolls = JSON.parse(saved); } catch {}
@@ -66,9 +66,12 @@
 	$effect(() => {
 		localStorage.setItem('theme', app.theme);
 	});
+	$effect(() => {
+		document.documentElement.dataset.theme = app.theme;
+	});
 </script>
 
-<div class="min-h-screen bg-stone-900 text-white" data-theme={app.theme}>
+<div class="min-h-screen bg-stone-900 text-white">
 	<NavBar />
 
 	<main

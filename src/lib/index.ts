@@ -1,1 +1,1 @@
-// place files you want to import through the `$lib` alias in this folder.
+// FSD architecture deliberately has a slice expose its own index.ts so using this is not needed.
