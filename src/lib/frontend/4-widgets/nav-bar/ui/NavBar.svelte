@@ -30,7 +30,7 @@
 			<div class="flex items-center gap-2">
 				<Logo class="h-6 w-6" />
 
-				<span class="text-accent font-bold">Tabula Rollsa</span>
+				<span class="text-accent logo-text font-bold">Tabula Rollsa</span>
 			</div>
 
 			<div class="flex items-center gap-1">
