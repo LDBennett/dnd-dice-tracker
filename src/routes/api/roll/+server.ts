@@ -8,7 +8,12 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	if (!locals.user) error(401, 'Unauthorized');
 
 	const body = await request.json();
-	const { dice, modifier = 0, name = '', sessionId } = body as {
+	const {
+		dice,
+		modifier = 0,
+		name = '',
+		sessionId
+	} = body as {
 		dice: Array<{ dieType: 4 | 6 | 8 | 10 | 12 | 20 | 100; value: number; note?: string }>;
 		modifier: number;
 		name: string;

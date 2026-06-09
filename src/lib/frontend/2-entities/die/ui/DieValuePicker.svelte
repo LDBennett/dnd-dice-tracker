@@ -20,9 +20,11 @@
 	let editingNumber = $state(false);
 
 	const isNat20 = $derived(dieType === 20 && value === 20);
-	const isNat1  = $derived(dieType === 20 && value === 1);
+	const isNat1 = $derived(dieType === 20 && value === 1);
 
-	function focusOnMount(node: HTMLElement) { node.focus(); }
+	function focusOnMount(node: HTMLElement) {
+		node.focus();
+	}
 
 	function commitNumber(raw: string) {
 		const n = parseInt(raw, 10);
@@ -63,7 +65,7 @@
 					if (e.key === 'Enter') (e.target as HTMLInputElement).blur();
 					if (e.key === 'Escape') editingNumber = false;
 				}}
-				class="w-20 border-b-2 bg-transparent text-center text-5xl leading-none font-black text-white focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+				class="w-20 [appearance:textfield] border-b-2 bg-transparent text-center text-5xl leading-none font-black text-white focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
 				style="border-color: {color};"
 			/>
 		{:else}
@@ -72,7 +74,8 @@
 				onclick={() => (editingNumber = true)}
 				title="Tap to type a value"
 				class="text-6xl leading-none font-black text-white transition hover:opacity-70 active:scale-95"
-			>{value}</button>
+				>{value}</button
+			>
 		{/if}
 		{#if isNat20}
 			<span in:fade={{ duration: 120 }}>

@@ -10,13 +10,7 @@
 
 <svg viewBox="0 0 100 100" width={size} height={size} aria-label="d{dieType}">
 	{#if shape}
-		<polygon
-			points={shape}
-			fill="{col}33"
-			stroke={col}
-			stroke-width="5"
-			stroke-linejoin="round"
-		/>
+		<polygon points={shape} fill="{col}33" stroke={col} stroke-width="5" stroke-linejoin="round" />
 	{:else}
 		<circle cx="50" cy="50" r="44" fill="{col}33" stroke={col} stroke-width="5" />
 	{/if}
@@ -28,6 +22,6 @@
 		fill={col}
 		font-size={dieType === 100 ? 14 : 18}
 		font-weight="800"
-		font-family="system-ui, sans-serif"
-	>d{dieType}</text>
+		font-family="system-ui, sans-serif">d{dieType}</text
+	>
 </svg>

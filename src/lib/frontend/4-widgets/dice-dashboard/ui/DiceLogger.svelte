@@ -126,7 +126,14 @@
 	let pickerLoading = $state(false);
 
 	const sessionMenuItems: DropdownItem[] = [
-		{ label: 'New', icon: 'mdi-plus-circle-outline', onclick: () => { session.reset(); pickerOpen = false; } },
+		{
+			label: 'New',
+			icon: 'mdi-plus-circle-outline',
+			onclick: () => {
+				session.reset();
+				pickerOpen = false;
+			}
+		},
 		{ label: 'Continue', icon: 'mdi-play-circle-outline', onclick: openPicker }
 	];
 

@@ -36,7 +36,9 @@
 	type="button"
 	class="fixed inset-0 z-60 cursor-default backdrop-blur-sm"
 	style="background: rgba(0,0,0,0.72);"
-	onclick={() => { if (backdropReady) onCancel(); }}
+	onclick={() => {
+		if (backdropReady) onCancel();
+	}}
 	aria-label="Dismiss"
 	in:fade={{ duration: 150 }}
 	out:fade={{ duration: 120 }}
@@ -46,7 +48,7 @@
 <div
 	in:scale={{ start: 0.55, duration: 340, easing: backOut }}
 	out:scale={{ start: 0.65, duration: 180, easing: cubicOut }}
-	class="fixed left-1/2 top-1/2 z-70 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl"
+	class="fixed top-1/2 left-1/2 z-70 w-72 -translate-x-1/2 -translate-y-1/2 rounded-3xl border-2 bg-stone-800 p-5 shadow-2xl"
 	style="border-color: {color}40;"
 >
 	<div class="mb-3 flex items-center justify-between">
@@ -54,7 +56,13 @@
 		<IconButton icon="mdi-close" onclick={onCancel} aria-label="Close" />
 	</div>
 
-	<DieValuePicker dieType={dieType} bind:value={sliderValue} color={color} />
+	<DieValuePicker {dieType} bind:value={sliderValue} {color} />
 
-	<Button variant="primary" fullWidth onclick={() => onConfirm(sliderValue)} style="background: {color};" class="mt-4">Update Roll</Button>
+	<Button
+		variant="primary"
+		fullWidth
+		onclick={() => onConfirm(sliderValue)}
+		style="background: {color};"
+		class="mt-4">Update Roll</Button
+	>
 </div>

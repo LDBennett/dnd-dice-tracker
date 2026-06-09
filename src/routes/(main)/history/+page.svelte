@@ -5,4 +5,4 @@
 	const initialSessionId = $derived(page.url.searchParams.get('session'));
 </script>
 
-<HistoryEditor initialSessionId={initialSessionId} />
+<HistoryEditor {initialSessionId} />

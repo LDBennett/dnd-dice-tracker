@@ -2,7 +2,11 @@
 	import { fmtDate } from '@fe-shared/lib';
 	import type { DieType, RollResult } from '@fe-shared/lib';
 
-	interface HistoryEntry { value: number; note: string; date: string; }
+	interface HistoryEntry {
+		value: number;
+		note: string;
+		date: string;
+	}
 
 	let {
 		die,
@@ -12,14 +16,16 @@
 		sessionRolls?: RollResult[];
 	} = $props();
 
-	let historyRolls   = $state<HistoryEntry[]>([]);
+	let historyRolls = $state<HistoryEntry[]>([]);
 	let historyLoading = $state(false);
 
-	$effect(() => { loadHistory(); });
+	$effect(() => {
+		loadHistory();
+	});
 
 	async function loadHistory() {
 		historyLoading = true;
-		historyRolls   = [];
+		historyRolls = [];
 		try {
 			const res = await fetch('/api/rolls');
 			if (res.ok) {
@@ -42,7 +48,9 @@
 <div class="flex max-h-72 flex-col gap-4 overflow-y-auto pr-1">
 	{#if sessionRolls.length > 0}
 		<div>
-			<p class="mb-1.5 text-xs font-semibold tracking-wider text-stone-500 uppercase">This session</p>
+			<p class="mb-1.5 text-xs font-semibold tracking-wider text-stone-500 uppercase">
+				This session
+			</p>
 			<div class="flex flex-col gap-1.5">
 				{#each sessionRolls as r, i (i)}
 					<div class="flex items-center gap-3">

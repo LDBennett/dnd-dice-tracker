@@ -1,4 +1,11 @@
-﻿import type { BreakdownEntry, ExtendedStats, SessionLuck, SessionRecord, SessionSummary, SingleSessionStats } from '../types/api-types';
+﻿import type {
+	BreakdownEntry,
+	ExtendedStats,
+	SessionLuck,
+	SessionRecord,
+	SessionSummary,
+	SingleSessionStats
+} from '../types/api-types';
 
 export function computeExtended(sessions: SessionRecord[]): ExtendedStats {
 	const counts: Partial<Record<number, { count: number; sum: number }>> = {};

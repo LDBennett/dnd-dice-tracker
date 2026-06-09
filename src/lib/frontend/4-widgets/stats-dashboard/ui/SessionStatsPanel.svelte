@@ -81,7 +81,7 @@
 						isCurrent ? 'bg-stone-700/80' : ''
 					]}
 				>
-					<span class="w-5 shrink-0 text-xs tabular-nums text-stone-600">{i + 1}</span>
+					<span class="w-5 shrink-0 text-xs text-stone-600 tabular-nums">{i + 1}</span>
 					<div class="min-w-0 flex-1">
 						<p class={['truncate text-sm font-semibold', isCurrent ? 'text-accent' : 'text-white']}>
 							{s.name || 'Unnamed session'}

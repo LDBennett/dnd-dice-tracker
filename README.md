@@ -13,13 +13,13 @@ A mobile-first web app for logging, tracking, and analyzing dice rolls in tablet
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | SvelteKit 2 + Svelte 5 (runes) |
-| Styling | Tailwind CSS v4 |
-| Database | Neon (PostgreSQL) via Drizzle ORM |
-| Auth | better-auth (email/password) |
-| Deployment | Vercel |
+| Layer      | Technology                        |
+| ---------- | --------------------------------- |
+| Framework  | SvelteKit 2 + Svelte 5 (runes)    |
+| Styling    | Tailwind CSS v4                   |
+| Database   | Neon (PostgreSQL) via Drizzle ORM |
+| Auth       | better-auth (email/password)      |
+| Deployment | Vercel                            |
 
 ## Architecture
 
@@ -78,17 +78,17 @@ pnpm dev
 
 ## Available Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start local development server |
-| `pnpm build` | Build for production |
-| `pnpm check` | Type-check with svelte-check |
-| `pnpm lint` | Run Prettier and ESLint checks |
-| `pnpm format` | Auto-format all source files |
-| `pnpm test` | Run unit tests with Vitest |
-| `pnpm db:push` | Sync schema to Neon (no migrations) |
-| `pnpm db:studio` | Open Drizzle Studio GUI |
-| `pnpm auth:schema` | Regenerate better-auth schema |
+| Command            | Description                         |
+| ------------------ | ----------------------------------- |
+| `pnpm dev`         | Start local development server      |
+| `pnpm build`       | Build for production                |
+| `pnpm check`       | Type-check with svelte-check        |
+| `pnpm lint`        | Run Prettier and ESLint checks      |
+| `pnpm format`      | Auto-format all source files        |
+| `pnpm test`        | Run unit tests with Vitest          |
+| `pnpm db:push`     | Sync schema to Neon (no migrations) |
+| `pnpm db:studio`   | Open Drizzle Studio GUI             |
+| `pnpm auth:schema` | Regenerate better-auth schema       |
 
 ## License
 

@@ -18,6 +18,9 @@
 	{type}
 	bind:value
 	{placeholder}
-	class={['w-full rounded-xl border border-stone-600 bg-stone-700/60 px-3 py-2.5 text-sm text-white placeholder-stone-500 accent-focus', extraClass]}
+	class={[
+		'accent-focus w-full rounded-xl border border-stone-600 bg-stone-700/60 px-3 py-2.5 text-sm text-white placeholder-stone-500',
+		extraClass
+	]}
 	{...restProps}
 />

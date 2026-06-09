@@ -90,14 +90,16 @@
 	<div class="mb-5 flex items-center justify-between">
 		<h2 class="text-xl font-bold text-white">{app.isGuest ? "Lee's" : 'Your'} Roll History</h2>
 		<div class="flex items-center gap-2">
-			<Button
-				onclick={() => (editMode = !editMode)}
-				class={`flex-full  flex items-center gap-1${editMode ? ' text-accent!' : ''}`}
-			>
-				<span class="mdi mdi-book-edit-outline text-lg"></span>
-				<span class="block md:hidden">Edit</span>
-				<span class="hidden md:block">Batch Edit</span>
-			</Button>
+			{#if !app.isGuest}
+				<Button
+					onclick={() => (editMode = !editMode)}
+					class={`flex-full  flex items-center gap-1${editMode ? ' text-accent!' : ''}`}
+				>
+					<span class="mdi mdi-book-edit-outline text-lg"></span>
+					<span class="block md:hidden">Edit</span>
+					<span class="hidden md:block">Batch Edit</span>
+				</Button>
+			{/if}
 			<Button onclick={fetchSessions}>↻ Refresh</Button>
 		</div>
 	</div>

@@ -31,9 +31,7 @@
 	);
 
 	const iconCls = $derived(
-		['mdi', icon, iconSize ?? (size === 'sm' ? 'text-base' : 'text-xl')]
-			.filter(Boolean)
-			.join(' ')
+		['mdi', icon, iconSize ?? (size === 'sm' ? 'text-base' : 'text-xl')].filter(Boolean).join(' ')
 	);
 </script>
 

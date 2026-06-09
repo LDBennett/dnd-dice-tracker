@@ -19,7 +19,7 @@ export interface SessionRecord {
 }
 
 export class PostgresRollRepository {
-	private mapRows(rows: typeof dbRollSessions.$inferSelect[]): SessionRecord[] {
+	private mapRows(rows: (typeof dbRollSessions.$inferSelect)[]): SessionRecord[] {
 		return rows.map((row) => {
 			const rolls = (row.rolls as RollRecord[]).map((r) => ({
 				dieType: r.dieType,

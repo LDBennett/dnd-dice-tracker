@@ -5,7 +5,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
 		<script>
-			try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'default'; } catch {}
+			try {
+				document.documentElement.dataset.theme = localStorage.getItem('theme') || 'default';
+			} catch {}
 		</script>
 		%sveltekit.head%
 	</head>

@@ -125,11 +125,7 @@
 	<!-- Quick fill -->
 	<div class="mb-4">
 		<div class="flex gap-2">
-			<TextInput
-				bind:value={quickFill}
-				placeholder="Quick fill: 14, 6, 3"
-				class="min-w-0 flex-1"
-			/>
+			<TextInput bind:value={quickFill} placeholder="Quick fill: 14, 6, 3" class="min-w-0 flex-1" />
 			<button
 				type="button"
 				onclick={applyQuickFill}
@@ -164,7 +160,7 @@
 	</div>
 
 	<p class="mb-3 text-sm text-stone-400">
-		Total: <span class="font-black text-accent">{batchTotal}</span>
+		Total: <span class="text-accent font-black">{batchTotal}</span>
 	</p>
 
 	<TextInput
@@ -174,6 +170,7 @@
 	/>
 
 	<Button variant="primary" fullWidth onclick={confirm}>
-		Add {entries.length} {entries.length === 1 ? 'roll' : 'rolls'} to session
+		Add {entries.length}
+		{entries.length === 1 ? 'roll' : 'rolls'} to session
 	</Button>
 </div>

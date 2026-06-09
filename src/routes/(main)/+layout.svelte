@@ -33,7 +33,12 @@
 		if (!untrack(() => data.user)) {
 			const saved = localStorage.getItem('guestSessionRolls');
 			if (saved) {
-				try { session.currentSessionRolls = JSON.parse(saved); } catch {}
+				try {
+					session.currentSessionRolls = JSON.parse(saved);
+				} catch (e) {
+					// Ignore malformed saved guest rolls
+					console.warn('Failed to parse guestSessionRolls from localStorage', e);
+				}
 			}
 		}
 	}
@@ -57,8 +62,7 @@
 		if (app.isGuest) {
 			if (app.session.currentSessionRolls.length > 0)
 				localStorage.setItem('guestSessionRolls', JSON.stringify(app.session.currentSessionRolls));
-			else
-				localStorage.removeItem('guestSessionRolls');
+			else localStorage.removeItem('guestSessionRolls');
 		} else {
 			localStorage.removeItem('guestSessionRolls');
 		}

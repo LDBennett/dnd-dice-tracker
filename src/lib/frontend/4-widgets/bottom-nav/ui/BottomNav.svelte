@@ -21,8 +21,18 @@
 	}
 
 	const rollModeItems = $derived<DropdownItem[]>([
-		{ label: 'Log Roll', icon: 'mdi-script-outline', onclick: () => (app.rollMode = false), active: !app.rollMode },
-		{ label: 'Quick Roll', icon: 'mdi-creation-outline', onclick: () => (app.rollMode = true), active: app.rollMode }
+		{
+			label: 'Log Roll',
+			icon: 'mdi-script-outline',
+			onclick: () => (app.rollMode = false),
+			active: !app.rollMode
+		},
+		{
+			label: 'Quick Roll',
+			icon: 'mdi-creation-outline',
+			onclick: () => (app.rollMode = true),
+			active: app.rollMode
+		}
 	]);
 </script>
 
@@ -104,8 +114,12 @@
 							isOpen || currentPath === '/' ? 'text-accent' : 'text-stone-500'
 						]}
 					>
-						<span class={['mdi text-sm', app.rollMode ? 'mdi-creation-outline' : 'mdi-script-outline']}></span>
-						<span class="text-[10px] leading-none font-semibold">{app.rollMode ? 'Quick Roll' : 'Log Roll'}</span>
+						<span
+							class={['mdi text-sm', app.rollMode ? 'mdi-creation-outline' : 'mdi-script-outline']}
+						></span>
+						<span class="text-[10px] leading-none font-semibold"
+							>{app.rollMode ? 'Quick Roll' : 'Log Roll'}</span
+						>
 					</button>
 				{/snippet}
 			</DropdownMenu>
@@ -116,11 +130,14 @@
 			onclick={handleRollClick}
 			aria-label="Roll Dice"
 			class={[
-				'absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-accent transition active:scale-95',
+				'bg-accent absolute top-0 left-1/2 flex h-17 w-17 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full transition active:scale-95',
 				currentPath === '/' ? 'shadow-accent-glow' : 'opacity-90'
 			]}
 		>
-			<Logo class={isRollAnimating ? 'w-8 h-8 anim-spin360' : 'w-8 h-8'} style="--logo-fill: white; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4))" />
+			<Logo
+				class={isRollAnimating ? 'anim-spin360 h-8 w-8' : 'h-8 w-8'}
+				style="--logo-fill: white; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4))"
+			/>
 		</button>
 	</div>
 </nav>

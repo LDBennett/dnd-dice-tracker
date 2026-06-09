@@ -23,7 +23,10 @@
 <div class={['relative flex rounded-xl p-1', bg, extraClass]}>
 	<div
 		aria-hidden="true"
-		class={['absolute top-1 bottom-1 left-1 rounded-lg transition-transform duration-200 ease-out', ...activeBgClasses]}
+		class={[
+			'absolute top-1 bottom-1 left-1 rounded-lg transition-transform duration-200 ease-out',
+			...activeBgClasses
+		]}
 		style="width: calc((100% - 0.5rem) / {items.length}); transform: translateX(calc({activeIndex} * 100%))"
 	></div>
 

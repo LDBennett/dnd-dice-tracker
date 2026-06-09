@@ -20,8 +20,8 @@
 			{@const count = queue.filter((d) => d === die).length}
 			<span
 				class="rounded-full px-3 py-1 text-sm font-bold text-stone-900"
-				style="background: {DIE_COLOR[die]}"
-			>{count > 1 ? `${count}×` : ''}d{die}</span>
+				style="background: {DIE_COLOR[die]}">{count > 1 ? `${count}×` : ''}d{die}</span
+			>
 		{/each}
 	</div>
 	<div class="flex gap-2">
@@ -29,12 +29,13 @@
 			type="button"
 			onclick={onRollAll}
 			class="flex-1 rounded-2xl py-3 text-base font-black text-stone-900 transition hover:brightness-110 active:scale-95"
-			style="background: #fbbf24"
-		>Roll All! ({queue.length})</button>
+			style="background: #fbbf24">Roll All! ({queue.length})</button
+		>
 		<button
 			type="button"
 			onclick={onClear}
 			class="rounded-2xl px-4 py-3 text-sm font-semibold text-stone-400 transition hover:bg-stone-700 hover:text-white"
-		>Clear</button>
+			>Clear</button
+		>
 	</div>
 </div>

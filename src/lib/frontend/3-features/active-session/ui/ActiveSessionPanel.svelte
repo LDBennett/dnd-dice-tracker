@@ -18,8 +18,9 @@
 {#if session.currentSessionRolls.length > 0 && session.currentSessionId}
 	<SessionCard
 		session={sessionData}
-		isGuest={app.isGuest}
+		isGuest={false}
 		live={true}
+		editMode={true}
 		savingId={session.saving ? session.currentSessionId : null}
 		savedId={null}
 		onSaveName={(_, name) => session.patch({ name })}

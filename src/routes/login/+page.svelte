@@ -6,7 +6,10 @@
 	let mode = $state<'login' | 'register'>('login');
 </script>
 
-<div class="flex min-h-screen flex-col items-center justify-center bg-stone-900 px-4 py-12" style="padding-bottom: max(3rem, env(safe-area-inset-bottom))">
+<div
+	class="flex min-h-screen flex-col items-center justify-center bg-stone-900 px-4 py-12"
+	style="padding-bottom: max(3rem, env(safe-area-inset-bottom))"
+>
 	<div class="w-full max-w-sm">
 		<div class="mb-8 text-center">
 			<div class="mb-2 text-5xl">⚔️</div>
@@ -18,14 +21,20 @@
 			<button
 				type="button"
 				onclick={() => (mode = 'login')}
-				class={['flex-1 rounded-lg py-3 text-sm font-semibold transition-colors', mode === 'login' ? 'bg-orange-400 text-stone-900' : 'text-stone-400 hover:text-white']}
+				class={[
+					'flex-1 rounded-lg py-3 text-sm font-semibold transition-colors',
+					mode === 'login' ? 'bg-orange-400 text-stone-900' : 'text-stone-400 hover:text-white'
+				]}
 			>
 				Sign In
 			</button>
 			<button
 				type="button"
 				onclick={() => (mode = 'register')}
-				class={['flex-1 rounded-lg py-3 text-sm font-semibold transition-colors', mode === 'register' ? 'bg-orange-400 text-stone-900' : 'text-stone-400 hover:text-white']}
+				class={[
+					'flex-1 rounded-lg py-3 text-sm font-semibold transition-colors',
+					mode === 'register' ? 'bg-orange-400 text-stone-900' : 'text-stone-400 hover:text-white'
+				]}
 			>
 				Register
 			</button>
@@ -45,7 +54,7 @@
 						name="name"
 						type="text"
 						autocomplete="name"
-						class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400/20"
+						class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 focus:outline-none"
 						placeholder="Your adventurer name"
 					/>
 				</div>
@@ -58,7 +67,7 @@
 					name="email"
 					type="email"
 					autocomplete="email"
-					class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400/20"
+					class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 focus:outline-none"
 					placeholder="you@example.com"
 				/>
 			</div>
@@ -70,7 +79,7 @@
 					name="password"
 					type="password"
 					autocomplete={mode === 'login' ? 'current-password' : 'new-password'}
-					class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-400/20"
+					class="w-full rounded-xl border border-stone-600 bg-stone-800 px-4 py-3 text-white placeholder-stone-500 focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 focus:outline-none"
 					placeholder="••••••••"
 				/>
 			</div>

@@ -43,7 +43,14 @@
 			stroke-linejoin="round"
 		/>
 	{:else}
-		<circle cx="50" cy="50" r="44" fill="rgba(0,0,0,0.22)" stroke="rgba(0,0,0,0.45)" stroke-width="4" />
+		<circle
+			cx="50"
+			cy="50"
+			r="44"
+			fill="rgba(0,0,0,0.22)"
+			stroke="rgba(0,0,0,0.45)"
+			stroke-width="4"
+		/>
 	{/if}
 	<text
 		x="50"

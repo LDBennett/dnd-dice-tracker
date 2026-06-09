@@ -42,7 +42,10 @@
 			<button
 				type="button"
 				onclick={() => onDieClick(die)}
-				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing === die ? 'scale(0.82)' : 'scale(1)'};"
+				style="transition: transform 120ms cubic-bezier(.34,1.56,.64,1); transform: {pressing ===
+				die
+					? 'scale(0.82)'
+					: 'scale(1)'};"
 				class="relative flex aspect-square items-center justify-center"
 			>
 				<svg viewBox="0 0 100 100" class="h-full w-full">
@@ -72,8 +75,8 @@
 						fill={DIE_COLOR[die]}
 						font-size={die === 100 ? 14 : 18}
 						font-weight="800"
-						font-family="system-ui, sans-serif"
-					>d{die}</text>
+						font-family="system-ui, sans-serif">d{die}</text
+					>
 				</svg>
 				{#if batchMode}
 					{@const count = app.rollMode
@@ -81,7 +84,7 @@
 						: batchEntries.filter((e) => e.dieType === die).length}
 					{#if count > 0}
 						<span
-							class="absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-black text-stone-900"
+							class="bg-accent absolute top-1.5 right-1.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-black text-stone-900"
 							>×{count}</span
 						>
 					{/if}
@@ -91,11 +94,6 @@
 	</div>
 
 	{#if selectedDie !== null}
-		<RollEntryCard
-			die={selectedDie}
-			{sessionRolls}
-			{onConfirm}
-			{onCancel}
-		/>
+		<RollEntryCard die={selectedDie} {sessionRolls} {onConfirm} {onCancel} />
 	{/if}
 </div>

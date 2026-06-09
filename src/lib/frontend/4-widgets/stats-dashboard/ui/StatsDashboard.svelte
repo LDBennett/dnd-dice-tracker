@@ -5,8 +5,9 @@
 	import { DieBreakdown, TopDiceList } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
 	import { fetchRollSessions, fetchDashboard } from '../api/statsDashboard.api';
+	import { resolve } from '$app/paths';
 	import SessionStatsPanel from './SessionStatsPanel.svelte';
-	import { tweened } from 'svelte/motion';
+	import { Tween } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
 	interface Props {
@@ -30,16 +31,50 @@
 
 	let activeTab = $state<'overall' | 'session'>('overall');
 	let selectedSessionId = $state<string | null>(null);
+	let viewMode = $state('server');
 
-	const animTotalRolls = tweened(0, { duration: 500, easing: cubicOut });
-	const animNat20s     = tweened(0, { duration: 500, easing: cubicOut });
-	const animNat1s      = tweened(0, { duration: 500, easing: cubicOut });
-	const animSessions   = tweened(0, { duration: 500, easing: cubicOut });
+	const VIEW_OPTIONS = [
+		{ value: 'server', label: "Lee's Stats" },
+		{ value: 'local', label: 'Local Rolls' }
+	];
 
-	$effect(() => { animTotalRolls.set(totalRolls); });
-	$effect(() => { animNat20s.set(nat20s); });
-	$effect(() => { animNat1s.set(nat1s); });
-	$effect(() => { animSessions.set(sessionCount); });
+	const localRolls = $derived(app.session.currentSessionRolls);
+	const localTotalRolls = $derived(localRolls.length);
+	const localNat20s = $derived(localRolls.filter((r) => r.dieType === 20 && r.value === 20).length);
+	const localNat1s = $derived(localRolls.filter((r) => r.dieType === 20 && r.value === 1).length);
+	const localSessionRecord = $derived(
+		app.session.currentSessionId
+			? {
+					id: app.session.currentSessionId,
+					rolls: app.session.currentSessionRolls,
+					modifier: 0,
+					rolledAt: app.session.rolledAt ?? new Date().toISOString(),
+					name: app.session.currentSessionName
+				}
+			: null
+	);
+
+	const effectiveTotalRolls = $derived(viewMode === 'local' ? localTotalRolls : totalRolls);
+	const effectiveNat20s = $derived(viewMode === 'local' ? localNat20s : nat20s);
+	const effectiveNat1s = $derived(viewMode === 'local' ? localNat1s : nat1s);
+
+	const animTotalRolls = new Tween(0, { duration: 500, easing: cubicOut });
+	const animNat20s = new Tween(0, { duration: 500, easing: cubicOut });
+	const animNat1s = new Tween(0, { duration: 500, easing: cubicOut });
+	const animSessions = new Tween(0, { duration: 500, easing: cubicOut });
+
+	$effect(() => {
+		animTotalRolls.set(effectiveTotalRolls);
+	});
+	$effect(() => {
+		animNat20s.set(effectiveNat20s);
+	});
+	$effect(() => {
+		animNat1s.set(effectiveNat1s);
+	});
+	$effect(() => {
+		animSessions.set(sessionCount);
+	});
 
 	const TAB_ITEMS = [
 		{ value: 'overall', label: 'Overall', icon: 'mdi-clipboard-list-outline' },
@@ -71,7 +106,11 @@
 	}
 
 	$effect(() => {
-		loadExtended();
+		if (viewMode === 'server') loadExtended();
+	});
+	$effect(() => {
+		if (viewMode === 'local')
+			applyExtended(localSessionRecord ? [localSessionRecord as SessionRecord] : []);
 	});
 
 	async function loadExtended() {
@@ -90,7 +129,11 @@
 
 <div class="px-4 py-6">
 	<div class="mb-4 flex items-center justify-between">
-		<h2 class="text-xl font-bold text-white">{app.isGuest ? "Lee's" : ''} Stats</h2>
+		{#if app.isGuest}
+			<SelectDropdown options={VIEW_OPTIONS} bind:value={viewMode} />
+		{:else}
+			<h2 class="text-xl font-bold text-white">Stats</h2>
+		{/if}
 		<Button onclick={refresh} aria-label="Refresh stats">↻ Refresh</Button>
 	</div>
 
@@ -103,7 +146,7 @@
 
 	{#if activeTab === 'overall'}
 		<div class="grid grid-cols-2 gap-4">
-			<StatCard label="Total Rolls" value={Math.round($animTotalRolls)} />
+			<StatCard label="Total Rolls" value={Math.round(animTotalRolls.current)} />
 			<StatCard label="Top Dice">
 				<div class="mt-1 flex gap-2">
 					{#if topDice.length === 0}
@@ -113,9 +156,19 @@
 					{/if}
 				</div>
 			</StatCard>
-			<StatCard label="Nat 20s" value={Math.round($animNat20s)} accent="amber" subtext="d20 critical hits" />
-			<StatCard label="Nat 1s" value={Math.round($animNat1s)} accent="red" subtext="d20 critical fails" />
-			<StatCard label="Sessions" value={Math.round($animSessions)} />
+			<StatCard
+				label="Nat 20s"
+				value={Math.round(animNat20s.current)}
+				accent="amber"
+				subtext="d20 critical hits"
+			/>
+			<StatCard
+				label="Nat 1s"
+				value={Math.round(animNat1s.current)}
+				accent="red"
+				subtext="d20 critical fails"
+			/>
+			<StatCard label="Sessions" value={Math.round(animSessions.current)} />
 			<StatCard
 				label="Avg Luck/Session"
 				value={sessionCount > 0 ? fmtLuck(avgLuckPerSession) : '—'}
@@ -192,7 +245,7 @@
 
 		{#if totalRolls === 0}
 			<div class="mt-8 text-center text-stone-500">
-				<p class="mb-2 text-4xl">🎲</p>
+				<p class="mb-2 text-4xl"><span class="mdi mdi-dice-multiple-outline"></span></p>
 				<p>No rolls logged yet.</p>
 				<p class="text-sm">Go roll some dice!</p>
 			</div>
@@ -208,10 +261,11 @@
 		/>
 		{#if selectedSessionId}
 			<a
-				href="/history?session={selectedSessionId}"
-				class="mb-4 flex items-center gap-1 text-xs text-accent hover:underline"
+				href={resolve(`/history?session=${selectedSessionId}`)}
+				class="text-accent mb-4 flex items-center gap-1 text-xs hover:underline"
 			>
-				View in Roll History →
+				View {selectedSession?.name} Roll History
+				<span class="mdi mdi-arrow-right-thin"></span>
 			</a>
 		{/if}
 		{#if selectedSession !== null}

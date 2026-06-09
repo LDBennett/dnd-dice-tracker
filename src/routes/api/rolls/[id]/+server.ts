@@ -8,7 +8,7 @@ const rollService = new RollApplicationService();
 export const PATCH: RequestHandler = async ({ params, request, locals }) => {
 	if (!locals.user) error(401, 'Unauthorized');
 
-	const body = await request.json() as { name?: string; rolls?: RollRecord[] };
+	const body = (await request.json()) as { name?: string; rolls?: RollRecord[] };
 	const fields: { name?: string; rolls?: RollRecord[] } = {};
 
 	if (typeof body.name === 'string') fields.name = body.name;

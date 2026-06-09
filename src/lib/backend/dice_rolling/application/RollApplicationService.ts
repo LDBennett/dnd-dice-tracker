@@ -1,4 +1,5 @@
 import { RollSession } from '../domain/models/RollSession';
+import { PlayerStats } from '../domain/models/PlayerStats';
 import { PostgresStatsRepository } from '../infrastructure/repositories/PostgresStatsRepository';
 import { PostgresRollRepository } from '../infrastructure/repositories/PostgresRollRepository';
 import type { DiceResult } from '../domain/models/RollSession';
@@ -89,11 +90,50 @@ export class RollApplicationService {
 		};
 	}
 
-	async updateSession(sessionId: string, userId: string, fields: { name?: string; rolls?: RollRecord[] }) {
+	async updateSession(
+		sessionId: string,
+		userId: string,
+		fields: { name?: string; rolls?: RollRecord[] }
+	) {
+		if (fields.rolls !== undefined) {
+			const existing = await rollRepo.findById(sessionId, userId);
+			if (existing) {
+				const stats = await statsRepo.findByUserId(userId);
+				for (const roll of existing.rolls) {
+					stats.removeRoll(roll.dieType, roll.value);
+				}
+				for (const roll of fields.rolls) {
+					stats.recordRoll(roll.dieType, roll.value);
+				}
+				await rollRepo.updateSession(sessionId, userId, fields);
+				await statsRepo.save(stats);
+				return;
+			}
+		}
 		await rollRepo.updateSession(sessionId, userId, fields);
 	}
 
 	async deleteSession(sessionId: string, userId: string): Promise<void> {
+		const session = await rollRepo.findById(sessionId, userId);
+		if (!session) return;
+
+		const stats = await statsRepo.findByUserId(userId);
+		for (const roll of session.rolls) {
+			stats.removeRoll(roll.dieType, roll.value);
+		}
+
 		await rollRepo.deleteSession(sessionId, userId);
+		await statsRepo.save(stats);
+	}
+
+	async recalculateStats(userId: string): Promise<void> {
+		const sessions = await rollRepo.findByUserId(userId);
+		const stats = new PlayerStats(userId, 0, 0, 0, 0);
+		for (const session of sessions) {
+			for (const roll of session.rolls) {
+				stats.recordRoll(roll.dieType, roll.value);
+			}
+		}
+		await statsRepo.save(stats);
 	}
 }
