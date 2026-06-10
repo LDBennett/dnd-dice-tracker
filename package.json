@@ -55,6 +55,7 @@
 	},
 	"dependencies": {
 		"@mdi/font": "^7.4.47",
+		"@vercel/analytics": "^2.0.1",
 		"classnames": "^2.5.1"
 	}
 }
