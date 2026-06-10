@@ -1,10 +1,12 @@
-﻿<script lang="ts">
-	import { untrack } from 'svelte';
-	import { fade, scale } from 'svelte/transition';
-	import { backOut } from 'svelte/easing';
-	import { IconButton, Badge, ConfirmModal, TextInput } from '@fe-shared/ui';
-	import { singleSessionStats, fmtLuck, luckClass } from '@fe-shared/lib/utils/dice-utils';
+<script lang="ts">
 	import type { RollRecord, SessionRecord } from '@fe-shared/lib';
+	import { fmtLuck, luckClass,singleSessionStats } from '@fe-shared/lib/utils/dice-utils';
+	import { Badge, ConfirmModal, IconButton, TextInput } from '@fe-shared/ui';
+	import { untrack } from 'svelte';
+	import { backOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
+
+	import { SessionCardState } from '../state/sessionCard.svelte';
 	import EditRollModal from './EditRollModal.svelte';
 	import RollGridCell from './RollGridCell.svelte';
 
@@ -30,35 +32,23 @@
 		onDelete: (id: string) => void;
 	} = $props();
 
-	let name = $state(untrack(() => session.name));
-	let rolls = $state(untrack(() => session.rolls.map((r) => ({ ...r }))));
-	let editingIndex = $state<number | null>(null);
-	let confirmingDelete = $state(false);
+	const s = new SessionCardState(untrack(() => session));
 
-	// In live mode: append new rolls without overwriting in-progress edits; reset on clear
+	// Live mode: append new rolls without overwriting in-progress edits; reset on clear
 	$effect(() => {
 		if (!live) return;
 		const incoming = session;
-		const localLen = untrack(() => rolls.length);
+		const localLen = untrack(() => s.rolls.length);
 		if (incoming.rolls.length === 0) {
-			rolls = [];
-			name = incoming.name;
+			s.rolls = [];
+			s.name = incoming.name;
 		} else if (incoming.rolls.length > localLen) {
-			rolls = [...untrack(() => rolls), ...incoming.rolls.slice(localLen).map((r) => ({ ...r }))];
+			s.rolls = [
+				...untrack(() => s.rolls),
+				...incoming.rolls.slice(localLen).map((r) => ({ ...r }))
+			];
 		}
 	});
-
-	function handleEditConfirm(index: number, value: number) {
-		rolls[index].value = value;
-		editingIndex = null;
-		onSaveRolls(session.id, rolls);
-	}
-
-	function deleteRoll(index: number) {
-		const updated = rolls.filter((_, i) => i !== index);
-		if (updated.length === 0) onDelete(session.id);
-		else onSaveRolls(session.id, updated);
-	}
 
 	function formatDate(iso: string) {
 		return new Date(iso).toLocaleDateString(undefined, {
@@ -80,12 +70,12 @@
 				<p
 					class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest || (editMode && 'px-3')]}
 				>
-					{name || 'Unnamed session'}
+					{s.name || 'Unnamed session'}
 				</p>
 			{:else}
 				<TextInput
-					bind:value={name}
-					onblur={() => onSaveName(session.id, name)}
+					bind:value={s.name}
+					onblur={() => onSaveName(session.id, s.name)}
 					placeholder="Unnamed session"
 					class="flex-1 font-semibold"
 				/>
@@ -95,7 +85,7 @@
 					iconSize="lg"
 					hoverColor="red"
 					rounded="lg"
-					onclick={() => (confirmingDelete = true)}
+					onclick={() => (s.confirmingDelete = true)}
 					aria-label="Delete session"
 				/>
 			{/if}
@@ -130,18 +120,18 @@
 	<!-- Per-roll grid / edit list -->
 	{#key editMode}
 		<div class={editMode ? 'flex flex-col gap-2' : 'grid grid-cols-3 gap-2 md:grid-cols-4'}>
-			{#each rolls as roll, i (i)}
+			{#each s.rolls as roll, i (i)}
 				<div in:scale={{ delay: i * 25, duration: 220, start: 0.75, easing: backOut }}>
 					<RollGridCell
 						dieType={roll.dieType}
 						value={roll.value}
-						bind:note={rolls[i].note}
+						bind:note={s.rolls[i].note}
 						index={i}
 						{editMode}
 						{isGuest}
-						onedit={() => (editingIndex = i)}
-						onblur={() => onSaveRolls(session.id, rolls)}
-						ondelete={() => deleteRoll(i)}
+						onedit={() => (s.editingIndex = i)}
+						onblur={() => onSaveRolls(session.id, s.rolls)}
+						ondelete={() => s.deleteRoll(i, session.id, onSaveRolls, onDelete)}
 					/>
 				</div>
 			{/each}
@@ -167,24 +157,24 @@
 	{/if}
 </div>
 
-{#if editingIndex !== null}
+{#if s.editingIndex !== null}
 	<EditRollModal
-		dieType={rolls[editingIndex].dieType as 4 | 6 | 8 | 10 | 12 | 20 | 100}
-		currentValue={rolls[editingIndex].value}
-		onConfirm={(v) => handleEditConfirm(editingIndex!, v)}
-		onCancel={() => (editingIndex = null)}
+		dieType={s.rolls[s.editingIndex].dieType as 4 | 6 | 8 | 10 | 12 | 20 | 100}
+		currentValue={s.rolls[s.editingIndex].value}
+		onConfirm={(v) => s.handleEditConfirm(s.editingIndex!, v, session.id, onSaveRolls)}
+		onCancel={() => (s.editingIndex = null)}
 	/>
 {/if}
 
-{#if confirmingDelete}
+{#if s.confirmingDelete}
 	<ConfirmModal
 		title="Delete session?"
 		message="This will permanently remove the session and all its rolls."
 		confirmLabel="Delete"
 		onConfirm={() => {
-			confirmingDelete = false;
+			s.confirmingDelete = false;
 			onDelete(session.id);
 		}}
-		onCancel={() => (confirmingDelete = false)}
+		onCancel={() => (s.confirmingDelete = false)}
 	/>
 {/if}

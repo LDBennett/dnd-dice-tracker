@@ -1,4 +1,5 @@
 import { getContext } from 'svelte';
+
 import type { ISession } from '../lib/types/session.types';
 
 export type User = { name: string; email: string };

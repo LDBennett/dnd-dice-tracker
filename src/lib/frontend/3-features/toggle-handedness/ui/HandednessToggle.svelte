@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { fade, scale } from 'svelte/transition';
-	import { backOut } from 'svelte/easing';
 	import { getAppContext } from '@fe-shared/context';
+	import { backOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
 
 	const app = getAppContext();
 

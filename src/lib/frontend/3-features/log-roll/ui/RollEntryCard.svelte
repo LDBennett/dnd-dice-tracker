@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { untrack } from 'svelte';
-	import { fade, scale } from 'svelte/transition';
-	import { backOut, cubicOut } from 'svelte/easing';
-	import { DIE_COLOR, IconButton, Button, TabBar, TextInput } from '@fe-shared/ui';
+	import { DieValuePicker } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
 	import type { DieType, RollResult } from '@fe-shared/lib';
+	import { Button, DIE_COLOR, IconButton, TabBar, TextInput } from '@fe-shared/ui';
+	import { untrack } from 'svelte';
+	import { backOut, cubicOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
+
 	import DiceHistory from './DiceHistory.svelte';
-	import { DieValuePicker } from '@fe-entities/die';
 
 	let {
 		die,

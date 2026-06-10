@@ -1,9 +1,11 @@
 <script lang="ts">
 	import './layout.css';
+
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+
+	import { dev } from '$app/environment';
 	import favicon from '$lib/assets/favicon.svg';
 	import ogImage from '$lib/assets/logo-full.png';
-	import { dev } from '$app/environment';
-	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
 	injectAnalytics({ mode: dev ? 'development' : 'production' });
 

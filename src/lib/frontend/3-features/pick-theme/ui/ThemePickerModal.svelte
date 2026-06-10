@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { getAppContext } from '@fe-shared/context';
 	import { Modal } from '@fe-shared/ui';
 	import { THEMES } from '@fe-shared/ui';
-	import { getAppContext } from '@fe-shared/context';
+
 	import ThemeCard from './ThemeCard.svelte';
 
 	let { open = $bindable(false) }: { open?: boolean } = $props();

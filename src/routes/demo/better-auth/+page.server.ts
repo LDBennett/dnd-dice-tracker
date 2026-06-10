@@ -1,7 +1,9 @@
 import { redirect } from '@sveltejs/kit';
+
+import { auth } from '$lib/server/auth';
+
 import type { Actions } from './$types';
 import type { PageServerLoad } from './$types';
-import { auth } from '$lib/server/auth';
 
 export const load: PageServerLoad = (event) => {
 	if (!event.locals.user) {

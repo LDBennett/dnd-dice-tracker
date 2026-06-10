@@ -1,7 +1,7 @@
 ﻿<script lang="ts">
 	import type { BreakdownEntry } from '@fe-shared/lib';
-	import { DIE_COLOR, DieIcon } from '@fe-shared/ui';
 	import { fmtLuck, luckClass } from '@fe-shared/lib';
+	import { DIE_COLOR, DieIcon } from '@fe-shared/ui';
 
 	let { breakdown }: { breakdown: BreakdownEntry[] } = $props();
 

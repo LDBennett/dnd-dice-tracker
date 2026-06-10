@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { scale } from 'svelte/transition';
-	import { backOut } from 'svelte/easing';
 	import type { Snippet } from 'svelte';
+	import { backOut } from 'svelte/easing';
+	import { scale } from 'svelte/transition';
 
 	export type DropdownItem = {
 		label: string;

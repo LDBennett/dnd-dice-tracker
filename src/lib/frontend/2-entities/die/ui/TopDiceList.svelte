@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DieIcon } from '@fe-shared/ui';
-	import { scale } from 'svelte/transition';
 	import { backOut } from 'svelte/easing';
+	import { scale } from 'svelte/transition';
 
 	let { dice }: { dice: number[] } = $props();
 </script>

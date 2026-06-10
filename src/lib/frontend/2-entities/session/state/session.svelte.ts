@@ -1,7 +1,8 @@
-import { submitRollSession, updateRollSession } from '../api/sessionApi';
-import type { RollResult } from '../types/session.types';
 import type { ISession, SessionRecord } from '@fe-shared/lib';
 import { SvelteDate } from 'svelte/reactivity';
+
+import { submitRollSession, updateRollSession } from '../api/sessionApi';
+import type { RollResult } from '../types/session.types';
 
 export class Session implements ISession {
 	currentSessionId = $state<string | null>(null);

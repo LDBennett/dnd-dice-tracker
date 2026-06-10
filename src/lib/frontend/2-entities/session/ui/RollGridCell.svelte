@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { DIE_COLOR, IconButton } from '@fe-shared/ui';
 	import { DieChip } from '@fe-entities/die';
+	import { DIE_COLOR, IconButton } from '@fe-shared/ui';
 
 	let {
 		dieType,

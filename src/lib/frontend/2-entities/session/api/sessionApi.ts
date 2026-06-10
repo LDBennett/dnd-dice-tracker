@@ -1,5 +1,6 @@
-import type { RollResult, SubmitResult } from '../types/session.types';
 import type { SessionRecord } from '@fe-shared/lib';
+
+import type { RollResult, SubmitResult } from '../types/session.types';
 export type { RollResult, SubmitResult };
 
 export async function submitRollSession(

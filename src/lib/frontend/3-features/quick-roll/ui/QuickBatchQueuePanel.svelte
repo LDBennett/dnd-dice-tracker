@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
-	import { DIE_COLOR } from '@fe-shared/ui';
 	import type { DieType } from '@fe-shared/lib';
+	import { DIE_COLOR } from '@fe-shared/ui';
 
 	let {
 		queue,

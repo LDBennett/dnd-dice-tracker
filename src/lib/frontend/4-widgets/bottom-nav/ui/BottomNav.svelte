@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { getAppContext } from '@fe-shared/context';
+	import type { DropdownItem } from '@fe-shared/ui';
+	import { DropdownMenu, Logo } from '@fe-shared/ui';
+
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { getAppContext } from '@fe-shared/context';
-	import { DropdownMenu, Logo } from '@fe-shared/ui';
-	import type { DropdownItem } from '@fe-shared/ui';
+	import { page } from '$app/stores';
+
 	import NavTabButton from './NavTabButton.svelte';
 
 	const app = getAppContext();

@@ -1,9 +1,9 @@
 ﻿<script lang="ts">
-	import { onMount } from 'svelte';
-	import { fade, scale } from 'svelte/transition';
-	import { backOut } from 'svelte/easing';
-	import { DIE_COLOR, Badge } from '@fe-shared/ui';
 	import type { DieType } from '@fe-shared/lib';
+	import { Badge,DIE_COLOR } from '@fe-shared/ui';
+	import { onMount } from 'svelte';
+	import { backOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
 
 	interface DieResult {
 		dieType: DieType;

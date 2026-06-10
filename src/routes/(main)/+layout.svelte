@@ -1,14 +1,16 @@
 ﻿<script lang="ts">
-	import { browser } from '$app/environment';
-	import { setContext, untrack } from 'svelte';
-	import type { LayoutServerData } from './$types';
-	import { NavBar } from '@fe-widgets/nav-bar';
-	import { BottomNav } from '@fe-widgets/bottom-nav';
+	import { Session } from '@fe-entities/session';
 	import { LoginModal } from '@fe-features/authenticate';
 	import { ThemePickerModal } from '@fe-features/pick-theme';
 	import { HandednessToggle } from '@fe-features/toggle-handedness';
-	import { AppContext, APP_CONTEXT_KEY } from '@fe-shared/context';
-	import { Session } from '@fe-entities/session';
+	import { APP_CONTEXT_KEY,AppContext } from '@fe-shared/context';
+	import { BottomNav } from '@fe-widgets/bottom-nav';
+	import { NavBar } from '@fe-widgets/nav-bar';
+	import { setContext, untrack } from 'svelte';
+
+	import { browser } from '$app/environment';
+
+	import type { LayoutServerData } from './$types';
 
 	let { data, children }: { data: LayoutServerData; children: import('svelte').Snippet } = $props();
 

@@ -1,9 +1,9 @@
-import { RollSession } from '../domain/models/RollSession';
 import { PlayerStats } from '../domain/models/PlayerStats';
-import { PostgresStatsRepository } from '../infrastructure/repositories/PostgresStatsRepository';
-import { PostgresRollRepository } from '../infrastructure/repositories/PostgresRollRepository';
 import type { DiceResult } from '../domain/models/RollSession';
+import { RollSession } from '../domain/models/RollSession';
 import type { RollRecord } from '../infrastructure/repositories/PostgresRollRepository';
+import { PostgresRollRepository } from '../infrastructure/repositories/PostgresRollRepository';
+import { PostgresStatsRepository } from '../infrastructure/repositories/PostgresStatsRepository';
 
 const statsRepo = new PostgresStatsRepository();
 const rollRepo = new PostgresRollRepository();

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
-	import { IconButton, ConfirmModal, DropdownMenu, Logo } from '@fe-shared/ui';
 	import type { DropdownItem } from '@fe-shared/ui';
+	import { ConfirmModal, DropdownMenu, IconButton, Logo } from '@fe-shared/ui';
 
 	const app = getAppContext();
 

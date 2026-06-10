@@ -1,6 +1,8 @@
+import { eq } from 'drizzle-orm';
+
 import { db } from '$lib/server/db';
 import { dbPlayerStats } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+
 import { PlayerStats } from '../../domain/models/PlayerStats';
 
 const ZERO = { totalRollsCount: 0, runningSum: 0, naturalTwenties: 0, naturalOnes: 0 } as const;

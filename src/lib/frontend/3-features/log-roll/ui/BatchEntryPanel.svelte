@@ -1,6 +1,8 @@
-﻿<script lang="ts">
-	import { DIE_COLOR, Button, IconButton, TextInput, Badge } from '@fe-shared/ui';
-	import type { DieType, RollResult } from '@fe-shared/lib';
+<script lang="ts">
+	import type { RollResult } from '@fe-shared/lib';
+	import { Badge,Button, DIE_COLOR, IconButton, TextInput } from '@fe-shared/ui';
+
+	import { BatchEntryState } from '../state/batchEntry.svelte';
 	import type { BatchEntry } from '../types/log-roll.types';
 
 	let {
@@ -11,35 +13,11 @@
 		onConfirm: (rolls: RollResult[]) => void;
 	} = $props();
 
-	let batchNote = $state('');
-	let quickFill = $state('');
+	const s = new BatchEntryState();
 
-	const batchTotal = $derived(entries.reduce((s, e) => s + e.value, 0));
-
-	const quickFillValidation = $derived(
-		quickFill.trim()
-			? quickFill
-					.split(/[\s,]+/)
-					.map((n) => parseInt(n, 10))
-					.filter((n) => !isNaN(n))
-					.map((value, i) => {
-						const entry = entries[i];
-						return entry
-							? {
-									value,
-									dieType: entry.dieType as DieType | null,
-									valid: value >= 1 && value <= entry.dieType
-								}
-							: { value, dieType: null as DieType | null, valid: false };
-					})
-			: ([] as Array<{ value: number; dieType: DieType | null; valid: boolean }>)
-	);
-
-	const quickFillReady = $derived(
-		quickFillValidation.length === entries.length &&
-			entries.length > 0 &&
-			quickFillValidation.every((item) => item.valid)
-	);
+	const batchTotal = $derived(entries.reduce((sum, e) => sum + e.value, 0));
+	const quickFillValidation = $derived(s.getValidation(entries));
+	const quickFillReady = $derived(s.isReady(entries));
 
 	function remove(id: number) {
 		entries = entries.filter((e) => e.id !== id);
@@ -58,23 +36,11 @@
 		});
 	}
 
-	function applyQuickFill() {
-		const nums = quickFill
-			.split(/[\s,]+/)
-			.map((n) => parseInt(n, 10))
-			.filter((n) => !isNaN(n) && n > 0);
-		if (nums.length === 0) return;
-		entries = entries.map((e, i) =>
-			i < nums.length ? { ...e, value: Math.max(1, Math.min(e.dieType, nums[i])) } : e
-		);
-		quickFill = '';
-	}
-
 	function confirm() {
 		if (entries.length === 0) return;
-		onConfirm(entries.map((e) => ({ dieType: e.dieType, value: e.value, note: batchNote.trim() })));
+		onConfirm(entries.map((e) => ({ dieType: e.dieType, value: e.value, note: s.batchNote.trim() })));
 		entries = [];
-		batchNote = '';
+		s.reset();
 	}
 </script>
 
@@ -125,10 +91,10 @@
 	<!-- Quick fill -->
 	<div class="mb-4">
 		<div class="flex gap-2">
-			<TextInput bind:value={quickFill} placeholder="Quick fill: 14, 6, 3" class="min-w-0 flex-1" />
+			<TextInput bind:value={s.quickFill} placeholder="Quick fill: 14, 6, 3" class="min-w-0 flex-1" />
 			<button
 				type="button"
-				onclick={applyQuickFill}
+				onclick={() => { entries = s.applyQuickFill(entries); }}
 				disabled={!quickFillReady}
 				class="shrink-0 rounded-xl bg-stone-700 px-4 py-2.5 text-sm font-semibold text-stone-300 transition hover:bg-stone-600 hover:text-white disabled:opacity-40"
 				>Apply</button
@@ -164,7 +130,7 @@
 	</p>
 
 	<TextInput
-		bind:value={batchNote}
+		bind:value={s.batchNote}
 		placeholder="Note for all rolls (optional)"
 		class="mb-3 bg-stone-700"
 	/>

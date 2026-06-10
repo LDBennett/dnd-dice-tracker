@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-	import { Badge } from '@fe-shared/ui';
 	import { getAppContext } from '@fe-shared/context';
 	import type { DieType } from '@fe-shared/lib';
+	import { Badge } from '@fe-shared/ui';
+	import { fade } from 'svelte/transition';
 
 	let {
 		dieType,

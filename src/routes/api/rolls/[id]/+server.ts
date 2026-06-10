@@ -1,7 +1,9 @@
-import { json, error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
+import { error,json } from '@sveltejs/kit';
+
 import { RollApplicationService } from '$lib/backend/dice_rolling';
 import type { RollRecord } from '$lib/backend/dice_rolling/infrastructure/repositories/PostgresRollRepository';
+
+import type { RequestHandler } from './$types';
 
 const rollService = new RollApplicationService();
 

@@ -1,5 +1,6 @@
-import type { PageServerLoad } from './$types';
 import { RollApplicationService } from '$lib/backend/dice_rolling';
+
+import type { PageServerLoad } from './$types';
 
 const rollService = new RollApplicationService();
 

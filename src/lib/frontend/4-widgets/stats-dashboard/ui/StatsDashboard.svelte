@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { StatCard, DIE_COLOR, Button, TabBar, SelectDropdown } from '@fe-shared/ui';
-	import { computeExtended, sessionSummary, fmtLuck, luckClass, fmtDate } from '@fe-shared/lib';
-	import type { BreakdownEntry, SessionLuck, SessionRecord } from '@fe-shared/lib';
 	import { DieBreakdown, TopDiceList } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
-	import { fetchRollSessions, fetchDashboard } from '../api/statsDashboard.api';
+	import { fmtLuck, luckClass,sessionSummary } from '@fe-shared/lib';
+	import { Button, DIE_COLOR, SelectDropdown,StatCard, TabBar } from '@fe-shared/ui';
+	import { untrack } from 'svelte';
+
 	import { resolve } from '$app/paths';
+
+	import { StatsDashboardState } from '../state/statsDashboard.svelte';
 	import SessionStatsPanel from './SessionStatsPanel.svelte';
-	import { Tween } from 'svelte/motion';
-	import { cubicOut } from 'svelte/easing';
 
 	interface Props {
 		totalRolls: number;
@@ -18,173 +18,72 @@
 
 	let { totalRolls, nat20s, nat1s }: Props = $props();
 
-	const app = getAppContext();
-
-	let sessionCount = $state(0);
-	let topDice = $state<number[]>([]);
-	let breakdown = $state<BreakdownEntry[]>([]);
-	let sessionLucks = $state<SessionLuck[]>([]);
-	let avgLuckPerSession = $state(0);
-	let luckExpanded = $state(false);
-	let expandedSessionId = $state<string | null>(null);
-	let allSessions = $state<SessionRecord[]>([]);
-
-	let activeTab = $state<'overall' | 'session'>('overall');
-	let selectedSessionId = $state<string | null>(null);
-	let viewMode = $state('server');
-
-	const VIEW_OPTIONS = [
-		{ value: 'server', label: "Lee's Stats" },
-		{ value: 'local', label: 'Local Rolls' }
-	];
-
-	const localRolls = $derived(app.session.currentSessionRolls);
-	const localTotalRolls = $derived(localRolls.length);
-	const localNat20s = $derived(localRolls.filter((r) => r.dieType === 20 && r.value === 20).length);
-	const localNat1s = $derived(localRolls.filter((r) => r.dieType === 20 && r.value === 1).length);
-	const localSessionRecord = $derived(
-		app.session.currentSessionId
-			? {
-					id: app.session.currentSessionId,
-					rolls: app.session.currentSessionRolls,
-					modifier: 0,
-					rolledAt: app.session.rolledAt ?? new Date().toISOString(),
-					name: app.session.currentSessionName
-				}
-			: null
+	const s = new StatsDashboardState(
+		getAppContext(),
+		untrack(() => totalRolls),
+		untrack(() => nat20s),
+		untrack(() => nat1s)
 	);
-
-	const effectiveTotalRolls = $derived(viewMode === 'local' ? localTotalRolls : totalRolls);
-	const effectiveNat20s = $derived(viewMode === 'local' ? localNat20s : nat20s);
-	const effectiveNat1s = $derived(viewMode === 'local' ? localNat1s : nat1s);
-
-	const animTotalRolls = new Tween(0, { duration: 500, easing: cubicOut });
-	const animNat20s = new Tween(0, { duration: 500, easing: cubicOut });
-	const animNat1s = new Tween(0, { duration: 500, easing: cubicOut });
-	const animSessions = new Tween(0, { duration: 500, easing: cubicOut });
-
-	$effect(() => {
-		animTotalRolls.set(effectiveTotalRolls);
-	});
-	$effect(() => {
-		animNat20s.set(effectiveNat20s);
-	});
-	$effect(() => {
-		animNat1s.set(effectiveNat1s);
-	});
-	$effect(() => {
-		animSessions.set(sessionCount);
-	});
-
-	const TAB_ITEMS = [
-		{ value: 'overall', label: 'Overall', icon: 'mdi-clipboard-list-outline' },
-		{ value: 'session', label: 'Session', icon: 'mdi-thought-bubble-outline' }
-	];
-
-	const sessionOptions = $derived(
-		allSessions.map((s) => ({
-			value: s.id,
-			label: s.name || 'Unnamed session',
-			subtext: fmtDate(s.rolledAt)
-		}))
-	);
-
-	const selectedSession = $derived(
-		selectedSessionId !== null
-			? (allSessions.find((s) => s.id === selectedSessionId) ?? null)
-			: null
-	);
-
-	function applyExtended(sessions: SessionRecord[]) {
-		const ext = computeExtended(sessions);
-		sessionCount = ext.sessionCount;
-		topDice = ext.topDice;
-		breakdown = ext.breakdown;
-		sessionLucks = ext.sessionLucks;
-		avgLuckPerSession = ext.avgLuckPerSession;
-		allSessions = sessions;
-	}
-
-	$effect(() => {
-		if (viewMode === 'server') loadExtended();
-	});
-	$effect(() => {
-		if (viewMode === 'local')
-			applyExtended(localSessionRecord ? [localSessionRecord as SessionRecord] : []);
-	});
-
-	async function loadExtended() {
-		const sessions = await fetchRollSessions();
-		applyExtended(sessions);
-	}
-
-	async function refresh() {
-		const [dash, sessions] = await Promise.all([fetchDashboard(), fetchRollSessions()]);
-		totalRolls = dash.totalRolls;
-		nat20s = dash.nat20s;
-		nat1s = dash.nat1s;
-		applyExtended(sessions);
-	}
 </script>
 
 <div class="px-4 py-6">
 	<div class="mb-4 flex items-center justify-between">
-		{#if app.isGuest}
-			<SelectDropdown options={VIEW_OPTIONS} bind:value={viewMode} />
+		{#if s.isGuest}
+			<SelectDropdown options={s.VIEW_OPTIONS} bind:value={s.viewMode} />
 		{:else}
 			<h2 class="text-xl font-bold text-white">Stats</h2>
 		{/if}
-		<Button onclick={refresh} aria-label="Refresh stats">↻ Refresh</Button>
+		<Button onclick={() => s.refresh()} aria-label="Refresh stats">↻ Refresh</Button>
 	</div>
 
 	<TabBar
-		items={TAB_ITEMS}
-		value={activeTab}
-		onchange={(v) => (activeTab = v as 'overall' | 'session')}
+		items={s.TAB_ITEMS}
+		value={s.activeTab}
+		onchange={(v) => (s.activeTab = v as 'overall' | 'session')}
 		class="mb-4"
 	/>
 
-	{#if activeTab === 'overall'}
+	{#if s.activeTab === 'overall'}
 		<div class="grid grid-cols-2 gap-4">
-			<StatCard label="Total Rolls" value={Math.round(animTotalRolls.current)} />
+			<StatCard label="Total Rolls" value={Math.round(s.animTotalRolls.current)} />
 			<StatCard label="Top Dice">
 				<div class="mt-1 flex gap-2">
-					{#if topDice.length === 0}
+					{#if s.topDice.length === 0}
 						<span class="text-4xl font-extrabold text-stone-600">—</span>
 					{:else}
-						<TopDiceList dice={topDice} />
+						<TopDiceList dice={s.topDice} />
 					{/if}
 				</div>
 			</StatCard>
 			<StatCard
 				label="Nat 20s"
-				value={Math.round(animNat20s.current)}
+				value={Math.round(s.animNat20s.current)}
 				accent="amber"
 				subtext="d20 critical hits"
 			/>
 			<StatCard
 				label="Nat 1s"
-				value={Math.round(animNat1s.current)}
+				value={Math.round(s.animNat1s.current)}
 				accent="red"
 				subtext="d20 critical fails"
 			/>
-			<StatCard label="Sessions" value={Math.round(animSessions.current)} />
+			<StatCard label="Sessions" value={Math.round(s.animSessions.current)} />
 			<StatCard
 				label="Avg Luck/Session"
-				value={sessionCount > 0 ? fmtLuck(avgLuckPerSession) : '—'}
-				valueColor={sessionCount > 0
-					? avgLuckPerSession > 0.1
+				value={s.sessionCount > 0 ? fmtLuck(s.avgLuckPerSession) : '—'}
+				valueColor={s.sessionCount > 0
+					? s.avgLuckPerSession > 0.1
 						? '#4ade80'
-						: avgLuckPerSession < -0.1
+						: s.avgLuckPerSession < -0.1
 							? '#f87171'
 							: '#94a3b8'
 					: '#475569'}
-				subtext={luckExpanded ? 'tap to collapse ▲' : 'tap for breakdown ▼'}
-				onclick={() => (luckExpanded = !luckExpanded)}
+				subtext={s.luckExpanded ? 'tap to collapse ▲' : 'tap for breakdown ▼'}
+				onclick={() => (s.luckExpanded = !s.luckExpanded)}
 			/>
 		</div>
 
-		{#if luckExpanded && sessionLucks.length > 0}
+		{#if s.luckExpanded && s.sessionLucks.length > 0}
 			<div class="mt-4 rounded-2xl bg-stone-800 p-4">
 				<h3 class="mb-2 text-xs font-semibold tracking-widest text-stone-500 uppercase">
 					Luck per Session
@@ -195,24 +94,24 @@
 					you rolled above average; negative means below.
 				</p>
 				<div class="flex flex-col gap-1">
-					{#each sessionLucks as s (s.id)}
-						{@const isOpen = expandedSessionId === s.id}
-						{@const summary = isOpen ? sessionSummary(allSessions, s.id) : null}
+					{#each s.sessionLucks as session (session.id)}
+						{@const isOpen = s.expandedSessionId === session.id}
+						{@const summary = isOpen ? sessionSummary(s.allSessions, session.id) : null}
 						<button
 							type="button"
-							onclick={() => (expandedSessionId = isOpen ? null : s.id)}
+							onclick={() => (s.expandedSessionId = isOpen ? null : session.id)}
 							class="w-full rounded-xl px-2 py-2 text-left transition-colors hover:bg-stone-700/50"
 						>
 							<div class="flex items-center justify-between gap-3">
 								<div class="min-w-0 flex-1">
 									<p class="truncate text-sm font-semibold text-white">
-										{s.name || 'Unnamed session'}
+										{session.name || 'Unnamed session'}
 									</p>
-									<p class="text-xs text-stone-500">{fmtDate(s.rolledAt)}</p>
+									<p class="text-xs text-stone-500">{session.rolledAt}</p>
 								</div>
 								<div class="flex items-center gap-2">
-									<span class={['shrink-0 text-sm font-bold', luckClass(s.luck)]}
-										>{fmtLuck(s.luck)}</span
+									<span class={['shrink-0 text-sm font-bold', luckClass(session.luck)]}
+										>{fmtLuck(session.luck)}</span
 									>
 									<span class="text-xs text-stone-600">{isOpen ? '▲' : '▼'}</span>
 								</div>
@@ -243,33 +142,37 @@
 			</div>
 		{/if}
 
-		{#if totalRolls === 0}
+		{#if s.totalRolls === 0}
 			<div class="mt-8 text-center text-stone-500">
 				<p class="mb-2 text-4xl"><span class="mdi mdi-dice-multiple-outline"></span></p>
 				<p>No rolls logged yet.</p>
 				<p class="text-sm">Go roll some dice!</p>
 			</div>
-		{:else if breakdown.length > 0}
-			<DieBreakdown {breakdown} />
+		{:else if s.breakdown.length > 0}
+			<DieBreakdown breakdown={s.breakdown} />
 		{/if}
 	{:else}
 		<SelectDropdown
-			options={sessionOptions}
-			bind:value={selectedSessionId}
+			options={s.sessionOptions}
+			bind:value={s.selectedSessionId}
 			placeholder="Select a session…"
 			class="mb-4"
 		/>
-		{#if selectedSessionId}
+		{#if s.selectedSessionId}
 			<a
-				href={resolve(`/history?session=${selectedSessionId}`)}
+				href={resolve(`/history?session=${s.selectedSessionId}`)}
 				class="text-accent mb-4 flex items-center gap-1 text-xs hover:underline"
 			>
-				View {selectedSession?.name} Roll History
+				View {s.selectedSession?.name} Roll History
 				<span class="mdi mdi-arrow-right-thin"></span>
 			</a>
 		{/if}
-		{#if selectedSession !== null}
-			<SessionStatsPanel session={selectedSession} {sessionLucks} {avgLuckPerSession} />
+		{#if s.selectedSession !== null}
+			<SessionStatsPanel
+				session={s.selectedSession}
+				sessionLucks={s.sessionLucks}
+				avgLuckPerSession={s.avgLuckPerSession}
+			/>
 		{:else}
 			<p class="mt-8 text-center text-sm text-stone-500">Select a session to view its stats.</p>
 		{/if}

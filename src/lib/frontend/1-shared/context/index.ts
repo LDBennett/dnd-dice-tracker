@@ -1,2 +1,2 @@
-export { AppContext, APP_CONTEXT_KEY, getAppContext } from './app.svelte';
 export type { User } from './app.svelte';
+export { APP_CONTEXT_KEY, AppContext, getAppContext } from './app.svelte';

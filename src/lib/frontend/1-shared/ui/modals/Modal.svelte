@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { fade, scale } from 'svelte/transition';
-	import { cubicOut } from 'svelte/easing';
 	import type { Snippet } from 'svelte';
+	import { cubicOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
 
 	let {
 		onclose,

@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { PageServerData } from './$types';
 	import { StatsDashboard } from '@fe-widgets/stats-dashboard';
+
+	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
 

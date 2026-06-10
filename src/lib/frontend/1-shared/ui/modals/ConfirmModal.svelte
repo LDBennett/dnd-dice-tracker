@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Modal from './Modal.svelte';
 	import Button from '../buttons/Button.svelte';
+	import Modal from './Modal.svelte';
 
 	let {
 		title,

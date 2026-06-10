@@ -1,10 +1,10 @@
 ﻿<script lang="ts">
-	import { untrack } from 'svelte';
-	import { fade, scale } from 'svelte/transition';
-	import { backOut, cubicOut } from 'svelte/easing';
-	import { DIE_COLOR, IconButton, Button } from '@fe-shared/ui';
-	import type { DieType } from '@fe-shared/lib';
 	import { DieValuePicker } from '@fe-entities/die';
+	import type { DieType } from '@fe-shared/lib';
+	import { Button,DIE_COLOR, IconButton } from '@fe-shared/ui';
+	import { untrack } from 'svelte';
+	import { backOut, cubicOut } from 'svelte/easing';
+	import { fade, scale } from 'svelte/transition';
 
 	let {
 		dieType,

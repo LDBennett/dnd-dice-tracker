@@ -1,6 +1,7 @@
-import { page } from 'vitest/browser';
 import { describe, expect, it } from 'vitest';
+import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-svelte';
+
 import Welcome from './Welcome.svelte';
 
 describe('Welcome.svelte', () => {
