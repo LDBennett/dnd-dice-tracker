@@ -4,18 +4,47 @@
 	import {
 		QuickBatchQueuePanel,
 		QuickBatchRollOverlay,
-		QuickRollOverlay	} from '@fe-features/quick-roll';
+		QuickRollOverlay
+	} from '@fe-features/quick-roll';
 	import { getAppContext } from '@fe-shared/context';
 	import type { SessionRecord } from '@fe-shared/lib';
 	import { fmtDate, fmtTime } from '@fe-shared/lib';
 	import type { DropdownItem } from '@fe-shared/ui';
-	import { DropdownMenu, IconButton, TabBar, TextInput } from '@fe-shared/ui';
+	import { DropdownMenu, IconButton, TextInput } from '@fe-shared/ui';
 
 	import { DiceLoggerState } from '../state/diceLogger.svelte';
 	import DiceGrid from './DiceGrid.svelte';
 
 	const app = getAppContext();
 	const s = new DiceLoggerState(app);
+
+	let swipeEl = $state<HTMLDivElement | null>(null);
+	let swipeStartX = 0;
+	let swipeStartY = 0;
+	let isSwiping = $state(false);
+
+	function onSwipeStart(e: PointerEvent) {
+		swipeStartX = e.clientX;
+		swipeStartY = e.clientY;
+		isSwiping = false;
+	}
+
+	function onSwipeMove(e: PointerEvent) {
+		if (isSwiping || !swipeEl) return;
+		const dx = e.clientX - swipeStartX;
+		const dy = e.clientY - swipeStartY;
+		if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+			isSwiping = true;
+			swipeEl.setPointerCapture(e.pointerId);
+		}
+	}
+
+	function onSwipeEnd(e: PointerEvent) {
+		if (!isSwiping) return;
+		const dx = e.clientX - swipeStartX;
+		if (Math.abs(dx) > 40) s.setMode(!s.batchMode);
+		isSwiping = false;
+	}
 </script>
 
 <div class="flex flex-col gap-6 px-4 py-6">
@@ -79,12 +108,23 @@
 				</div>
 			{/if}
 		{/if}
-		<TabBar
-			items={s.modeTabs}
-			value={s.batchMode ? 'battle' : 'rp'}
-			onchange={(v) => s.setMode(v === 'battle')}
-			bg="bg-stone-800"
-		/>
+	</div>
+
+	<!-- Mode indicator row -->
+	<div class="flex items-center justify-between">
+		<div class="flex items-center gap-2">
+			<span
+				class={['mdi text-sm text-accent', s.batchMode ? 'mdi-hexagon-multiple-outline' : 'mdi-hexagon']}
+				aria-hidden="true"
+			></span>
+			<span class="text-sm font-semibold text-accent">
+				{s.batchMode ? 'Multi Roll' : 'Single Roll'}
+			</span>
+		</div>
+		<div class="flex items-center gap-1.5" aria-hidden="true">
+			<span class={['size-1.5 rounded-full transition-colors duration-200', !s.batchMode ? 'bg-accent' : 'bg-stone-600']}></span>
+			<span class={['size-1.5 rounded-full transition-colors duration-200', s.batchMode ? 'bg-accent' : 'bg-stone-600']}></span>
+		</div>
 	</div>
 
 	<!-- Quick roll overlays -->
@@ -95,18 +135,28 @@
 		<QuickBatchRollOverlay dice={s.quickBatchQueue} onComplete={(r) => s.onQuickBatchAllDone(r)} />
 	{/if}
 
-	<!-- Dice grid -->
-	<DiceGrid
-		batchMode={s.batchMode}
-		pressing={s.pressing}
-		selectedDie={s.selectedDie}
-		quickBatchQueue={s.quickBatchQueue}
-		batchEntries={s.batchEntries}
-		sessionRolls={s.sessionRolls}
-		onDieClick={(die) => s.handleDieClick(die)}
-		onConfirm={(roll) => s.addToSession(roll)}
-		onCancel={() => (s.selectedDie = null)}
-	/>
+	<!-- Swipe-enabled dice grid -->
+	<div
+		bind:this={swipeEl}
+		role="group"
+		onpointerdown={onSwipeStart}
+		onpointermove={onSwipeMove}
+		onpointerup={onSwipeEnd}
+		class={['rounded-xl border-2 transition-colors duration-300', s.batchMode ? 'border-accent' : 'border-stone-700']}
+		style="touch-action: pan-y"
+	>
+		<DiceGrid
+			batchMode={s.batchMode}
+			pressing={s.pressing}
+			selectedDie={s.selectedDie}
+			quickBatchQueue={s.quickBatchQueue}
+			batchEntries={s.batchEntries}
+			sessionRolls={s.sessionRolls}
+			onDieClick={(die) => s.handleDieClick(die)}
+			onConfirm={(roll) => s.addToSession(roll)}
+			onCancel={() => (s.selectedDie = null)}
+		/>
+	</div>
 
 	<!-- Quick batch queue (Battle+Quick mode) -->
 	{#if s.batchMode && app.rollMode && s.quickBatchQueue.length > 0 && !s.quickBatchRolling}
@@ -123,7 +173,10 @@
 
 	<!-- Battle+Log batch panel -->
 	{#if s.batchMode && !app.rollMode && s.batchEntries.length > 0}
-		<BatchEntryPanel bind:entries={s.batchEntries} onConfirm={(rolls) => s.addBatchToSession(rolls)} />
+		<BatchEntryPanel
+			bind:entries={s.batchEntries}
+			onConfirm={(rolls) => s.addBatchToSession(rolls)}
+		/>
 	{/if}
 
 	<!-- Save error -->

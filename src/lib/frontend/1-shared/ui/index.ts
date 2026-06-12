@@ -10,6 +10,7 @@ export { default as TextInput } from './inputs/TextInput.svelte';
 export { default as ConfirmModal } from './modals/ConfirmModal.svelte';
 export { default as Modal } from './modals/Modal.svelte';
 export { default as TabBar } from './navigation/TabBar.svelte';
+export { default as ToggleSwitch } from './navigation/ToggleSwitch.svelte';
 export type { DropdownItem } from './overlays/DropdownMenu.svelte';
 export { default as DropdownMenu } from './overlays/DropdownMenu.svelte';
 export { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from './static/dice-colors';
