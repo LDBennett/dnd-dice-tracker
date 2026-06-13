@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { RollRecord, SessionRecord } from '@fe-shared/lib';
-	import { fmtLuck, luckClass,singleSessionStats } from '@fe-shared/lib/utils/dice-utils';
+	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/lib/utils/dice-utils';
 	import { Badge, ConfirmModal, IconButton, TextInput } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';
@@ -57,9 +57,6 @@
 			year: 'numeric'
 		});
 	}
-	function formatTime(iso: string) {
-		return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-	}
 </script>
 
 <div class="rounded-2xl bg-stone-800 p-4">
@@ -97,7 +94,7 @@
 		{#if !live}
 			<div>
 				<p class="text-xs font-semibold text-stone-400">{formatDate(session.rolledAt)}</p>
-				<p class="text-xs text-stone-500">{formatTime(session.rolledAt)}</p>
+				<p class="text-xs text-stone-500">{fmtTime(session.rolledAt)}</p>
 			</div>
 			<div class="text-right">
 				<p class="text-xs text-stone-500">Total Rolls</p>
