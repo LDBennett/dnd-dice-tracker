@@ -111,25 +111,25 @@ export class DiceLoggerState {
 		if (this.quickRollDie === null) return;
 		const die = this.quickRollDie;
 		this.quickRollDie = null;
-		trackEvent('roll_dice', { source: 'quick' });
+		trackEvent('roll_dice', { source: 'quick', roll_type: 'single', dice_count: 1 });
 		this.app.session.autoSave([{ dieType: die, value, note: '' }]);
 	}
 
 	onQuickBatchAllDone(results: { dieType: DieType; value: number }[]) {
 		this.quickBatchQueue = [];
 		this.quickBatchRolling = false;
-		trackEvent('roll_dice', { source: 'quick' });
+		trackEvent('roll_dice', { source: 'quick', roll_type: 'batch', dice_count: results.length });
 		this.app.session.autoSave(results.map((r) => ({ ...r, note: '' })));
 	}
 
 	addToSession(roll: RollResult) {
 		this.selectedDie = null;
-		trackEvent('roll_dice', { source: 'logger' });
+		trackEvent('roll_dice', { source: 'logger', roll_type: 'single', dice_count: 1 });
 		this.app.session.autoSave([roll]);
 	}
 
 	addBatchToSession(rolls: RollResult[]) {
-		trackEvent('roll_dice', { source: 'logger' });
+		trackEvent('roll_dice', { source: 'logger', roll_type: 'batch', dice_count: rolls.length });
 		this.app.session.autoSave(rolls);
 	}
 

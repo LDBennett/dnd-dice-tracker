@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Modal, TabBar, TextInput } from '@fe-shared/ui';
+	import { Modal, TabBar, TextInput, TurnstileWidget } from '@fe-shared/ui';
 
 	import { invalidateAll } from '$app/navigation';
 	import { PUBLIC_ALLOW_REGISTRATION } from '$env/static/public';
@@ -57,6 +57,8 @@
 				placeholder="Password"
 				autocomplete={s.mode === 'login' ? 'current-password' : 'new-password'}
 			/>
+
+			<TurnstileWidget onToken={(t) => (s.turnstileToken = t)} />
 
 			{#if s.error}
 				<p class="rounded-lg bg-red-900/40 px-3 py-2 text-xs text-red-400">{s.error}</p>

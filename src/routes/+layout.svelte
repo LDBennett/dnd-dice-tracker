@@ -1,13 +1,9 @@
 <script lang="ts">
 	import './layout.css';
 
-	import { injectAnalytics } from '@vercel/analytics/sveltekit';
-
-	import { dev } from '$app/environment';
 	import favicon from '$lib/assets/favicon.svg';
 	import ogImage from '$lib/assets/logo-full.png';
-
-	injectAnalytics({ mode: dev ? 'development' : 'production' });
+	import { AnalyticsConsent } from '@fe-shared/ui';
 
 	let { children } = $props();
 </script>
@@ -37,4 +33,5 @@
 	<meta property="og:url" content="https://tabularollsa.com" />
 </svelte:head>
 
+<AnalyticsConsent />
 {@render children()}

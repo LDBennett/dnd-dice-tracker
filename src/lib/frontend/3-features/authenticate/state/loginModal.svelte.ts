@@ -5,6 +5,7 @@ export class LoginModalState {
 	name = $state('');
 	error = $state('');
 	loading = $state(false);
+	turnstileToken = $state('');
 
 	readonly authTabs = [
 		{ value: 'login', label: 'Sign In' },
@@ -16,11 +17,16 @@ export class LoginModalState {
 		this.email = '';
 		this.password = '';
 		this.name = '';
+		this.turnstileToken = '';
 		this.mode = 'login';
 	}
 
 	async submit(onSuccess: () => void) {
 		this.error = '';
+		if (!this.turnstileToken) {
+			this.error = 'Please complete the verification challenge.';
+			return;
+		}
 		this.loading = true;
 		try {
 			const endpoint =
@@ -32,7 +38,7 @@ export class LoginModalState {
 
 			const res = await fetch(endpoint, {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
+				headers: { 'Content-Type': 'application/json', 'X-Turnstile-Token': this.turnstileToken },
 				body: JSON.stringify(body)
 			});
 

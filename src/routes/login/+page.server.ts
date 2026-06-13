@@ -2,6 +2,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { APIError } from 'better-auth/api';
 
 import { getAuth } from '$lib/server/auth';
+import { verifyTurnstile } from '$lib/server/turnstile';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -17,6 +18,11 @@ export const actions: Actions = {
 
 	signInEmail: async (event) => {
 		const formData = await event.request.formData();
+		const token = formData.get('cf-turnstile-response')?.toString() ?? null;
+		if (!(await verifyTurnstile(token, event.getClientAddress()))) {
+			return fail(400, { message: 'Bot verification failed. Please try again.' });
+		}
+
 		const email = formData.get('email')?.toString() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
 
@@ -34,6 +40,11 @@ export const actions: Actions = {
 
 	signUpEmail: async (event) => {
 		const formData = await event.request.formData();
+		const token = formData.get('cf-turnstile-response')?.toString() ?? null;
+		if (!(await verifyTurnstile(token, event.getClientAddress()))) {
+			return fail(400, { message: 'Bot verification failed. Please try again.' });
+		}
+
 		const email = formData.get('email')?.toString() ?? '';
 		const password = formData.get('password')?.toString() ?? '';
 		const name = formData.get('name')?.toString() ?? '';

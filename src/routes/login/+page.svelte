@@ -1,6 +1,8 @@
 ﻿<script lang="ts">
 	import { enhance } from '$app/forms';
 
+	import { PUBLIC_TURNSTILE_SITE_KEY } from '$env/static/public';
+
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -84,6 +86,8 @@
 					placeholder="••••••••"
 				/>
 			</div>
+
+			<div class="cf-turnstile" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-theme="dark"></div>
 
 			{#if form?.message}
 				<p class="rounded-lg bg-red-900/40 px-4 py-3 text-sm text-red-400">{form.message}</p>
