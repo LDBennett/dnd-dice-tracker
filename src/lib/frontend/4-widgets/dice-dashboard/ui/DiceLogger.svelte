@@ -110,20 +110,25 @@
 		{/if}
 	</div>
 
-	<!-- Mode indicator row -->
-	<div class="flex items-center justify-between">
-		<div class="flex items-center gap-2">
-			<span
-				class={['mdi text-sm text-accent', s.batchMode ? 'mdi-hexagon-multiple-outline' : 'mdi-hexagon']}
-				aria-hidden="true"
-			></span>
-			<span class="text-sm font-semibold text-accent">
-				{s.batchMode ? 'Multi Roll' : 'Single Roll'}
-			</span>
+	<!-- Animated mode label -->
+	<div class="relative h-7">
+		<div
+			class={[
+				'absolute left-0 flex items-center gap-2 transition-all duration-300',
+				!s.batchMode ? 'opacity-100 text-accent translate-x-0' : 'opacity-0 -translate-x-3 pointer-events-none'
+			]}
+		>
+			<span class="mdi mdi-hexagon text-sm" aria-hidden="true"></span>
+			<span class="text-sm font-semibold">Single Roll</span>
 		</div>
-		<div class="flex items-center gap-1.5" aria-hidden="true">
-			<span class={['size-1.5 rounded-full transition-colors duration-200', !s.batchMode ? 'bg-accent' : 'bg-stone-600']}></span>
-			<span class={['size-1.5 rounded-full transition-colors duration-200', s.batchMode ? 'bg-accent' : 'bg-stone-600']}></span>
+		<div
+			class={[
+				'absolute right-0 flex items-center gap-2 transition-all duration-300',
+				s.batchMode ? 'opacity-100 text-accent translate-x-0' : 'opacity-0 translate-x-3 pointer-events-none'
+			]}
+		>
+			<span class="text-sm font-semibold">Multi Roll</span>
+			<span class="mdi mdi-hexagon-multiple-outline text-sm" aria-hidden="true"></span>
 		</div>
 	</div>
 
@@ -142,15 +147,21 @@
 		onpointerdown={onSwipeStart}
 		onpointermove={onSwipeMove}
 		onpointerup={onSwipeEnd}
-		class={['relative rounded-xl border-2 transition-colors duration-300', s.batchMode ? 'border-accent' : 'border-stone-700']}
+		class={['relative rounded-xl transition-colors duration-300']}
 		style="touch-action: pan-y"
 	>
 		<span
-			class={['mdi mdi-chevron-left pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2 text-2xl transition-opacity duration-200', isSwiping ? 'opacity-60 text-accent' : 'opacity-20 text-stone-400']}
+			class={[
+				'mdi mdi-chevron-left pointer-events-none absolute top-1/2 left-1.5 -translate-y-1/2 text-2xl transition-opacity duration-200',
+				isSwiping ? 'text-accent opacity-60' : 'text-stone-400 opacity-20'
+			]}
 			aria-hidden="true"
 		></span>
 		<span
-			class={['mdi mdi-chevron-right pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-2xl transition-opacity duration-200', isSwiping ? 'opacity-60 text-accent' : 'opacity-20 text-stone-400']}
+			class={[
+				'mdi mdi-chevron-right pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-2xl transition-opacity duration-200',
+				isSwiping ? 'text-accent opacity-60' : 'text-stone-400 opacity-20'
+			]}
 			aria-hidden="true"
 		></span>
 		<DiceGrid
@@ -164,6 +175,36 @@
 			onConfirm={(roll) => s.addToSession(roll)}
 			onCancel={() => (s.selectedDie = null)}
 		/>
+	</div>
+
+	<!-- Mode pills with flanking icons -->
+	<div class="flex items-center justify-center gap-3">
+		<span
+			class={[
+				'mdi mdi-hexagon transition-all duration-200',
+				!s.batchMode ? 'scale-125 text-accent' : 'scale-100 text-stone-600'
+			]}
+			style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+			aria-hidden="true"
+		></span>
+
+		<div class="flex items-center gap-1.5">
+			<span
+				class={['h-1.5 w-6 rounded-full transition-colors duration-300', !s.batchMode ? 'bg-accent' : 'bg-stone-600']}
+			></span>
+			<span
+				class={['h-1.5 w-6 rounded-full transition-colors duration-300', s.batchMode ? 'bg-accent' : 'bg-stone-600']}
+			></span>
+		</div>
+
+		<span
+			class={[
+				'mdi mdi-hexagon-multiple-outline transition-all duration-200',
+				s.batchMode ? 'scale-125 text-accent' : 'scale-100 text-stone-600'
+			]}
+			style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+			aria-hidden="true"
+		></span>
 	</div>
 
 	<!-- Quick batch queue (Battle+Quick mode) -->
