@@ -42,13 +42,10 @@
 	class="fixed right-0 bottom-0 left-0 z-50 flex justify-center"
 	style="padding-bottom: env(safe-area-inset-bottom)"
 >
-	<div
-		class="relative mx-4 mb-4 w-full max-w-sm"
-		style="filter: drop-shadow(0 4px 24px rgb(0 0 0 / 0.5))"
-	>
+	<div class="relative w-full max-w-sm" style="filter: drop-shadow(0 4px 24px rgb(0 0 0 / 0.5))">
 		<!-- Bar with circular notch cut at top-center -->
 		<div
-			class="flex h-16 items-center justify-between rounded-2xl bg-stone-800 px-8"
+			class="flex h-16 items-center justify-between rounded-t-2xl bg-stone-800 px-8"
 			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
 		>
 			<!-- History -->
