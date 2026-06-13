@@ -13,7 +13,7 @@
 </script>
 
 <div
-	class="flex items-center justify-center gap-3"
+	class="flex items-center justify-center gap-3 active:cursor-grabbing"
 	role="group"
 	aria-label="Mode selector — swipe to switch"
 	style="touch-action: pan-y"
@@ -42,13 +42,19 @@
 		<button
 			type="button"
 			onclick={() => onSetMode(false)}
-			class={['h-1.5 w-6 rounded-full transition-colors duration-300', !batchMode ? 'bg-accent' : 'bg-stone-600']}
+			class={[
+				'h-1.5 w-6 rounded-full transition-colors duration-300',
+				!batchMode ? 'bg-accent' : 'bg-stone-600'
+			]}
 			aria-label="Single roll mode"
 		></button>
 		<button
 			type="button"
 			onclick={() => onSetMode(true)}
-			class={['h-1.5 w-6 rounded-full transition-colors duration-300', batchMode ? 'bg-accent' : 'bg-stone-600']}
+			class={[
+				'h-1.5 w-6 rounded-full transition-colors duration-300',
+				batchMode ? 'bg-accent' : 'bg-stone-600'
+			]}
 			aria-label="Batch roll mode"
 		></button>
 	</div>

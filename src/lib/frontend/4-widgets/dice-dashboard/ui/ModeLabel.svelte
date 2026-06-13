@@ -25,7 +25,7 @@
 </script>
 
 <div
-	class="flex flex-col"
+	class="flex cursor-grab flex-col active:cursor-grabbing"
 	bind:clientWidth={containerWidth}
 	role="group"
 	aria-label="Mode selector — swipe to switch"
@@ -38,13 +38,13 @@
 	<div class="relative h-7">
 		<div
 			class={[
-				'absolute left-0 flex items-center gap-2 transition-all duration-300',
+				'absolute left-0 flex  items-center gap-2 transition-all duration-300',
 				singleOpacity > 0.5 ? 'text-accent' : 'text-stone-500'
 			]}
 			style={`opacity: ${singleOpacity}; pointer-events: ${singleOpacity > 0.1 ? 'auto' : 'none'};`}
 		>
 			<span class="mdi mdi-hexagon text-sm" aria-hidden="true"></span>
-			<span class="text-sm font-semibold">Single Roll</span>
+			<span class="text-sm font-semibold select-none">Single Roll</span>
 		</div>
 		<div
 			class={[
@@ -53,7 +53,7 @@
 			]}
 			style={`opacity: ${multiOpacity}; pointer-events: ${multiOpacity > 0.1 ? 'auto' : 'none'};`}
 		>
-			<span class="text-sm font-semibold">Multi Roll</span>
+			<span class=" text-sm font-semibold select-none">Multi Roll</span>
 			<span class="mdi mdi-hexagon-multiple-outline text-sm" aria-hidden="true"></span>
 		</div>
 	</div>
