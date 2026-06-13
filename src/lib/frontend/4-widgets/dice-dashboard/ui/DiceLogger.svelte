@@ -18,33 +18,52 @@
 	const app = getAppContext();
 	const s = new DiceLoggerState(app);
 
-	let swipeEl = $state<HTMLDivElement | null>(null);
 	let swipeStartX = 0;
 	let swipeStartY = 0;
+	let pointerIsDown = false;
 	let isSwiping = $state(false);
+	let swipeDeltaX = $state(0);
+	let containerWidth = $state(0);
 
 	function onSwipeStart(e: PointerEvent) {
+		pointerIsDown = true;
 		swipeStartX = e.clientX;
 		swipeStartY = e.clientY;
 		isSwiping = false;
 	}
 
 	function onSwipeMove(e: PointerEvent) {
-		if (isSwiping || !swipeEl) return;
+		if (!pointerIsDown) return;
+		const el = e.currentTarget as HTMLElement;
 		const dx = e.clientX - swipeStartX;
 		const dy = e.clientY - swipeStartY;
-		if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+		if (!isSwiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
 			isSwiping = true;
-			swipeEl.setPointerCapture(e.pointerId);
+			el.setPointerCapture(e.pointerId);
 		}
+		if (isSwiping) swipeDeltaX = dx;
 	}
 
 	function onSwipeEnd(e: PointerEvent) {
+		pointerIsDown = false;
 		if (!isSwiping) return;
 		const dx = e.clientX - swipeStartX;
 		if (Math.abs(dx) > 40) s.setMode(!s.batchMode);
 		isSwiping = false;
+		swipeDeltaX = 0;
 	}
+
+	const gradientProgress = $derived(
+		(() => {
+			const base = s.batchMode ? 1 : 0;
+			if (!isSwiping || containerWidth === 0) return base;
+			const drag = swipeDeltaX / (containerWidth * 0.55);
+			return Math.max(0, Math.min(1, base + drag));
+		})()
+	);
+
+	const singleRollOpacity = $derived(1 - gradientProgress);
+	const multiRollOpacity = $derived(gradientProgress);
 </script>
 
 <div class="flex flex-col gap-6 px-4 py-6">
@@ -111,25 +130,48 @@
 	</div>
 
 	<!-- Animated mode label -->
-	<div class="relative h-7">
+	<div
+		class="flex flex-col"
+		bind:clientWidth={containerWidth}
+		role="group"
+		aria-label="Mode selector — swipe to switch"
+		style="touch-action: pan-y"
+		onpointerdown={onSwipeStart}
+		onpointermove={onSwipeMove}
+		onpointerup={onSwipeEnd}
+		onpointercancel={onSwipeEnd}
+	>
+		<div class="relative h-7">
+			<div
+				class={[
+					'absolute left-0 flex items-center gap-2 transition-all duration-300',
+					singleRollOpacity > 0.5 ? 'text-accent' : 'text-stone-500'
+				]}
+				style={`opacity: ${singleRollOpacity}; pointer-events: ${singleRollOpacity > 0.1 ? 'auto' : 'none'};`}
+			>
+				<span class="mdi mdi-hexagon text-sm" aria-hidden="true"></span>
+				<span class="text-sm font-semibold">Single Roll</span>
+			</div>
+			<div
+				class={[
+					'absolute right-0 flex items-center gap-2 transition-all duration-300',
+					multiRollOpacity > 0.5 ? 'text-accent' : 'text-stone-500'
+				]}
+				style={`opacity: ${multiRollOpacity}; pointer-events: ${multiRollOpacity > 0.1 ? 'auto' : 'none'};`}
+			>
+				<span class="text-sm font-semibold">Multi Roll</span>
+				<span class="mdi mdi-hexagon-multiple-outline text-sm" aria-hidden="true"></span>
+			</div>
+		</div>
+
+		<!-- Animated gradient edge indicating mode + swipe affordance -->
 		<div
 			class={[
-				'absolute left-0 flex items-center gap-2 transition-all duration-300',
-				!s.batchMode ? 'opacity-100 text-accent translate-x-0' : 'opacity-0 -translate-x-3 pointer-events-none'
+				'accent-gradient h-1.5 overflow-hidden rounded-full',
+				!isSwiping && 'gradient-animate'
 			]}
-		>
-			<span class="mdi mdi-hexagon text-sm" aria-hidden="true"></span>
-			<span class="text-sm font-semibold">Single Roll</span>
-		</div>
-		<div
-			class={[
-				'absolute right-0 flex items-center gap-2 transition-all duration-300',
-				s.batchMode ? 'opacity-100 text-accent translate-x-0' : 'opacity-0 translate-x-3 pointer-events-none'
-			]}
-		>
-			<span class="text-sm font-semibold">Multi Roll</span>
-			<span class="mdi mdi-hexagon-multiple-outline text-sm" aria-hidden="true"></span>
-		</div>
+			style={`--gradient-pos: ${gradientProgress * 100}%;`}
+		></div>
 	</div>
 
 	<!-- Quick roll overlays -->
@@ -140,30 +182,8 @@
 		<QuickBatchRollOverlay dice={s.quickBatchQueue} onComplete={(r) => s.onQuickBatchAllDone(r)} />
 	{/if}
 
-	<!-- Swipe-enabled dice grid -->
-	<div
-		bind:this={swipeEl}
-		role="group"
-		onpointerdown={onSwipeStart}
-		onpointermove={onSwipeMove}
-		onpointerup={onSwipeEnd}
-		class={['relative rounded-xl transition-colors duration-300']}
-		style="touch-action: pan-y"
-	>
-		<span
-			class={[
-				'mdi mdi-chevron-left pointer-events-none absolute top-1/2 left-1.5 -translate-y-1/2 text-2xl transition-opacity duration-200',
-				isSwiping ? 'text-accent opacity-60' : 'text-stone-400 opacity-20'
-			]}
-			aria-hidden="true"
-		></span>
-		<span
-			class={[
-				'mdi mdi-chevron-right pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-2xl transition-opacity duration-200',
-				isSwiping ? 'text-accent opacity-60' : 'text-stone-400 opacity-20'
-			]}
-			aria-hidden="true"
-		></span>
+	<!-- Dice grid -->
+	<div class={['relative rounded-xl transition-colors duration-300']}>
 		<DiceGrid
 			batchMode={s.batchMode}
 			pressing={s.pressing}
@@ -178,33 +198,68 @@
 	</div>
 
 	<!-- Mode pills with flanking icons -->
-	<div class="flex items-center justify-center gap-3">
-		<span
-			class={[
-				'mdi mdi-hexagon transition-all duration-200',
-				!s.batchMode ? 'scale-125 text-accent' : 'scale-100 text-stone-600'
-			]}
-			style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
-			aria-hidden="true"
-		></span>
+	<div
+		class="flex items-center justify-center gap-3"
+		role="group"
+		aria-label="Mode selector — swipe to switch"
+		style="touch-action: pan-y"
+		onpointerdown={onSwipeStart}
+		onpointermove={onSwipeMove}
+		onpointerup={onSwipeEnd}
+		onpointercancel={onSwipeEnd}
+	>
+		<button
+			type="button"
+			onclick={() => s.setMode(false)}
+			class="flex items-center justify-center"
+			aria-label="Single roll mode"
+		>
+			<span
+				class={[
+					'mdi mdi-hexagon-outline transition-all duration-200',
+					!s.batchMode ? 'text-accent scale-125' : 'scale-100 text-stone-600'
+				]}
+				style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+				aria-hidden="true"
+			></span>
+		</button>
 
 		<div class="flex items-center gap-1.5">
-			<span
-				class={['h-1.5 w-6 rounded-full transition-colors duration-300', !s.batchMode ? 'bg-accent' : 'bg-stone-600']}
-			></span>
-			<span
-				class={['h-1.5 w-6 rounded-full transition-colors duration-300', s.batchMode ? 'bg-accent' : 'bg-stone-600']}
-			></span>
+			<button
+				type="button"
+				onclick={() => s.setMode(false)}
+				class={[
+					'h-1.5 w-6 rounded-full transition-colors duration-300',
+					!s.batchMode ? 'bg-accent' : 'bg-stone-600'
+				]}
+				aria-label="Single roll mode"
+			></button>
+			<button
+				type="button"
+				onclick={() => s.setMode(true)}
+				class={[
+					'h-1.5 w-6 rounded-full transition-colors duration-300',
+					s.batchMode ? 'bg-accent' : 'bg-stone-600'
+				]}
+				aria-label="Batch roll mode"
+			></button>
 		</div>
 
-		<span
-			class={[
-				'mdi mdi-hexagon-multiple-outline transition-all duration-200',
-				s.batchMode ? 'scale-125 text-accent' : 'scale-100 text-stone-600'
-			]}
-			style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
-			aria-hidden="true"
-		></span>
+		<button
+			type="button"
+			onclick={() => s.setMode(true)}
+			class="flex items-center justify-center"
+			aria-label="Batch roll mode"
+		>
+			<span
+				class={[
+					'mdi mdi-hexagon-multiple-outline transition-all duration-200',
+					s.batchMode ? 'text-accent scale-125' : 'scale-100 text-stone-600'
+				]}
+				style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+				aria-hidden="true"
+			></span>
+		</button>
 	</div>
 
 	<!-- Quick batch queue (Battle+Quick mode) -->
@@ -236,3 +291,18 @@
 	<!-- Active session -->
 	<ActiveSessionPanel />
 </div>
+
+<style>
+	:global(.gradient-animate) {
+		transition: --gradient-pos 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	:global(.accent-gradient) {
+		background: linear-gradient(
+			90deg,
+			transparent calc(var(--gradient-pos) - 40%),
+			color-mix(in srgb, var(--accent) 60%, transparent) var(--gradient-pos),
+			transparent calc(var(--gradient-pos) + 40%)
+		);
+	}
+</style>

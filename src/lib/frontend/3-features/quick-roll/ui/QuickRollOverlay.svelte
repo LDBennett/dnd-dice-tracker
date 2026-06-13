@@ -1,6 +1,6 @@
 ﻿<script lang="ts">
 	import type { DieType } from '@fe-shared/lib';
-	import { Badge,DIE_COLOR } from '@fe-shared/ui';
+	import { Badge, DIE_COLOR } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
@@ -89,9 +89,14 @@
 			{#if settled}
 				<span in:fade={{ duration: 200 }}>
 					{#if isNat20}
-						<Badge variant="warning" class="px-3 py-1 text-sm font-bold">NAT 20! 🎉</Badge>
+						<Badge variant="warning" class="flex items-center gap-2 px-3 py-1 text-sm font-bold"
+							>NAT 20!
+							<span class="mdi mdi-fire"></span></Badge
+						>
 					{:else if isNat1}
-						<Badge variant="danger" class="px-3 py-1 text-sm font-bold">NAT 1 💀</Badge>
+						<Badge variant="danger" class="flex items-center gap-2 px-3 py-1 text-sm font-bold"
+							>NAT 1 <span class="mdi mdi-skull-outline"></span></Badge
+						>
 					{:else}
 						<span class="text-xs text-stone-500">tap to dismiss</span>
 					{/if}
