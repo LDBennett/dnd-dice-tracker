@@ -55,7 +55,7 @@
 						item.active ? 'text-accent' : 'text-stone-400'
 					]}
 				>
-					<span class={['mdi text-base', item.icon]}></span>
+					<span class={['mdi text-2xl', item.icon]}></span>
 					{item.label}
 				</button>
 			{/each}

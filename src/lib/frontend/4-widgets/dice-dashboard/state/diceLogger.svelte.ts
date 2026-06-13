@@ -22,11 +22,6 @@ export class DiceLoggerState {
 	pickerSessions = $state<SessionRecord[]>([]);
 	pickerLoading = $state(false);
 
-	readonly modeTabs = [
-		{ value: 'rp', label: 'Single', icon: 'mdi-hexagon' },
-		{ value: 'battle', label: 'Multi', icon: 'mdi-hexagon-multiple-outline' }
-	];
-
 	readonly sessionMenuItems = [
 		{
 			label: 'New',

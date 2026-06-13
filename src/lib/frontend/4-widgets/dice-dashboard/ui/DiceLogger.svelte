@@ -4,18 +4,66 @@
 	import {
 		QuickBatchQueuePanel,
 		QuickBatchRollOverlay,
-		QuickRollOverlay	} from '@fe-features/quick-roll';
+		QuickRollOverlay
+	} from '@fe-features/quick-roll';
 	import { getAppContext } from '@fe-shared/context';
 	import type { SessionRecord } from '@fe-shared/lib';
 	import { fmtDate, fmtTime } from '@fe-shared/lib';
 	import type { DropdownItem } from '@fe-shared/ui';
-	import { DropdownMenu, IconButton, TabBar, TextInput } from '@fe-shared/ui';
+	import { DropdownMenu, IconButton, TextInput } from '@fe-shared/ui';
 
 	import { DiceLoggerState } from '../state/diceLogger.svelte';
 	import DiceGrid from './DiceGrid.svelte';
 
 	const app = getAppContext();
 	const s = new DiceLoggerState(app);
+
+	let swipeStartX = 0;
+	let swipeStartY = 0;
+	let pointerIsDown = false;
+	let isSwiping = $state(false);
+	let swipeDeltaX = $state(0);
+	let containerWidth = $state(0);
+
+	function onSwipeStart(e: PointerEvent) {
+		pointerIsDown = true;
+		swipeStartX = e.clientX;
+		swipeStartY = e.clientY;
+		isSwiping = false;
+	}
+
+	function onSwipeMove(e: PointerEvent) {
+		if (!pointerIsDown) return;
+		const el = e.currentTarget as HTMLElement;
+		const dx = e.clientX - swipeStartX;
+		const dy = e.clientY - swipeStartY;
+		if (!isSwiping && Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+			isSwiping = true;
+			el.setPointerCapture(e.pointerId);
+		}
+		if (isSwiping) swipeDeltaX = dx;
+	}
+
+	function onSwipeEnd(e: PointerEvent) {
+		pointerIsDown = false;
+		if (!isSwiping) return;
+		const dx = e.clientX - swipeStartX;
+		if (Math.abs(dx) > 40) s.setMode(!s.batchMode);
+		isSwiping = false;
+		swipeDeltaX = 0;
+	}
+
+	const gradientProgress = $derived(
+		(() => {
+			const base = s.batchMode ? 1 : 0;
+			if (!isSwiping || containerWidth === 0) return base;
+			const drag = swipeDeltaX / (containerWidth * 0.55);
+			return Math.max(0, Math.min(1, base + drag));
+		})()
+	);
+
+	const singleRollOpacity = $derived(1 - gradientProgress);
+	const multiRollOpacity = $derived(gradientProgress);
 </script>
 
 <div class="flex flex-col gap-6 px-4 py-6">
@@ -79,12 +127,51 @@
 				</div>
 			{/if}
 		{/if}
-		<TabBar
-			items={s.modeTabs}
-			value={s.batchMode ? 'battle' : 'rp'}
-			onchange={(v) => s.setMode(v === 'battle')}
-			bg="bg-stone-800"
-		/>
+	</div>
+
+	<!-- Animated mode label -->
+	<div
+		class="flex flex-col"
+		bind:clientWidth={containerWidth}
+		role="group"
+		aria-label="Mode selector — swipe to switch"
+		style="touch-action: pan-y"
+		onpointerdown={onSwipeStart}
+		onpointermove={onSwipeMove}
+		onpointerup={onSwipeEnd}
+		onpointercancel={onSwipeEnd}
+	>
+		<div class="relative h-7">
+			<div
+				class={[
+					'absolute left-0 flex items-center gap-2 transition-all duration-300',
+					singleRollOpacity > 0.5 ? 'text-accent' : 'text-stone-500'
+				]}
+				style={`opacity: ${singleRollOpacity}; pointer-events: ${singleRollOpacity > 0.1 ? 'auto' : 'none'};`}
+			>
+				<span class="mdi mdi-hexagon text-sm" aria-hidden="true"></span>
+				<span class="text-sm font-semibold">Single Roll</span>
+			</div>
+			<div
+				class={[
+					'absolute right-0 flex items-center gap-2 transition-all duration-300',
+					multiRollOpacity > 0.5 ? 'text-accent' : 'text-stone-500'
+				]}
+				style={`opacity: ${multiRollOpacity}; pointer-events: ${multiRollOpacity > 0.1 ? 'auto' : 'none'};`}
+			>
+				<span class="text-sm font-semibold">Multi Roll</span>
+				<span class="mdi mdi-hexagon-multiple-outline text-sm" aria-hidden="true"></span>
+			</div>
+		</div>
+
+		<!-- Animated gradient edge indicating mode + swipe affordance -->
+		<div
+			class={[
+				'accent-gradient h-1.5 overflow-hidden rounded-full',
+				!isSwiping && 'gradient-animate'
+			]}
+			style={`--gradient-pos: ${gradientProgress * 100}%;`}
+		></div>
 	</div>
 
 	<!-- Quick roll overlays -->
@@ -96,17 +183,84 @@
 	{/if}
 
 	<!-- Dice grid -->
-	<DiceGrid
-		batchMode={s.batchMode}
-		pressing={s.pressing}
-		selectedDie={s.selectedDie}
-		quickBatchQueue={s.quickBatchQueue}
-		batchEntries={s.batchEntries}
-		sessionRolls={s.sessionRolls}
-		onDieClick={(die) => s.handleDieClick(die)}
-		onConfirm={(roll) => s.addToSession(roll)}
-		onCancel={() => (s.selectedDie = null)}
-	/>
+	<div class={['relative rounded-xl transition-colors duration-300']}>
+		<DiceGrid
+			batchMode={s.batchMode}
+			pressing={s.pressing}
+			selectedDie={s.selectedDie}
+			quickBatchQueue={s.quickBatchQueue}
+			batchEntries={s.batchEntries}
+			sessionRolls={s.sessionRolls}
+			onDieClick={(die) => s.handleDieClick(die)}
+			onConfirm={(roll) => s.addToSession(roll)}
+			onCancel={() => (s.selectedDie = null)}
+		/>
+	</div>
+
+	<!-- Mode pills with flanking icons -->
+	<div
+		class="flex items-center justify-center gap-3"
+		role="group"
+		aria-label="Mode selector — swipe to switch"
+		style="touch-action: pan-y"
+		onpointerdown={onSwipeStart}
+		onpointermove={onSwipeMove}
+		onpointerup={onSwipeEnd}
+		onpointercancel={onSwipeEnd}
+	>
+		<button
+			type="button"
+			onclick={() => s.setMode(false)}
+			class="flex items-center justify-center"
+			aria-label="Single roll mode"
+		>
+			<span
+				class={[
+					'mdi mdi-hexagon-outline transition-all duration-200',
+					!s.batchMode ? 'text-accent scale-125' : 'scale-100 text-stone-600'
+				]}
+				style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+				aria-hidden="true"
+			></span>
+		</button>
+
+		<div class="flex items-center gap-1.5">
+			<button
+				type="button"
+				onclick={() => s.setMode(false)}
+				class={[
+					'h-1.5 w-6 rounded-full transition-colors duration-300',
+					!s.batchMode ? 'bg-accent' : 'bg-stone-600'
+				]}
+				aria-label="Single roll mode"
+			></button>
+			<button
+				type="button"
+				onclick={() => s.setMode(true)}
+				class={[
+					'h-1.5 w-6 rounded-full transition-colors duration-300',
+					s.batchMode ? 'bg-accent' : 'bg-stone-600'
+				]}
+				aria-label="Batch roll mode"
+			></button>
+		</div>
+
+		<button
+			type="button"
+			onclick={() => s.setMode(true)}
+			class="flex items-center justify-center"
+			aria-label="Batch roll mode"
+		>
+			<span
+				class={[
+					'mdi mdi-hexagon-multiple-outline transition-all duration-200',
+					s.batchMode ? 'text-accent scale-125' : 'scale-100 text-stone-600'
+				]}
+				style="transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1)"
+				aria-hidden="true"
+			></span>
+		</button>
+	</div>
 
 	<!-- Quick batch queue (Battle+Quick mode) -->
 	{#if s.batchMode && app.rollMode && s.quickBatchQueue.length > 0 && !s.quickBatchRolling}
@@ -123,7 +277,10 @@
 
 	<!-- Battle+Log batch panel -->
 	{#if s.batchMode && !app.rollMode && s.batchEntries.length > 0}
-		<BatchEntryPanel bind:entries={s.batchEntries} onConfirm={(rolls) => s.addBatchToSession(rolls)} />
+		<BatchEntryPanel
+			bind:entries={s.batchEntries}
+			onConfirm={(rolls) => s.addBatchToSession(rolls)}
+		/>
 	{/if}
 
 	<!-- Save error -->
@@ -134,3 +291,18 @@
 	<!-- Active session -->
 	<ActiveSessionPanel />
 </div>
+
+<style>
+	:global(.gradient-animate) {
+		transition: --gradient-pos 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	:global(.accent-gradient) {
+		background: linear-gradient(
+			90deg,
+			transparent calc(var(--gradient-pos) - 40%),
+			color-mix(in srgb, var(--accent) 60%, transparent) var(--gradient-pos),
+			transparent calc(var(--gradient-pos) + 40%)
+		);
+	}
+</style>

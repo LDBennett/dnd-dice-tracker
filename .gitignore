@@ -28,3 +28,5 @@ drizzle/
 # Claude
 .claude
 CLAUDE.MD
+docs
+session_summary.md
