@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { APIError } from 'better-auth/api';
 
-import { auth } from '$lib/server/auth';
+import { getAuth } from '$lib/server/auth';
 
 import type { Actions } from './$types';
 import type { PageServerLoad } from './$types';
@@ -20,7 +20,7 @@ export const actions: Actions = {
 		const password = formData.get('password')?.toString() ?? '';
 
 		try {
-			await auth.api.signInEmail({
+			await getAuth().api.signInEmail({
 				body: {
 					email,
 					password,
@@ -43,7 +43,7 @@ export const actions: Actions = {
 		const name = formData.get('name')?.toString() ?? '';
 
 		try {
-			await auth.api.signUpEmail({
+			await getAuth().api.signUpEmail({
 				body: {
 					email,
 					password,
