@@ -142,9 +142,17 @@
 		onpointerdown={onSwipeStart}
 		onpointermove={onSwipeMove}
 		onpointerup={onSwipeEnd}
-		class={['rounded-xl border-2 transition-colors duration-300', s.batchMode ? 'border-accent' : 'border-stone-700']}
+		class={['relative rounded-xl border-2 transition-colors duration-300', s.batchMode ? 'border-accent' : 'border-stone-700']}
 		style="touch-action: pan-y"
 	>
+		<span
+			class={['mdi mdi-chevron-left pointer-events-none absolute left-1.5 top-1/2 -translate-y-1/2 text-2xl transition-opacity duration-200', isSwiping ? 'opacity-60 text-accent' : 'opacity-20 text-stone-400']}
+			aria-hidden="true"
+		></span>
+		<span
+			class={['mdi mdi-chevron-right pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-2xl transition-opacity duration-200', isSwiping ? 'opacity-60 text-accent' : 'opacity-20 text-stone-400']}
+			aria-hidden="true"
+		></span>
 		<DiceGrid
 			batchMode={s.batchMode}
 			pressing={s.pressing}
