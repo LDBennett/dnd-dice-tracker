@@ -25,7 +25,7 @@ export class Session implements ISession {
 		this.saving = true;
 		this.saveError = null;
 		try {
-			const result = await submitRollSession(rolls, '', this.currentSessionId ?? undefined);
+			const result = await submitRollSession(rolls, this.currentSessionName, this.currentSessionId ?? undefined);
 			if (!this.currentSessionId) {
 				this.currentSessionId = result.sessionId;
 				this.rolledAt = new SvelteDate().toISOString();

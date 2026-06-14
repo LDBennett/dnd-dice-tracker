@@ -31,6 +31,7 @@
 	if (browser) {
 		app.session.currentSessionId = localStorage.getItem('currentSessionId');
 		app.session.rolledAt = localStorage.getItem('sessionRolledAt');
+		app.session.currentSessionName = localStorage.getItem('sessionName') ?? '';
 		app.theme = localStorage.getItem('theme') ?? 'default';
 		if (!untrack(() => data.user)) {
 			const saved = localStorage.getItem('guestSessionRolls');
@@ -59,6 +60,11 @@
 	$effect(() => {
 		if (app.session.rolledAt) localStorage.setItem('sessionRolledAt', app.session.rolledAt);
 		else localStorage.removeItem('sessionRolledAt');
+	});
+	$effect(() => {
+		if (app.session.currentSessionName)
+			localStorage.setItem('sessionName', app.session.currentSessionName);
+		else localStorage.removeItem('sessionName');
 	});
 	$effect(() => {
 		if (app.isGuest) {
