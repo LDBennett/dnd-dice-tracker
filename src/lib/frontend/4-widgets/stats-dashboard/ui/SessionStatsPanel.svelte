@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { DieBreakdown, TopDiceList } from '@fe-entities/die';
-	import type { SessionLuck,SessionRecord } from '@fe-shared/lib';
-	import { fmtDate,fmtLuck, luckClass, singleSessionStats } from '@fe-shared/lib';
-	import { StatCard } from '@fe-shared/ui';
+	import { DieBreakdown } from '@fe-entities/die';
+	import type { SessionLuck,SessionRecord } from '@fe-shared';
+	import { fmtDate,fmtLuck, luckClass, singleSessionStats } from '@fe-shared';
+	import { DieIcon, StatCard } from '@fe-shared/ui';
 
 	let {
 		session,
@@ -25,12 +25,17 @@
 
 <div class="grid grid-cols-2 gap-4">
 	<StatCard label="Total Rolls" value={stats.totalRolls} />
-	<StatCard label="Top Dice">
-		<div class="mt-1 flex gap-2">
-			{#if stats.topDice.length === 0}
-				<span class="text-4xl font-extrabold text-stone-600">—</span>
+	<StatCard label="Best Rolls">
+		<div class="mt-1 flex gap-3">
+			{#if stats.bestRolls.length === 0}
+				<span class="text-sm text-stone-500">No standout rolls yet</span>
 			{:else}
-				<TopDiceList dice={stats.topDice} />
+				{#each stats.bestRolls as roll}
+					<div class="flex flex-col items-center gap-0.5">
+						<DieIcon dieType={roll.dieType} size={28} />
+						<span class="text-sm font-bold text-white">{roll.value}</span>
+					</div>
+				{/each}
 			{/if}
 		</div>
 	</StatCard>

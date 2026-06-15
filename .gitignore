@@ -30,3 +30,5 @@ drizzle/
 CLAUDE.MD
 docs
 session_summary.md
+
+src/lib/frontend/5-routes--src.routes.md

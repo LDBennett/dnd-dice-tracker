@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { SessionLuck, SessionRecord } from '@fe-shared/lib';
-	import { fmtLuck, luckClass, sessionSummary } from '@fe-shared/lib';
+	import type { SessionLuck, SessionRecord } from '@fe-shared';
+	import { fmtLuck, luckClass, sessionSummary } from '@fe-shared';
 	import { DIE_COLOR } from '@fe-shared/ui';
 
 	interface Props {

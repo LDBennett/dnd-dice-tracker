@@ -3,15 +3,16 @@
 
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import type { Pathname } from '$app/types';
 
 	let {
-		href,
+		path,
 		label,
 		active,
 		icon,
 		animClass = ''
 	}: {
-		href: string;
+		path: Pathname;
 		label: string;
 		active: boolean;
 		icon: Snippet;
@@ -27,7 +28,8 @@
 				isAnimating = false;
 			}, 500);
 		}
-		goto(resolve(href));
+		const resolvedPath = resolve(path);
+		goto(resolvedPath);
 	}
 </script>
 

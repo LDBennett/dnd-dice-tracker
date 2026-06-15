@@ -52,7 +52,7 @@ export interface SingleSessionStats {
 	totalRolls: number;
 	nat20s: number;
 	nat1s: number;
-	topDice: number[];
+	bestRolls: Array<{ dieType: number; value: number }>;
 	luck: number | null;
 	breakdown: BreakdownEntry[];
 }

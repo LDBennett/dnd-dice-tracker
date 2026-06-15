@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getAppContext } from '@fe-shared/context';
-	import type { DieType } from '@fe-shared/lib';
+	import type { DieType } from '@fe-shared';
 	import { Badge } from '@fe-shared/ui';
 	import { fade } from 'svelte/transition';
 

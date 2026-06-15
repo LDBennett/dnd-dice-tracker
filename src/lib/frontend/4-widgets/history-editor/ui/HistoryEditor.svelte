@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SessionCard } from '@fe-entities/session';
 	import { getAppContext } from '@fe-shared/context';
-	import type { SessionRecord } from '@fe-shared/lib';
+	import type { SessionRecord } from '@fe-shared';
 	import { Button, SelectDropdown } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 

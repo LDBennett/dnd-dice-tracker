@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DieValuePicker } from '@fe-entities/die';
 	import { getAppContext } from '@fe-shared/context';
-	import type { DieType, RollResult } from '@fe-shared/lib';
+	import type { DieType, RollResult } from '@fe-shared';
 	import { Button, DIE_COLOR, IconButton, TabBar, TextInput } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 	import { backOut, cubicOut } from 'svelte/easing';

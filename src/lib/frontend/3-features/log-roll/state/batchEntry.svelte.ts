@@ -1,4 +1,4 @@
-import type { DieType } from '@fe-shared/lib';
+import type { DieType } from '@fe-shared';
 
 import type { BatchEntry } from '../types/log-roll.types';
 

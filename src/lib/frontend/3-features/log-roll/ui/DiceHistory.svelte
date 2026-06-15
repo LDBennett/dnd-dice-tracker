@@ -1,6 +1,6 @@
-﻿<script lang="ts">
-	import type { DieType, RollResult } from '@fe-shared/lib';
-	import { fmtDate } from '@fe-shared/lib';
+<script lang="ts">
+	import type { DieType, RollResult } from '@fe-shared';
+	import { fmtDate } from '@fe-shared';
 
 	interface HistoryEntry {
 		value: number;

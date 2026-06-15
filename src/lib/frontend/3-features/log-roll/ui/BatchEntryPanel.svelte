@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { RollResult } from '@fe-shared/lib';
+	import type { RollResult } from '@fe-shared';
 	import { Badge,Button, DIE_COLOR, IconButton, TextInput } from '@fe-shared/ui';
 
 	import { BatchEntryState } from '../state/batchEntry.svelte';

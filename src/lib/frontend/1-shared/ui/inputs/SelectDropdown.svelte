@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 
-	import type { SelectOption } from '../../lib/types/api-types';
+	import type { SelectOption } from '../../types/api-types';
 	import TextInput from './TextInput.svelte';
 
 	let {

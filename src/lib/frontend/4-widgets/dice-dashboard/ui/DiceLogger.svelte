@@ -9,7 +9,7 @@
 	import { getAppContext } from '@fe-shared/context';
 
 	import { DiceLoggerState } from '../state/diceLogger.svelte';
-	import { SwipeGesture } from '../utils/swipeGesture.svelte';
+	import { SwipeGesture } from '../state/swipeGesture.svelte';
 	import DiceGrid from './DiceGrid.svelte';
 	import ModeLabel from './ModeLabel.svelte';
 	import ModePills from './ModePills.svelte';

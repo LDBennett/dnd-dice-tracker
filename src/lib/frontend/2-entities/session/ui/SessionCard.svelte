@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { RollRecord, SessionRecord } from '@fe-shared/lib';
-	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/lib/utils/dice-utils';
+	import type { RollRecord, SessionRecord } from '@fe-shared';
+	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/utils/dice-utils';
 	import { Badge, ConfirmModal, IconButton, TextInput } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';

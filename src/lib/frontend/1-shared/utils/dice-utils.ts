@@ -99,15 +99,16 @@ export function singleSessionStats(session: SessionRecord): SingleSessionStats {
 		}))
 		.sort((a, b) => a.dieType - b.dieType);
 
-	const topDice = [...breakdown]
-		.sort((a, b) => b.count - a.count)
+	const bestRolls = [...session.rolls]
+		.filter((r) => r.value >= Math.ceil(r.dieType * 0.75))
+		.sort((a, b) => b.value - (b.dieType + 1) / 2 - (a.value - (a.dieType + 1) / 2))
 		.slice(0, 3)
-		.map((e) => e.dieType);
+		.map((r) => ({ dieType: r.dieType, value: r.value }));
 
 	const totalRolls = session.rolls.length;
 	const luck = totalRolls > 0 ? Number((luckDelta / totalRolls).toFixed(2)) : null;
 
-	return { totalRolls, nat20s, nat1s, topDice, luck, breakdown };
+	return { totalRolls, nat20s, nat1s, bestRolls, luck, breakdown };
 }
 
 export function fmtLuck(n: number): string {
