@@ -1,6 +1,6 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { DieValuePicker } from '@fe-entities/die';
-	import type { DieType } from '@fe-shared/lib';
+	import type { DieType } from '@fe-shared';
 	import { Button,DIE_COLOR, IconButton } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 	import { backOut, cubicOut } from 'svelte/easing';

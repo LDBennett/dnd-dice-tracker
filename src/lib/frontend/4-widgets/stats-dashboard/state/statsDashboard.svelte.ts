@@ -1,6 +1,6 @@
 import type { AppContext } from '@fe-shared/context';
-import type { BreakdownEntry, SessionLuck, SessionRecord } from '@fe-shared/lib';
-import { computeExtended, fmtDate } from '@fe-shared/lib';
+import type { BreakdownEntry, SessionLuck, SessionRecord } from '@fe-shared';
+import { computeExtended, fmtDate } from '@fe-shared';
 import { untrack } from 'svelte';
 import { cubicOut } from 'svelte/easing';
 import { Tween } from 'svelte/motion';

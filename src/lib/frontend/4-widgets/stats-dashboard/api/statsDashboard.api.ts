@@ -1,4 +1,4 @@
-import type { SessionRecord } from '@fe-shared/lib';
+import type { SessionRecord } from '@fe-shared';
 
 export interface DashboardData {
 	totalRolls: number;

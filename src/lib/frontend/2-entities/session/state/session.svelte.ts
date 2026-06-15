@@ -1,4 +1,4 @@
-import type { ISession, SessionRecord } from '@fe-shared/lib';
+import type { ISession, SessionRecord } from '@fe-shared';
 import { SvelteDate } from 'svelte/reactivity';
 
 import { submitRollSession, updateRollSession } from '../api/sessionApi';

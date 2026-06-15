@@ -1,4 +1,4 @@
-import type { RollResult } from '@fe-shared/lib';
+import type { RollResult } from '@fe-shared';
 
 export type { RollResult };
 

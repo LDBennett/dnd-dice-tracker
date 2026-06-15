@@ -1,4 +1,4 @@
-import type { RollRecord,SessionRecord } from '@fe-shared/lib';
+import type { RollRecord,SessionRecord } from '@fe-shared';
 import { untrack } from 'svelte';
 
 export class SessionCardState {

@@ -5,12 +5,12 @@
 
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 
 	import NavTabButton from './NavTabButton.svelte';
 
 	const app = getAppContext();
-	const currentPath = $derived($page.url.pathname);
+	const currentPath = $derived(page.url.pathname);
 
 	let isRollAnimating = $state(false);
 
@@ -50,7 +50,7 @@
 		>
 			<!-- History -->
 			<NavTabButton
-				href="/history"
+				path="/history"
 				label="History"
 				active={currentPath === '/history'}
 				animClass="anim-bounce"
@@ -78,7 +78,7 @@
 
 			<!-- Stats -->
 			<NavTabButton
-				href="/stats"
+				path="/stats"
 				label="Stats"
 				active={currentPath === '/stats'}
 				animClass="anim-pop"

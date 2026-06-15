@@ -1,8 +1,8 @@
 import { fetchSessions } from '@fe-entities/session';
 import type { BatchEntry } from '@fe-features/log-roll';
 import type { AppContext } from '@fe-shared/context';
-import type { DieType, RollResult, SessionRecord } from '@fe-shared/lib';
-import { trackEvent } from '@fe-shared/lib';
+import type { DieType, RollResult, SessionRecord } from '@fe-shared';
+import { trackEvent } from '@fe-shared';
 
 export class DiceLoggerState {
 	selectedDie = $state<DieType | null>(null);

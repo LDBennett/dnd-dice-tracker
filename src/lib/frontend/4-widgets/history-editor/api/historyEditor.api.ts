@@ -1,4 +1,4 @@
-import type { SessionRecord } from '@fe-shared/lib';
+import type { SessionRecord } from '@fe-shared';
 
 export async function fetchSessions(): Promise<SessionRecord[]> {
 	const res = await fetch('/api/rolls');

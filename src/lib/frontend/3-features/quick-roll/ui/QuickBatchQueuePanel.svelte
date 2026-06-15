@@ -1,5 +1,5 @@
-﻿<script lang="ts">
-	import type { DieType } from '@fe-shared/lib';
+<script lang="ts">
+	import type { DieType } from '@fe-shared';
 	import { DIE_COLOR } from '@fe-shared/ui';
 
 	let {

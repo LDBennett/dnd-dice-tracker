@@ -1,4 +1,4 @@
-export type { SelectOption } from '../lib/types/api-types';
+export type { SelectOption } from '../types/api-types';
 export { default as Badge } from './badges/Badge.svelte';
 export { default as Logo } from './brand/Logo.svelte';
 export { default as Button } from './buttons/Button.svelte';

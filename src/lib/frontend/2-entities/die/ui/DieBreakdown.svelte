@@ -1,6 +1,6 @@
-﻿<script lang="ts">
-	import type { BreakdownEntry } from '@fe-shared/lib';
-	import { fmtLuck, luckClass } from '@fe-shared/lib';
+<script lang="ts">
+	import type { BreakdownEntry } from '@fe-shared';
+	import { fmtLuck, luckClass } from '@fe-shared';
 	import { DIE_COLOR, DieIcon } from '@fe-shared/ui';
 
 	let { breakdown }: { breakdown: BreakdownEntry[] } = $props();

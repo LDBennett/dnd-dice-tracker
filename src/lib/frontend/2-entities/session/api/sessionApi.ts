@@ -1,4 +1,4 @@
-import type { SessionRecord } from '@fe-shared/lib';
+import type { SessionRecord } from '@fe-shared';
 
 import type { RollResult, SubmitResult } from '../types/session.types';
 export type { RollResult, SubmitResult };

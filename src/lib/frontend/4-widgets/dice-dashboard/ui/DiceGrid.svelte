@@ -2,7 +2,7 @@
 	import type { BatchEntry } from '@fe-features/log-roll';
 	import { RollEntryCard } from '@fe-features/log-roll';
 	import { getAppContext } from '@fe-shared/context';
-	import type { DieType, RollResult } from '@fe-shared/lib';
+	import type { DieType, RollResult } from '@fe-shared';
 	import { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from '@fe-shared/ui';
 
 	const DICE: DieType[] = [4, 6, 8, 10, 12, 20, 100];

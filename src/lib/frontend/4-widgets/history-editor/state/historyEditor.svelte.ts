@@ -1,6 +1,6 @@
 import type { AppContext } from '@fe-shared/context';
-import type { RollRecord,SessionRecord } from '@fe-shared/lib';
-import { fmtDate } from '@fe-shared/lib';
+import type { RollRecord,SessionRecord } from '@fe-shared';
+import { fmtDate } from '@fe-shared';
 import { untrack } from 'svelte';
 
 import {
