@@ -1,11 +1,11 @@
-﻿<script lang="ts">
+<script lang="ts">
 	import { Session } from '@fe-entities/session';
 	import { LoginModal } from '@fe-features/authenticate';
-	import { ThemePickerModal } from '@fe-features/pick-theme';
-	import { HandednessToggle } from '@fe-features/toggle-handedness';
+	import { ThemePicker } from '@fe-features/pick-theme';
+	import { HandednessToggle } from '@fe-features/handedness';
 	import { APP_CONTEXT_KEY,AppContext } from '@fe-shared/context';
 	import { BottomNav } from '@fe-widgets/bottom-nav';
-	import { NavBar } from '@fe-widgets/nav-bar';
+	import { NavBar } from '@fe-widgets/top-nav';
 	import { setContext, untrack } from 'svelte';
 
 	import { browser } from '$app/environment';
@@ -98,4 +98,4 @@
 </div>
 
 <LoginModal bind:open={app.showLogin} />
-<ThemePickerModal bind:open={app.showThemePicker} />
+<ThemePicker bind:open={app.showThemePicker} />

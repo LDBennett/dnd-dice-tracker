@@ -7,8 +7,8 @@
 	import { fade, scale } from 'svelte/transition';
 
 	import { SessionCardState } from '../state/sessionCard.svelte';
-	import EditRollModal from './EditRollModal.svelte';
-	import RollGridCell from './RollGridCell.svelte';
+	import EditRollModal from './SessionCard.EditRollModal.svelte';
+	import RollGridCell from './SessionCard.RollGridCell.svelte';
 
 	let {
 		session,

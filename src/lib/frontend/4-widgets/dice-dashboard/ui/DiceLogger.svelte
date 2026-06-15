@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { ActiveSessionPanel } from '@fe-features/active-session';
-	import { BatchEntryPanel } from '@fe-features/log-roll';
+	import { BatchEntryPanel } from '@fe-features/roll-entry';
 	import {
 		QuickBatchQueuePanel,
 		QuickBatchRollOverlay,
 		QuickRollOverlay
-	} from '@fe-features/quick-roll';
+	} from '@fe-features/roll-auto';
 	import { getAppContext } from '@fe-shared/context';
 
 	import { DiceLoggerState } from '../state/diceLogger.svelte';
 	import { SwipeGesture } from '../state/swipeGesture.svelte';
-	import DiceGrid from './DiceGrid.svelte';
-	import ModeLabel from './ModeLabel.svelte';
-	import ModePills from './ModePills.svelte';
-	import SessionHeader from './SessionHeader.svelte';
+	import Grid from './DiceLogger.Grid.svelte';
+	import ModeLabel from './DiceLogger.ModeLabel.svelte';
+	import ModePills from './DiceLogger.ModePills.svelte';
+	import SessionHeader from './DiceLogger.SessionHeader.svelte';
 
 	const app = getAppContext();
 	const s = new DiceLoggerState(app);
@@ -55,7 +55,7 @@
 	{/if}
 
 	<div class="relative rounded-xl transition-colors duration-300">
-		<DiceGrid
+		<Grid
 			batchMode={s.batchMode}
 			pressing={s.pressing}
 			selectedDie={s.selectedDie}

@@ -8,8 +8,8 @@
 	import { resolve } from '$app/paths';
 
 	import { StatsDashboardState } from '../state/statsDashboard.svelte';
-	import LuckBreakdownPanel from './LuckBreakdownPanel.svelte';
-	import SessionStatsPanel from './SessionStatsPanel.svelte';
+	import LuckBreakdown from './StatsDashboard.LuckBreakdown.svelte';
+	import SessionStats from './StatsDashboard.SessionStats.svelte';
 
 	interface Props {
 		totalRolls: number;
@@ -85,7 +85,7 @@
 		</div>
 
 		{#if s.luckExpanded && s.sessionLucks.length > 0}
-			<LuckBreakdownPanel
+			<LuckBreakdown
 				sessionLucks={s.sessionLucks}
 				expandedSessionId={s.expandedSessionId}
 				allSessions={s.allSessions}
@@ -119,7 +119,7 @@
 			</a>
 		{/if}
 		{#if s.selectedSession !== null}
-			<SessionStatsPanel
+			<SessionStats
 				session={s.selectedSession}
 				sessionLucks={s.sessionLucks}
 				avgLuckPerSession={s.avgLuckPerSession}

@@ -3,7 +3,7 @@
 	import { Modal } from '@fe-shared/ui';
 	import { THEMES } from '@fe-shared/ui';
 
-	import ThemeCard from './ThemeCard.svelte';
+	import ThemeCard from './ThemePicker.Card.svelte';
 
 	let { open = $bindable(false) }: { open?: boolean } = $props();
 

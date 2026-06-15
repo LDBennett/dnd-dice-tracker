@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { BatchEntry } from '@fe-features/log-roll';
-	import { RollEntryCard } from '@fe-features/log-roll';
+	import type { BatchEntry } from '@fe-features/roll-entry';
+	import { RollEntryCard } from '@fe-features/roll-entry';
 	import { getAppContext } from '@fe-shared/context';
 	import type { DieType, RollResult } from '@fe-shared';
 	import { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from '@fe-shared/ui';

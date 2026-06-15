@@ -1,1 +1,1 @@
-export { default as ThemePickerModal } from './ui/ThemePickerModal.svelte';
+export { default as ThemePicker } from './ui/ThemePicker.svelte';
