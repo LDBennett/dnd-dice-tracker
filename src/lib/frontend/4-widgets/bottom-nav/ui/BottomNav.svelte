@@ -7,7 +7,7 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 
-	import NavTabButton from './NavTabButton.svelte';
+	import TabButton from './BottomNav.TabButton.svelte';
 
 	const app = getAppContext();
 	const currentPath = $derived(page.url.pathname);
@@ -49,7 +49,7 @@
 			style="mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px); -webkit-mask-image: radial-gradient(circle 36px at 50% 0%, transparent 35px, black 36px);"
 		>
 			<!-- History -->
-			<NavTabButton
+			<TabButton
 				path="/history"
 				label="History"
 				active={currentPath === '/history'}
@@ -71,13 +71,13 @@
 						<path d="M9 12h6M9 16h4" />
 					</svg>
 				{/snippet}
-			</NavTabButton>
+			</TabButton>
 
 			<!-- Center spacer (layout only — mode button is absolute sibling below) -->
 			<div class="w-18 shrink-0"></div>
 
 			<!-- Stats -->
-			<NavTabButton
+			<TabButton
 				path="/stats"
 				label="Stats"
 				active={currentPath === '/stats'}
@@ -97,7 +97,7 @@
 						<path d="M18 20V10M12 20V4M6 20v-6" />
 					</svg>
 				{/snippet}
-			</NavTabButton>
+			</TabButton>
 		</div>
 
 		<!-- Mode toggle: sits above the roll button in z-order so its label area is tappable -->

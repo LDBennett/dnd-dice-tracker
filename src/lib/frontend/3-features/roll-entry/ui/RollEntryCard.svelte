@@ -7,7 +7,7 @@
 	import { backOut, cubicOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
 
-	import DiceHistory from './DiceHistory.svelte';
+	import DiceHistory from './RollEntryCard.DiceHistory.svelte';
 
 	let {
 		die,
