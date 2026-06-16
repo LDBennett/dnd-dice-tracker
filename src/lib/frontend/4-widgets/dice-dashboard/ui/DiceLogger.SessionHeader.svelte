@@ -14,34 +14,46 @@
 
 {#if !app.isGuest}
 	<div class="flex flex-col gap-2">
-		<div class="flex items-center gap-3 rounded-2xl bg-stone-800/60 px-4 py-2.5">
-			<div class="flex min-w-0 flex-1 flex-col gap-0.5">
-				<div class="flex items-center gap-1.5">
-					{#if s.editingTitle}
-						<TextInput
-							id="session-name"
-							bind:value={s.titleDraft}
-							onblur={s.commitTitle}
-							onkeydown={(e: KeyboardEvent) => s.onTitleKeydown(e)}
-							placeholder="Unnamed session"
-							autofocus
-							class="font-semibold"
-						/>
-					{:else if app.session.currentSessionId !== null}
-						<span class="truncate text-sm font-semibold text-white"
-							>{app.session.currentSessionName || 'Unnamed session'}</span
-						>
-						<IconButton icon="mdi-pencil-outline" size="sm" onclick={() => s.startEditTitle()} />
-					{:else}
-						<span class="text-sm font-semibold text-stone-500">No session</span>
+		<div class="flex items-center gap-2 border-b border-stone-700/40 pb-2">
+			<!-- Status dot -->
+			<span
+				class={[
+					'size-2 shrink-0 rounded-full',
+					app.session.currentSessionId !== null ? 'bg-green-400' : 'bg-stone-500'
+				]}
+			></span>
+
+			<!-- Name / edit input -->
+			<div class="flex min-w-0 flex-1 items-center gap-1.5">
+				{#if s.editingTitle}
+					<TextInput
+						id="session-name"
+						bind:value={s.titleDraft}
+						onblur={() => s.commitTitle()}
+						onkeydown={(e: KeyboardEvent) => s.onTitleKeydown(e)}
+						placeholder="Unnamed session"
+						autofocus
+						class="font-semibold"
+					/>
+				{:else if app.session.currentSessionId !== null}
+					<span class="truncate text-sm font-semibold text-white">
+						{app.session.currentSessionName || 'Unnamed session'}
+					</span>
+					<IconButton
+						icon="mdi-application-edit-outline"
+						size="sm"
+						onclick={() => s.startEditTitle()}
+					/>
+					{#if app.session.rolledAt !== null}
+						<span class="shrink-0 text-xs text-stone-500">
+							· {fmtDate(app.session.rolledAt)} · {fmtTime(app.session.rolledAt)}
+						</span>
 					{/if}
-				</div>
-				{#if app.session.rolledAt !== null}
-					<p class="text-xs text-stone-500">
-						{fmtDate(app.session.rolledAt)} · {fmtTime(app.session.rolledAt)}
-					</p>
+				{:else}
+					<span class="text-sm font-semibold text-stone-500">No session</span>
 				{/if}
 			</div>
+
 			<DropdownMenu items={s.sessionMenuItems as DropdownItem[]} direction="down" align="right">
 				{#snippet trigger(toggle)}
 					<IconButton icon="mdi-dots-vertical" size="sm" onclick={toggle} />

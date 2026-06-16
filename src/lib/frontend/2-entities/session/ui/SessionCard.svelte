@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { RollRecord, SessionRecord } from '@fe-shared';
-	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/utils/dice-utils';
 	import { Badge, ConfirmModal, IconButton, TextInput } from '@fe-shared/ui';
+	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/utils/dice-utils';
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
 
 	import { SessionCardState } from '../state/sessionCard.svelte';
+	import AddRollRow from './SessionCard.AddRollRow.svelte';
 	import EditRollModal from './SessionCard.EditRollModal.svelte';
 	import RollGridCell from './SessionCard.RollGridCell.svelte';
 
@@ -34,11 +35,19 @@
 
 	const s = new SessionCardState(untrack(() => session));
 
-	// Live mode: append new rolls without overwriting in-progress edits; reset on clear
+	// Live mode: reset on session switch; append new rolls without overwriting in-progress edits
 	$effect(() => {
 		if (!live) return;
 		const incoming = session;
-		const localLen = untrack(() => s.rolls.length);
+		const [localLen, localSessionId] = untrack(() => [s.rolls.length, s.sessionId]);
+
+		if (localSessionId !== incoming.id) {
+			s.sessionId = incoming.id;
+			s.rolls = incoming.rolls.map((r) => ({ ...r }));
+			s.name = incoming.name;
+			return;
+		}
+
 		if (incoming.rolls.length === 0) {
 			s.rolls = [];
 			s.name = incoming.name;
@@ -138,6 +147,21 @@
 		<Badge variant="neutral" class="mt-2 self-start">
 			modifier {session.modifier >= 0 ? `+${session.modifier}` : session.modifier}
 		</Badge>
+	{/if}
+
+	<!-- Add Roll -->
+	{#if !isGuest && editMode}
+		{#if s.addingRoll}
+			<AddRollRow {s} sessionId={session.id} {onSaveRolls} />
+		{:else}
+			<button
+				type="button"
+				onclick={() => (s.addingRoll = true)}
+				class="mx-auto mt-3 flex items-center gap-1 text-xs text-stone-500 transition hover:text-white"
+			>
+				<span class="mdi mdi-invoice-plus-outline"></span> Add Roll
+			</button>
+		{/if}
 	{/if}
 
 	<!-- Save indicator -->
