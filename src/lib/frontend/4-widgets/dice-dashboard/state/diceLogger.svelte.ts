@@ -1,8 +1,8 @@
 import { fetchSessions } from '@fe-entities/session';
 import type { BatchEntry } from '@fe-features/roll-entry';
-import type { AppContext } from '@fe-shared/context';
 import type { DieType, RollResult, SessionRecord } from '@fe-shared';
 import { trackEvent } from '@fe-shared';
+import type { AppContext } from '@fe-shared/context';
 
 export class DiceLoggerState {
 	selectedDie = $state<DieType | null>(null);
@@ -32,7 +32,7 @@ export class DiceLoggerState {
 			}
 		},
 		{
-			label: 'Continue',
+			label: 'Resume',
 			icon: 'mdi-play-circle-outline',
 			onclick: () => this.openPicker()
 		}
