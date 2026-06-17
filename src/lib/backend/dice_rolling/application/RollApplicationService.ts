@@ -72,6 +72,12 @@ export class RollApplicationService {
 		};
 	}
 
+	async getLatestSession(userId: string) {
+		const session = await rollRepo.findLatestByUserId(userId);
+		if (!session) return null;
+		return { ...session, rolls: [...session.rolls].reverse() };
+	}
+
 	async getSessionHistory(userId: string) {
 		return rollRepo.findByUserId(userId);
 	}

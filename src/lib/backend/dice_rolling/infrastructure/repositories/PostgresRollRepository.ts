@@ -1,4 +1,4 @@
-import { and,desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 import { db } from '$lib/server/db';
 import { dbRollSessions } from '$lib/server/db/schema';
@@ -58,6 +58,16 @@ export class PostgresRollRepository {
 			.orderBy(desc(dbRollSessions.rolledAt))
 			.limit(100);
 		return this.mapRows(rows);
+	}
+
+	async findLatestByUserId(userId: string): Promise<SessionRecord | null> {
+		const rows = await db
+			.select()
+			.from(dbRollSessions)
+			.where(eq(dbRollSessions.userId, userId))
+			.orderBy(desc(dbRollSessions.rolledAt))
+			.limit(1);
+		return this.mapRows(rows)[0] ?? null;
 	}
 
 	async findAll(): Promise<SessionRecord[]> {
