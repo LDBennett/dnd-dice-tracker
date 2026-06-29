@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { RollResult } from '@fe-shared';
-	import { Badge,Button, DIE_COLOR, IconButton, TextInput } from '@fe-shared/ui';
+	import { Badge, Button, DIE_COLOR, IconButton, TextInput } from '@fe-shared/ui';
 
 	import { BatchEntryState } from '../state/batchEntry.svelte';
 	import type { BatchEntry } from '../types/log-roll.types';
@@ -38,7 +38,9 @@
 
 	function confirm() {
 		if (entries.length === 0) return;
-		onConfirm(entries.map((e) => ({ dieType: e.dieType, value: e.value, note: s.batchNote.trim() })));
+		onConfirm(
+			entries.map((e) => ({ dieType: e.dieType, value: e.value, note: s.batchNote.trim() }))
+		);
 		entries = [];
 		s.reset();
 	}
@@ -91,10 +93,16 @@
 	<!-- Quick fill -->
 	<div class="mb-4">
 		<div class="flex gap-2">
-			<TextInput bind:value={s.quickFill} placeholder="Quick fill: 14, 6, 3" class="min-w-0 flex-1" />
+			<TextInput
+				bind:value={s.quickFill}
+				placeholder="Quick fill: 14, 6, 3"
+				class="min-w-0 flex-1"
+			/>
 			<button
 				type="button"
-				onclick={() => { entries = s.applyQuickFill(entries); }}
+				onclick={() => {
+					entries = s.applyQuickFill(entries);
+				}}
 				disabled={!quickFillReady}
 				class="shrink-0 rounded-xl bg-stone-700 px-4 py-2.5 text-sm font-semibold text-stone-300 transition hover:bg-stone-600 hover:text-white disabled:opacity-40"
 				>Apply</button

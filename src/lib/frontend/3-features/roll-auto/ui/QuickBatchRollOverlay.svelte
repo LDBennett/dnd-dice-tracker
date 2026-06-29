@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { DieType } from '@fe-shared';
-	import { Badge,DIE_COLOR } from '@fe-shared/ui';
+	import { Badge, DIE_COLOR } from '@fe-shared/ui';
 	import { onMount } from 'svelte';
 	import { backOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';

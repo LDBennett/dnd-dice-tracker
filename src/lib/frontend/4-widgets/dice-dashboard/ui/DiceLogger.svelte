@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { ActiveSessionPanel } from '@fe-features/active-session';
-	import { BatchEntryPanel } from '@fe-features/roll-entry';
 	import {
 		QuickBatchQueuePanel,
 		QuickBatchRollOverlay,
 		QuickRollOverlay
 	} from '@fe-features/roll-auto';
+	import { BatchEntryPanel } from '@fe-features/roll-entry';
 	import { getAppContext } from '@fe-shared/context';
 
 	import { DiceLoggerState } from '../state/diceLogger.svelte';

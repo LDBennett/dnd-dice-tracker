@@ -1,12 +1,13 @@
-import type { AppContext } from '@fe-shared/context';
-import type { RollRecord,SessionRecord } from '@fe-shared';
+import type { RollRecord, SessionRecord } from '@fe-shared';
 import { fmtDate } from '@fe-shared';
+import type { AppContext } from '@fe-shared/context';
 import { untrack } from 'svelte';
 
 import {
 	deleteSession as apiDeleteSession,
 	fetchSessions as apiFetchSessions,
-	patchSession} from '../api/historyEditor.api';
+	patchSession
+} from '../api/historyEditor.api';
 
 export class HistoryEditorState {
 	sessions = $state<SessionRecord[]>([]);

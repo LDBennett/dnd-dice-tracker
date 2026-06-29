@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getAppContext } from '@fe-shared/context';
 	import type { SessionRecord } from '@fe-shared';
 	import { fmtDate, fmtTime } from '@fe-shared';
+	import { getAppContext } from '@fe-shared/context';
 	import type { DropdownItem } from '@fe-shared/ui';
 	import { DropdownMenu, IconButton, TextInput } from '@fe-shared/ui';
 

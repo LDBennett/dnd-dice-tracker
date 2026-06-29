@@ -77,12 +77,7 @@
 			<div class="w-18 shrink-0"></div>
 
 			<!-- Stats -->
-			<TabButton
-				path="/stats"
-				label="Stats"
-				active={currentPath === '/stats'}
-				animClass="anim-pop"
-			>
+			<TabButton path="/stats" label="Stats" active={currentPath === '/stats'} animClass="anim-pop">
 				{#snippet icon()}
 					<svg
 						width="22"

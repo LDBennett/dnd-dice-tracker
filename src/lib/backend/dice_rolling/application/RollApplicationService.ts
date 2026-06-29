@@ -1,3 +1,5 @@
+import { db } from '$lib/server/db';
+
 import { PlayerStats } from '../domain/models/PlayerStats';
 import type { DiceResult } from '../domain/models/RollSession';
 import { RollSession } from '../domain/models/RollSession';
@@ -25,9 +27,10 @@ export class RollApplicationService {
 			stats.recordRoll(roll.dieType, roll.value);
 		}
 
-		// TODO: wrap in db.transaction for atomicity
-		await rollRepo.save(session);
-		await statsRepo.save(stats);
+		await db.transaction(async (tx) => {
+			await rollRepo.save(session, tx);
+			await statsRepo.save(stats, tx);
+		});
 
 		return { sessionId: session.id, total: session.totalScore, rolls: session.getRolls() };
 	}
@@ -52,8 +55,15 @@ export class RollApplicationService {
 			stats.recordRoll(roll.dieType, roll.value);
 		}
 
-		await rollRepo.updateSession(sessionId, userId, { rolls: [...existing.rolls, ...newRolls] });
-		await statsRepo.save(stats);
+		await db.transaction(async (tx) => {
+			await rollRepo.updateSession(
+				sessionId,
+				userId,
+				{ rolls: [...existing.rolls, ...newRolls] },
+				tx
+			);
+			await statsRepo.save(stats, tx);
+		});
 
 		return {
 			sessionId,
@@ -111,8 +121,10 @@ export class RollApplicationService {
 				for (const roll of fields.rolls) {
 					stats.recordRoll(roll.dieType, roll.value);
 				}
-				await rollRepo.updateSession(sessionId, userId, fields);
-				await statsRepo.save(stats);
+				await db.transaction(async (tx) => {
+					await rollRepo.updateSession(sessionId, userId, fields, tx);
+					await statsRepo.save(stats, tx);
+				});
 				return;
 			}
 		}
@@ -128,8 +140,10 @@ export class RollApplicationService {
 			stats.removeRoll(roll.dieType, roll.value);
 		}
 
-		await rollRepo.deleteSession(sessionId, userId);
-		await statsRepo.save(stats);
+		await db.transaction(async (tx) => {
+			await rollRepo.deleteSession(sessionId, userId, tx);
+			await statsRepo.save(stats, tx);
+		});
 	}
 
 	async recalculateStats(userId: string): Promise<void> {

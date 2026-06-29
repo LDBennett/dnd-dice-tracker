@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Session } from '@fe-entities/session';
 	import { LoginModal } from '@fe-features/authenticate';
-	import { ThemePicker } from '@fe-features/pick-theme';
 	import { HandednessToggle } from '@fe-features/handedness';
-	import { APP_CONTEXT_KEY,AppContext } from '@fe-shared/context';
+	import { ThemePicker } from '@fe-features/pick-theme';
+	import { persist } from '@fe-shared';
+	import { APP_CONTEXT_KEY, AppContext } from '@fe-shared/context';
 	import { BottomNav } from '@fe-widgets/bottom-nav';
 	import { NavBar } from '@fe-widgets/top-nav';
 	import { setContext, untrack } from 'svelte';
@@ -47,36 +48,27 @@
 	}
 
 	$effect(() => {
-		localStorage.setItem('rollMode', app.rollMode ? 'quick' : 'log');
+		persist('rollMode', app.rollMode ? 'quick' : 'log');
 	});
 	$effect(() => {
-		localStorage.setItem('handedness', app.rightHanded ? 'right' : 'left');
+		persist('handedness', app.rightHanded ? 'right' : 'left');
 	});
 	$effect(() => {
-		if (app.session.currentSessionId)
-			localStorage.setItem('currentSessionId', app.session.currentSessionId);
-		else localStorage.removeItem('currentSessionId');
+		persist('currentSessionId', app.session.currentSessionId);
 	});
 	$effect(() => {
-		if (app.session.rolledAt) localStorage.setItem('sessionRolledAt', app.session.rolledAt);
-		else localStorage.removeItem('sessionRolledAt');
+		persist('sessionRolledAt', app.session.rolledAt);
 	});
 	$effect(() => {
-		if (app.session.currentSessionName)
-			localStorage.setItem('sessionName', app.session.currentSessionName);
-		else localStorage.removeItem('sessionName');
+		persist('sessionName', app.session.currentSessionName || null);
 	});
 	$effect(() => {
-		if (app.isGuest) {
-			if (app.session.currentSessionRolls.length > 0)
-				localStorage.setItem('guestSessionRolls', JSON.stringify(app.session.currentSessionRolls));
-			else localStorage.removeItem('guestSessionRolls');
-		} else {
-			localStorage.removeItem('guestSessionRolls');
-		}
+		persist('theme', app.theme);
 	});
 	$effect(() => {
-		localStorage.setItem('theme', app.theme);
+		if (app.isGuest && app.session.currentSessionRolls.length > 0)
+			persist('guestSessionRolls', JSON.stringify(app.session.currentSessionRolls));
+		else localStorage.removeItem('guestSessionRolls');
 	});
 	$effect(() => {
 		document.documentElement.dataset.theme = app.theme;

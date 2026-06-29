@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 
-import { db } from '$lib/server/db';
+import { db, type Tx } from '$lib/server/db';
 import { dbPlayerStats } from '$lib/server/db/schema';
 
 import { PlayerStats } from '../../domain/models/PlayerStats';
@@ -28,8 +28,8 @@ export class PostgresStatsRepository {
 		);
 	}
 
-	async save(stats: PlayerStats): Promise<void> {
-		await db
+	async save(stats: PlayerStats, tx?: Tx): Promise<void> {
+		await (tx ?? db)
 			.insert(dbPlayerStats)
 			.values({
 				userId: stats.userId,

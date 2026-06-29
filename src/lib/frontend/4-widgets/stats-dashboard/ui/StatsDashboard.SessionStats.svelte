@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { DieBreakdown } from '@fe-entities/die';
-	import type { SessionLuck,SessionRecord } from '@fe-shared';
-	import { fmtDate,fmtLuck, luckClass, singleSessionStats } from '@fe-shared';
+	import type { SessionLuck, SessionRecord } from '@fe-shared';
+	import { fmtDate, fmtLuck, luckClass, singleSessionStats } from '@fe-shared';
 	import { DieIcon, StatCard } from '@fe-shared/ui';
 
 	let {

@@ -19,6 +19,24 @@ export class SessionCardState {
 		this.rolls = untrack(() => session.rolls.map((r) => ({ ...r })));
 	}
 
+	syncLive(incoming: SessionRecord): void {
+		if (this.sessionId !== incoming.id) {
+			this.sessionId = incoming.id;
+			this.rolls = incoming.rolls.map((r) => ({ ...r }));
+			this.name = incoming.name;
+			return;
+		}
+		if (incoming.rolls.length === 0) {
+			this.rolls = [];
+			this.name = incoming.name;
+		} else if (incoming.rolls.length > this.rolls.length) {
+			this.rolls = [
+				...untrack(() => this.rolls),
+				...incoming.rolls.slice(this.rolls.length).map((r) => ({ ...r }))
+			];
+		}
+	}
+
 	handleEditConfirm(
 		index: number,
 		value: number,
@@ -51,7 +69,11 @@ export class SessionCardState {
 		onDelete: (id: string) => void
 	) {
 		const updated = this.rolls.filter((_, i) => i !== index);
-		if (updated.length === 0) onDelete(sessionId);
-		else onSaveRolls(sessionId, updated);
+		if (updated.length === 0) {
+			onDelete(sessionId);
+		} else {
+			this.rolls = updated;
+			onSaveRolls(sessionId, updated);
+		}
 	}
 }

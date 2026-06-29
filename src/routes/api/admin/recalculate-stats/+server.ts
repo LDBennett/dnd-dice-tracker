@@ -1,6 +1,6 @@
-import { error,json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 
-import { RollApplicationService } from '$lib/backend/dice_rolling/application/RollApplicationService';
+import { RollApplicationService } from '$lib/backend/dice_rolling';
 
 import type { RequestHandler } from './$types';
 

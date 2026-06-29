@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SessionCard } from '@fe-entities/session';
-	import { getAppContext } from '@fe-shared/context';
 	import type { SessionRecord } from '@fe-shared';
+	import { getAppContext } from '@fe-shared/context';
 	import { Button, SelectDropdown } from '@fe-shared/ui';
 	import { untrack } from 'svelte';
 
@@ -12,7 +12,10 @@
 	}
 	let { initialSessionId = null }: Props = $props();
 
-	const s = new HistoryEditorState(untrack(() => initialSessionId ?? ''), getAppContext());
+	const s = new HistoryEditorState(
+		untrack(() => initialSessionId ?? ''),
+		getAppContext()
+	);
 </script>
 
 <div class="px-4 py-6">

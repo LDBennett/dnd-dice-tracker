@@ -12,7 +12,8 @@ const corsHeaders = {
 	'Access-Control-Allow-Methods': 'GET, OPTIONS'
 };
 
-export const OPTIONS: RequestHandler = () => new Response(null, { status: 204, headers: corsHeaders });
+export const OPTIONS: RequestHandler = () =>
+	new Response(null, { status: 204, headers: corsHeaders });
 
 export const GET: RequestHandler = async () => {
 	if (!env.WIDGET_USER_ID) {

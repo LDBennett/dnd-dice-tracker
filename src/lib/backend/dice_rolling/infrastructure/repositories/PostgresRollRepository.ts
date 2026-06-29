@@ -1,6 +1,6 @@
 import { and, desc, eq } from 'drizzle-orm';
 
-import { db } from '$lib/server/db';
+import { db, type Tx } from '$lib/server/db';
 import { dbRollSessions } from '$lib/server/db/schema';
 
 import type { RollSession } from '../../domain/models/RollSession';
@@ -39,8 +39,8 @@ export class PostgresRollRepository {
 		});
 	}
 
-	async save(session: RollSession): Promise<void> {
-		await db.insert(dbRollSessions).values({
+	async save(session: RollSession, tx?: Tx): Promise<void> {
+		await (tx ?? db).insert(dbRollSessions).values({
 			id: session.id,
 			userId: session.userId,
 			rolls: session.getRolls() as unknown as object,
@@ -92,20 +92,21 @@ export class PostgresRollRepository {
 	async updateSession(
 		sessionId: string,
 		userId: string,
-		fields: { name?: string; rolls?: RollRecord[] }
+		fields: { name?: string; rolls?: RollRecord[] },
+		tx?: Tx
 	): Promise<void> {
 		const update: Record<string, unknown> = {};
 		if (fields.name !== undefined) update.name = fields.name;
 		if (fields.rolls !== undefined) update.rolls = fields.rolls;
 
-		await db
+		await (tx ?? db)
 			.update(dbRollSessions)
 			.set(update)
 			.where(and(eq(dbRollSessions.id, sessionId), eq(dbRollSessions.userId, userId)));
 	}
 
-	async deleteSession(sessionId: string, userId: string): Promise<void> {
-		await db
+	async deleteSession(sessionId: string, userId: string, tx?: Tx): Promise<void> {
+		await (tx ?? db)
 			.delete(dbRollSessions)
 			.where(and(eq(dbRollSessions.id, sessionId), eq(dbRollSessions.userId, userId)));
 	}

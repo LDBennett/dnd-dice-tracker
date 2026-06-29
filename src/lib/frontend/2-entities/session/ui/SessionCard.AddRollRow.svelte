@@ -53,11 +53,7 @@
 			class="w-16 shrink-0 rounded-lg bg-stone-700/60 px-2 py-1.5 text-center text-sm text-white outline-none focus:ring-1 focus:ring-stone-500"
 			aria-label="Roll value"
 		/>
-		<TextInput
-			bind:value={s.addRollNote}
-			placeholder="Note (optional)"
-			class="flex-1 text-sm"
-		/>
+		<TextInput bind:value={s.addRollNote} placeholder="Note (optional)" class="flex-1 text-sm" />
 		<IconButton
 			icon="mdi-check"
 			size="sm"

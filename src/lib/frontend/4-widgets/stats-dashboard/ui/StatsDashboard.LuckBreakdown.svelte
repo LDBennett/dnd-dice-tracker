@@ -18,9 +18,9 @@
 		Luck per Session
 	</h3>
 	<p class="mb-4 text-xs leading-relaxed text-stone-500">
-		Each session's luck = average <span class="text-stone-400">(actual − expected)</span> per die,
-		where expected is the midpoint of that die's range (e.g. d20 → 10.5, d6 → 3.5). Positive means
-		you rolled above average; negative means below.
+		Each session's luck = average <span class="text-stone-400">(actual − expected)</span> per die, where
+		expected is the midpoint of that die's range (e.g. d20 → 10.5, d6 → 3.5). Positive means you rolled
+		above average; negative means below.
 	</p>
 	<div class="flex flex-col gap-1">
 		{#each sessionLucks as session (session.id)}

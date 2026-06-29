@@ -7,7 +7,8 @@ export class BatchEntryState {
 	quickFill = $state('');
 
 	getValidation(entries: BatchEntry[]) {
-		if (!this.quickFill.trim()) return [] as Array<{ value: number; dieType: DieType | null; valid: boolean }>;
+		if (!this.quickFill.trim())
+			return [] as Array<{ value: number; dieType: DieType | null; valid: boolean }>;
 		return this.quickFill
 			.split(/[\s,]+/)
 			.map((n) => parseInt(n, 10))
@@ -15,7 +16,11 @@ export class BatchEntryState {
 			.map((value, i) => {
 				const entry = entries[i];
 				return entry
-					? { value, dieType: entry.dieType as DieType | null, valid: value >= 1 && value <= entry.dieType }
+					? {
+							value,
+							dieType: entry.dieType as DieType | null,
+							valid: value >= 1 && value <= entry.dieType
+						}
 					: { value, dieType: null as DieType | null, valid: false };
 			});
 	}

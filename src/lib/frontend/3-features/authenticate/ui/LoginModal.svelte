@@ -64,7 +64,11 @@
 
 			<button
 				type="button"
-				onclick={() => s.submit(async () => { await invalidateAll(); close(); })}
+				onclick={() =>
+					s.submit(async () => {
+						await invalidateAll();
+						close();
+					})}
 				disabled={s.loading}
 				class="bg-accent mt-1 w-full rounded-xl py-3.5 text-sm font-bold text-stone-900 transition hover:brightness-110 active:scale-95 disabled:opacity-50"
 			>

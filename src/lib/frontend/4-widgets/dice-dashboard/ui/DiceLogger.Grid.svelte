@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { BatchEntry } from '@fe-features/roll-entry';
 	import { RollEntryCard } from '@fe-features/roll-entry';
-	import { getAppContext } from '@fe-shared/context';
 	import type { DieType, RollResult } from '@fe-shared';
+	import { getAppContext } from '@fe-shared/context';
 	import { DIE_COLOR, DIE_SHAPE, DIE_TEXT_Y } from '@fe-shared/ui';
 
 	const DICE: DieType[] = [4, 6, 8, 10, 12, 20, 100];
@@ -34,9 +34,10 @@
 
 <div class="relative">
 	<div
-		class="grid grid-cols-3 gap-3 transition-all duration-300 sm:grid-cols-4"
-		class:opacity-20={selectedDie !== null}
-		class:pointer-events-none={selectedDie !== null}
+		class={[
+			'grid grid-cols-3 gap-3 transition-all duration-300 sm:grid-cols-4',
+			selectedDie !== null && 'pointer-events-none opacity-20'
+		]}
 	>
 		{#each DICE as die (die)}
 			<button
@@ -46,7 +47,7 @@
 				die
 					? 'scale(0.82)'
 					: 'scale(1)'};"
-				class="relative flex aspect-square items-center justify-center"
+				class="relative flex aspect-square min-h-12 items-center justify-center"
 			>
 				<svg viewBox="0 0 100 100" class="h-full w-full">
 					{#if DIE_SHAPE[die]}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { RollRecord, SessionRecord } from '@fe-shared';
+	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared';
 	import { Badge, ConfirmModal, IconButton, TextInput } from '@fe-shared/ui';
-	import { fmtLuck, fmtTime, luckClass, singleSessionStats } from '@fe-shared/utils/dice-utils';
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';
 	import { fade, scale } from 'svelte/transition';
@@ -35,28 +35,8 @@
 
 	const s = new SessionCardState(untrack(() => session));
 
-	// Live mode: reset on session switch; append new rolls without overwriting in-progress edits
 	$effect(() => {
-		if (!live) return;
-		const incoming = session;
-		const [localLen, localSessionId] = untrack(() => [s.rolls.length, s.sessionId]);
-
-		if (localSessionId !== incoming.id) {
-			s.sessionId = incoming.id;
-			s.rolls = incoming.rolls.map((r) => ({ ...r }));
-			s.name = incoming.name;
-			return;
-		}
-
-		if (incoming.rolls.length === 0) {
-			s.rolls = [];
-			s.name = incoming.name;
-		} else if (incoming.rolls.length > localLen) {
-			s.rolls = [
-				...untrack(() => s.rolls),
-				...incoming.rolls.slice(localLen).map((r) => ({ ...r }))
-			];
-		}
+		if (live) s.syncLive(session);
 	});
 
 	function formatDate(iso: string) {
@@ -73,9 +53,7 @@
 	{#if !live}
 		<div class="relative mb-3 flex items-center gap-2">
 			{#if isGuest || !editMode}
-				<p
-					class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest || (editMode && 'px-3')]}
-				>
+				<p class={['flex-1 py-2 text-sm font-semibold text-white', !isGuest && 'px-3']}>
 					{s.name || 'Unnamed session'}
 				</p>
 			{:else}

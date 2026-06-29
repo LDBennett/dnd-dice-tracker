@@ -92,12 +92,12 @@ pnpm dev
 
 ## Documentation
 
-| Doc | Contents |
-| --- | --- |
-| [`docs/faq.md`](docs/faq.md) | Gotchas, non-obvious decisions, common patterns |
+| Doc                                      | Contents                                                   |
+| ---------------------------------------- | ---------------------------------------------------------- |
+| [`docs/faq.md`](docs/faq.md)             | Gotchas, non-obvious decisions, common patterns            |
 | [`docs/blueprint.md`](docs/blueprint.md) | Core code examples (DDD models, repositories, app service) |
-| [`docs/roadmap.md`](docs/roadmap.md) | Architecture plans and future work |
-| [`docs/progress.md`](docs/progress.md) | Per-session change log |
+| [`docs/roadmap.md`](docs/roadmap.md)     | Architecture plans and future work                         |
+| [`docs/progress.md`](docs/progress.md)   | Per-session change log                                     |
 
 ## License
 
