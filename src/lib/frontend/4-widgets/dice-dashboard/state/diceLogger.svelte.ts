@@ -1,8 +1,10 @@
 import { fetchSessions } from '@fe-entities/session';
 import type { BatchEntry } from '@fe-features/roll-entry';
 import type { DieType, RollResult, SessionRecord } from '@fe-shared';
-import { trackEvent } from '@fe-shared';
+import { isWithinDays, trackEvent } from '@fe-shared';
 import type { AppContext } from '@fe-shared/context';
+
+const RESUME_RECENT_DAYS = 14;
 
 export class DiceLoggerState {
 	selectedDie = $state<DieType | null>(null);
@@ -24,7 +26,7 @@ export class DiceLoggerState {
 
 	readonly sessionMenuItems = [
 		{
-			label: 'New',
+			label: 'New Session',
 			icon: 'mdi-plus-circle-outline',
 			onclick: () => {
 				this.app.session.reset();
@@ -32,7 +34,7 @@ export class DiceLoggerState {
 			}
 		},
 		{
-			label: 'Resume',
+			label: 'Resume Recent',
 			icon: 'mdi-play-circle-outline',
 			onclick: () => this.openPicker()
 		}
@@ -46,7 +48,10 @@ export class DiceLoggerState {
 
 	get pickerItems(): SessionRecord[] {
 		return this.pickerSessions
-			.filter((s) => s.id !== this.app.session.currentSessionId)
+			.filter(
+				(s) =>
+					s.id !== this.app.session.currentSessionId && isWithinDays(s.rolledAt, RESUME_RECENT_DAYS)
+			)
 			.slice(0, 8);
 	}
 

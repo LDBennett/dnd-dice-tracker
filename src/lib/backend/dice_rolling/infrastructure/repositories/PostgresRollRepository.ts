@@ -92,12 +92,13 @@ export class PostgresRollRepository {
 	async updateSession(
 		sessionId: string,
 		userId: string,
-		fields: { name?: string; rolls?: RollRecord[] },
+		fields: { name?: string; rolls?: RollRecord[]; rolledAt?: Date },
 		tx?: Tx
 	): Promise<void> {
 		const update: Record<string, unknown> = {};
 		if (fields.name !== undefined) update.name = fields.name;
 		if (fields.rolls !== undefined) update.rolls = fields.rolls;
+		if (fields.rolledAt !== undefined) update.rolledAt = fields.rolledAt;
 
 		await (tx ?? db)
 			.update(dbRollSessions)

@@ -30,11 +30,11 @@
 		session.guestMode = app.isGuest;
 	});
 	if (browser) {
-		app.session.currentSessionId = localStorage.getItem('currentSessionId');
-		app.session.rolledAt = localStorage.getItem('sessionRolledAt');
-		app.session.currentSessionName = localStorage.getItem('sessionName') ?? '';
 		app.theme = localStorage.getItem('theme') ?? 'default';
 		if (!untrack(() => data.user)) {
+			app.session.currentSessionId = localStorage.getItem('currentSessionId');
+			app.session.rolledAt = localStorage.getItem('sessionRolledAt');
+			app.session.currentSessionName = localStorage.getItem('sessionName') ?? '';
 			const saved = localStorage.getItem('guestSessionRolls');
 			if (saved) {
 				try {

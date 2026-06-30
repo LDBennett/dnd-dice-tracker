@@ -112,7 +112,7 @@
 		{#if s.selectedSessionId}
 			<a
 				href={resolve(`/history?session=${s.selectedSessionId}`)}
-				class="text-accent mb-4 flex items-center gap-1 text-xs hover:underline"
+				class="text-accent mb-4 flex items-center justify-end gap-1 text-xs hover:underline"
 			>
 				View {s.selectedSession?.name} Roll History
 				<span class="mdi mdi-arrow-right-thin"></span>
