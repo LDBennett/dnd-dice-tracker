@@ -126,3 +126,7 @@ export function fmtDate(iso: string): string {
 export function fmtTime(iso: string): string {
 	return new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
 }
+
+export function isWithinDays(iso: string, days: number): boolean {
+	return new Date(iso).getTime() >= Date.now() - days * 24 * 60 * 60 * 1000;
+}

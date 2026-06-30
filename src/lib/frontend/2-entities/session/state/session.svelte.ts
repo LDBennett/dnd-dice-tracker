@@ -17,8 +17,8 @@ export class Session implements ISession {
 		if (this.guestMode) {
 			if (!this.currentSessionId) {
 				this.currentSessionId = crypto.randomUUID();
-				this.rolledAt = new SvelteDate().toISOString();
 			}
+			this.rolledAt = new SvelteDate().toISOString();
 			this.currentSessionRolls = [...this.currentSessionRolls, ...rolls];
 			return;
 		}
@@ -32,8 +32,8 @@ export class Session implements ISession {
 			);
 			if (!this.currentSessionId) {
 				this.currentSessionId = result.sessionId;
-				this.rolledAt = new SvelteDate().toISOString();
 			}
+			this.rolledAt = new SvelteDate().toISOString();
 			this.currentSessionRolls = [...this.currentSessionRolls, ...rolls];
 		} catch (e) {
 			const msg = e instanceof Error ? e.message : 'Network error';

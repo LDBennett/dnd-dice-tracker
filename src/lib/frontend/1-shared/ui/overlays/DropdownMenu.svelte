@@ -23,7 +23,7 @@
 	let container = $state<HTMLElement | null>(null);
 
 	const panelClass = $derived([
-		'absolute z-50 overflow-hidden rounded-2xl bg-stone-800 shadow-xl ring-1 ring-stone-700/60 min-w-36',
+		'absolute z-50 overflow-hidden rounded-2xl bg-stone-800 shadow-xl ring-1 ring-stone-700/60 min-w-44',
 		direction === 'up' ? 'bottom-full mb-1' : 'top-full mt-1',
 		align === 'center' ? 'left-1/2 -translate-x-1/2' : align === 'left' ? 'left-0' : 'right-0'
 	]);
@@ -51,7 +51,7 @@
 						open = false;
 					}}
 					class={[
-						'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold transition hover:bg-stone-700 active:scale-95',
+						'flex w-full items-center gap-2.5 px-5 py-3 text-sm font-semibold whitespace-nowrap transition hover:bg-stone-700 active:scale-95',
 						item.active ? 'text-accent' : 'text-stone-400'
 					]}
 				>

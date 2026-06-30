@@ -59,7 +59,7 @@ export class RollApplicationService {
 			await rollRepo.updateSession(
 				sessionId,
 				userId,
-				{ rolls: [...existing.rolls, ...newRolls] },
+				{ rolls: [...existing.rolls, ...newRolls], rolledAt: new Date() },
 				tx
 			);
 			await statsRepo.save(stats, tx);
